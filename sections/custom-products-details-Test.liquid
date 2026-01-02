@@ -246,7 +246,6 @@
   .option-values {
     margin-top: 8px;
     display: flex;
-    gap: 12px;
     flex-wrap: wrap;
   }
 
@@ -504,6 +503,63 @@
   }
 </style>
 
+<style>
+  .variant-box {
+    position: relative;
+    min-width: 44px;
+    height: 44px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    padding: 0;
+    margin: 0 8px 8px 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .variant-box:hover {
+    border-color: #000;
+    transform: scale(1.05);
+  }
+
+  .variant-box.selected {
+    border-color: #000;
+    border-width: 2px;
+    box-shadow: 0 0 0 1px #000;
+  }
+
+  .color-swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: block;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .variant-box:not(.color-option) {
+    font-size: 12px;
+    padding: 0 8px;
+    border-radius: 4px;
+    width: auto;
+    min-width: auto;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
 <section class="product-details-section">
   <div class="breadcrumbs">
     <a href="{{ routes.root_url }}">Home</a>
@@ -516,29 +572,37 @@
   </div>
 
   <div class="product-details-container">
+
     <div class="left-content">
+
+      {% assign first_variant = product.variants | first %}
+      {% assign main_image = first_variant.image | default: product.featured_image %}
+
       <img
+        id="mainProductImage"
         class="product-img"
         width="100%"
         height="100%"
-        src="{{ product.featured_image | img_url: 'master' }}"
+        src="{{ main_image.src | img_url: 'master' }}"
         alt="{{ product.title }}">
 
       {% if product.images.size > 1 %}
         <div class="thumb-imgs">
           {% for image in product.images %}
-            {% if image.id != product.featured_image.id %}
-              <img
-                class="thumb-img"
-                width="100%"
-                height="100%"
-                src="{{ image.src | img_url: '360x360' }}"
-                alt="{{ image.alt | escape }}">
-            {% endif %}
+            {% comment %} Only exclude the current main image initially {% endcomment %}
+            <img
+              class="thumb-img"
+              width="100%"
+              height="100%"
+              src="{{ image.src | img_url: '360x360' }}"
+              alt="{{ image.alt | escape }}"
+              data-image-id="{{ image.id }}"
+              data-variant-ids="{% for variant in image.variants %}{{ variant.id }},{% endfor %}">
           {% endfor %}
         </div>
       {% endif %}
     </div>
+
 
     <div class="right-content">
       {% for block in section.blocks %}
@@ -616,21 +680,41 @@
         {% if block.type == 'variants' %}
           {% if product.options.size > 0 %}
             {% for option in product.options_with_values %}
-              <div class="variant-option" data-option-index="{{ forloop.index0 }}">
-                <h4 class="variant-option-name">{{ option.name }}</h4>
+              {% if option.name == 'Color' %}
+                <div class="variant-option" data-option-index="{{ forloop.index0 }}">
+                  <h4 class="variant-option-name">{{ option.name }}</h4>
+                  <div class="option-values">
+                    {% for value in option.values %}
+                      {% assign selected_variant = product.variants | where: 'option1', value | first %}
+                      {% assign hex_color = value.swatch.color %}
 
-                <div class="option-values">
-                  {% for value in option.values %}
-                    <button
-                      class="variant-box {% if forloop.first %}selected{% endif %}"
-                      data-option-name="{{ option.name }}"
-                      data-option-value="{{ value }}">
-                      {{ value }}
-                    </button>
-                  {% endfor %}
+                      {% for variant in product.variants %}
+                        {% if variant.options contains value %}
+                          {% assign color_metafield = variant.metafields.custom.color %}
+                          {% if color_metafield != blank %}
+                            {% assign hex_color = color_metafield.value %}
+                          {% endif %}
+                          {% break %}
+                        {% endif %}
+                      {% endfor %}
+
+                      <button
+                        class="variant-box color-option {% if forloop.first %}selected{% endif %}"
+                        data-variant-id="{{ selected_variant.id }}"
+                        data-variant-img="{% if selected_variant and selected_variant.image %}{{ selected_variant.image.src | img_url: 'master' }}{% else %}{{ product.featured_image.src | img_url: 'master' }}{% endif %}"
+                        data-option-name="{{ option.name }}"
+                        data-option-value="{{ value }}"
+                        title="{{ value }}">
+                        <span class="color-swatch" style="background-color: {{ hex_color }};">
+                          <span class="sr-only">{{ value }}</span>
+                        </span>
+                      </button>
+
+
+                    {% endfor %}
+                  </div>
                 </div>
-              </div>
-              
+              {% endif %}
             {% endfor %}
           {% endif %}
         {% endif %}
@@ -949,5 +1033,79 @@
   // Initial Load
   document.addEventListener('DOMContentLoaded', () => {
     bindEvents();
+  });
+  
+  document.addEventListener('DOMContentLoaded', () => {
+  function initVariantImages() {
+    const mainImage = document.getElementById('mainProductImage');
+    const thumbContainer = document.querySelector('.thumb-imgs');
+    
+    if (!thumbContainer) return;
+    
+    // Get all thumb images and store them with their variant associations
+    const thumbImages = Array.from(thumbContainer.querySelectorAll('.thumb-img'));
+    
+    // Function to update thumbnails visibility based on selected variant
+    function updateThumbnailsForVariant(variantId) {
+      thumbImages.forEach(img => {
+        const variantIds = img.dataset.variantIds || '';
+        const isForSelectedVariant = variantIds.includes(variantId.toString());
+        
+        // Show ALL thumbnails first
+        img.style.display = 'inline-block';
+        
+        // Then hide only the ones associated with the current variant
+        // (unless it's the only image for that variant)
+        if (isForSelectedVariant) {
+          img.style.display = 'none';
+        }
+      });
+      
+      // Ensure main image is not duplicated in thumbnails
+      const currentMainImageSrc = mainImage.src.split('?')[0];
+      thumbImages.forEach(img => {
+        const thumbSrc = img.src.split('?')[0];
+        if (thumbSrc === currentMainImageSrc) {
+          img.style.display = 'none';
+        }
+      });
+    }
+    
+    // Set up click handlers for variant buttons
+    document.querySelectorAll('.variant-box.color-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update selected state
+        document.querySelectorAll('.variant-box.color-option').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        
+        // Update main image
+        const imgUrl = btn.dataset.variantImg;
+        if (imgUrl) {
+          mainImage.src = imgUrl;
+        }
+        
+        // Update variant selection
+        const variantId = btn.dataset.variantId;
+        const selectElement = document.querySelector('select[name="id"]');
+        if (selectElement) {
+          selectElement.value = variantId;
+          selectElement.dispatchEvent(new Event('change'));
+        }
+        
+        // Update thumbnails for this variant
+        updateThumbnailsForVariant(variantId);
+      });
+    });
+    
+    // Initialize with first variant
+    const firstBtn = document.querySelector('.variant-box.color-option.selected') || 
+                     document.querySelector('.variant-box.color-option');
+    if (firstBtn) {
+      const initialVariantId = firstBtn.dataset.variantId;
+      updateThumbnailsForVariant(initialVariantId);
+    }
+  }
+  
+  initVariantImages();
   });
 </script>
