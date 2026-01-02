@@ -162,32 +162,30 @@
         <div class="filter-content {% if filter.active_values.size > 0 %} active{% endif %}">
           {% case filter.type %}
             {% when 'list' %}
+
               {% for value in filter.values %}
                 {% if value.count > 0 %}
-
                   <div class="filter-item">
-
                     <div class="checkbox-wrapper">
                       <input
                         type="checkbox"
+                        class="{% if filter.label == 'Color' %}color-filter{% endif %}"
                         name="{{ filter.param_name }}"
                         value="{{ value.value }}"
                         id="{{ filter.param_name | handleize }}-{{ forloop.index }}"
                         {% if value.active %}
                         checked
-                        {% endif %}>
-
+                        {% endif %}
+                        >
                       <label class="checkbox-label" for="{{ filter.param_name | handleize }}-{{ forloop.index }}">
                         <p>{{ value.label }}</p>
                       </label>
-
                     </div>
-
                     <p>({{ value.count }})</p>
                   </div>
-
                 {% endif %}
               {% endfor %}
+
 
             {% when 'price_range' %}
 

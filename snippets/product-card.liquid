@@ -1,14 +1,47 @@
+<style>
+
+  /* Color swatches modifier for buttons */
+  .variant-box.color-swatch {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background-clip: content-box;
+  }
+
+  /* Hover effect */
+  .variant-box.color-swatch:hover {
+    transform: scale(1.2);
+    border-color: #999;
+  }
+
+  /* Selected state */
+  .variant-box.color-swatch.selected {
+    border: 2px solid #000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Remove default text styling */
+  .variant-box.color-swatch::after {
+    content: '';
+  }
+
+</style>
+
+
 <div class="product-card">
-  {% if product.featured_image %}
-    <a href="{{ product.url }}">
-      <img
-        src="{{ product.featured_image | img_url: '400x400' }}"
-        alt="{{ product.title }}"
-        class="product-card-img"
-        width="400"
-        height="400">
-    </a>
-  {% endif %}
+
+  {% assign selected_variant = product.selected_or_first_available_variant %}
+
+  <a href="{{ product.url }}">
+    <img
+      src="{{ selected_variant.featured_image | img_url: '400x400' }}"
+      alt="{{ selected_variant.title }}"
+      class="product-card-img"
+      width="400"
+      height="400">
+  </a>
 
   <p class="vendor">{{ product.vendor }}</p>
   <a href="{{ product.url }}">
@@ -18,20 +51,44 @@
   {% if product.variants.size > 1 %}
     <div class="variant-values">
       {% for variant in product.variants %}
-        <button
-          class="variant-box {% if forloop.first %}selected{% endif %}"
-          data-variant-id="{{ variant.id }}"
-          data-variant-price="{{ variant.price | money }}"
-          data-variant-compare-price="{{ variant.compare_at_price | money }}"
-          data-variant-quantity="{{ variant.inventory_quantity }}">
-          {{ variant.title }}
-        </button>
+
+        {% assign has_color_swatch = false %}
+        {% for option in variant.options %}
+          {% if option.swatch and option.swatch.color %}
+            {% assign has_color_swatch = true %}
+          {% endif %}
+        {% endfor %}
+
+        {% if has_color_swatch %}
+          {% for option in variant.options %}
+            {% if option.swatch and option.swatch.color %}
+              <button
+                style="background-color: {{ option.swatch.color }};"
+                class="variant-box color-swatch {% if forloop.first %}selected{% endif %}"
+                data-variant-id="{{ variant.id }}"
+                data-variant-quantity="{{ variant.inventory_quantity }}"
+                data-variant-color="{{ option.swatch.color | downcase | strip }}"
+                data-variant-image="{{ variant.image | img_url: '400x400' }}"></button>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <button
+            class="variant-box {% if forloop.first %}selected{% endif %}"
+            data-variant-id="{{ variant.id }}"
+            data-variant-price="{{ variant.price | money }}"
+            data-variant-compare-price="{{ variant.compare_at_price | money }}"
+            data-variant-quantity="{{ variant.inventory_quantity }}">
+            {{ variant.title }}
+          </button>
+        {% endif %}
+
       {% endfor %}
     </div>
   {% endif %}
 
+
   <div class="price-add-to-cart-container">
-    
+
     <div class="price-container">
       <p class="variant-price">{{ product.selected_or_first_available_variant.price | money }}</p>
 

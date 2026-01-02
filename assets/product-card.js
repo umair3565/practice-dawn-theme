@@ -1,15 +1,14 @@
-
 function handleProductCards() {
     const productCards = document.querySelectorAll('.product-card');
     if (!productCards.length) return;
 
     productCards.forEach((card) => {
-
         const variantBoxes = card.querySelectorAll('.variant-box');
         const priceElement = card.querySelector('.variant-price');
         const comparePrice = card.querySelector('.compare-price');
+        const mainImage = card.querySelector('.product-card-img');
 
-        if (variantBoxes.length === 0) return;
+        if (!variantBoxes.length) return;
 
         let selectedVariantId = variantBoxes[0].dataset.variantId;
         variantBoxes[0].classList.add('selected');
@@ -24,22 +23,44 @@ function handleProductCards() {
                 return;
             }
 
+            // show variant image on hover
+            box.addEventListener('mouseenter', () => {
+                if (box.dataset.variantImage) {
+                    mainImage.src = box.dataset.variantImage;
+                }
+            });
+
+            // restore selected variant image when no mouse leave
+            box.addEventListener('mouseleave', () => {
+                const selectedBox = card.querySelector('.variant-box.selected');
+                if (selectedBox && selectedBox.dataset.variantImage) {
+                    mainImage.src = selectedBox.dataset.variantImage;
+                }
+            });
+
+            // select variant image when clilcked
             box.addEventListener('click', () => {
                 variantBoxes.forEach((b) => b.classList.remove('selected'));
                 box.classList.add('selected');
                 selectedVariantId = box.dataset.variantId;
 
-                const selectedVariantPrice = box.dataset.variantPrice;
-                if (priceElement) priceElement.textContent = selectedVariantPrice;
+                // Update price
+                if (box.dataset.variantPrice && priceElement) {
+                    priceElement.textContent = box.dataset.variantPrice;
+                }
+                if (box.dataset.variantComparePrice && comparePrice) {
+                    comparePrice.textContent = box.dataset.variantComparePrice;
+                }
 
-                const selectedVariantComparePrice = box.dataset.variantComparePrice;
-                if (comparePrice) comparePrice.textContent = selectedVariantComparePrice;
+                // Update main image
+                if (box.dataset.variantImage) {
+                    mainImage.src = box.dataset.variantImage;
+                }
             });
         });
 
-        // --- Add to Cart ---
+        // Add to Cart 
         const addToCartBtns = card.querySelectorAll('.add-to-bag-btn');
-
         addToCartBtns.forEach((btn) => {
             btn.addEventListener('click', async () => {
                 try {

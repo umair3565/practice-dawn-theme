@@ -187,6 +187,7 @@
 
 
 <script>
+  
   const container = document.getElementById('productsGrid');
   const sectionId = container?.dataset.sectionId;
   const clearFilterBtn = container.querySelector('.clear-filters-btn');
@@ -206,13 +207,26 @@
   
   //  Filtering Logic
   function handleFiltering() {
-    const filtersForm = document.getElementById('filtersForm');
-  
-    filtersForm.addEventListener('change', () => {
-      const formData = new FormData(filtersForm);
-      const searchParams = new URLSearchParams(formData).toString();
-      renderCollection(searchParams);
+  const filtersForm = document.getElementById('filtersForm');
+  if (!filtersForm) return;
+
+
+  // logic for single select color filters
+  const colorCheckboxes = filtersForm.querySelectorAll('.color-filter');
+  colorCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+      if (!checkbox.checked) return;
+      colorCheckboxes.forEach((cb) => {
+        if (cb !== checkbox) cb.checked = false;
+      });
     });
+  });
+
+  filtersForm.addEventListener('change', () => {
+    const formData = new FormData(filtersForm);
+    const searchParams = new URLSearchParams(formData).toString();
+    renderCollection(searchParams);
+  });
   }
   
   function handleSidebar() {

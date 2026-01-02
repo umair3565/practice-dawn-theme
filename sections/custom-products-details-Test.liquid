@@ -680,6 +680,7 @@
         {% if block.type == 'variants' %}
           {% if product.options.size > 0 %}
             {% for option in product.options_with_values %}
+              
               {% if option.name == 'Color' %}
                 <div class="variant-option" data-option-index="{{ forloop.index0 }}">
                   <h4 class="variant-option-name">{{ option.name }}</h4>
