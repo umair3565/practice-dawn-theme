@@ -1,1 +1,556 @@
-{"sections":{"custom_banner_hB4UEW":{"type":"custom-banner","blocks":{"banner_slide_Gphxbt":{"type":"banner_slide","settings":{"video":"shopify:\/\/files\/videos\/banner-bg.mp4","heading":"One Destination, Endless Fragrances","heading_color":"#e8e8e8","text":"Endless Fragrance Varieties, All in One Destination for Every Mood, Style, and Occasion","para_color":"#e8e8e8","button_link":"shopify:\/\/collections\/all","button_text":"Explore Now","link_color":"#e8e8e8","content_position":"bottom_right"}},"banner_slide_D6iF6p":{"type":"banner_slide","settings":{"video":"shopify:\/\/files\/videos\/banner-bg.mp4","heading":"One Destination, Endless Fragrances","heading_color":"#e8e8e8","text":"Endless Fragrance Varieties, All in One Destination for Every Mood, Style, and Occasion","para_color":"#e8e8e8","button_link":"shopify:\/\/collections\/all","button_text":"Explore Now","link_color":"#e8e8e8","content_position":"bottom_right"}},"banner_slide_wNXg4U":{"type":"banner_slide","settings":{"video":"shopify:\/\/files\/videos\/banner-bg.mp4","heading":"One Destination, Endless Fragrances","heading_color":"#e8e8e8","text":"Endless Fragrance Varieties, All in One Destination for Every Mood, Style, and Occasion","para_color":"#e8e8e8","button_link":"shopify:\/\/collections\/all","button_text":"Explore Now","link_color":"#e8e8e8","content_position":"bottom_right"}}},"block_order":["banner_slide_Gphxbt","banner_slide_D6iF6p","banner_slide_wNXg4U"],"name":"Custom Banner","settings":{}},"custom_featured_collection_bKjact":{"type":"custom-featured-collection","name":"Custom Feature Collection","settings":{"heading_text":"A World of Fragrances, Curated for You","heading_color":"#e8e8e8","first_link_text":"Explore Men's Collection","first_link_url":"shopify:\/\/collections\/for-him","second_link_text":"Explore Women's Collection","second_link_url":"shopify:\/\/collections\/for-her","link_color":"#e8e8e8","first_img":"shopify:\/\/shop_images\/men-collection.png","second_img":"shopify:\/\/shop_images\/women-collection.png"}},"collection_tabs_slider_MjVGbQ":{"type":"collection-tabs-slider","name":"Collection Tabs Slider","settings":{"main_heading":"Discover Scents That Define You","heading_color":"#e8e8e8","button_link":"shopify:\/\/collections\/all","collection_list":["newly-arrived","hot-selling","luxurious"]}},"custom_timer_n6rDig":{"type":"custom-timer","disabled":true,"name":"Custom Timer","settings":{"bg_img":"shopify:\/\/shop_images\/timer-bg.jpg","content_alignment":"flex-end","sale_date":"2026-02-28-17:30","heading":"Uncover Timeless Fragrances","heading_color":"#ffffff","text":"Explore our curated selection of on-sale items and indulge in luxury for less.","text_color":"#ffffff","button_text":"View Sale","button_color":"#ffffff","button_link":"shopify:\/\/collections\/all","timer_color":"#ffffff","timer_text_color":"#ffffff"}},"custom_timer_zone_LYCTUb":{"type":"custom-timer-zone","name":"Custom Timer Zone","settings":{"bg_desktop":"shopify:\/\/shop_images\/IMG_Holder.png","bg_mobile":"shopify:\/\/shop_images\/season-product-4.png","section_height":"500","overlay_opacity":40,"overlay_color":"#000000","sale_date":"2026-02-28-18:00","timer_time":"18:00","time_zone":"Asia\/Karachi","heading_small":"It starts with one.","heading":"Our first collab.","content_position":"center","text_alignment":"center","text_color":"#ffffff","content_bg":"rgba(0,0,0,0)","section_width":"1440","section_padding_top":55,"section_padding_bottom":80}},"seasonal_collection_yXdD7c":{"type":"seasonal-collection","name":"Seasonal Collection","settings":{"main_heading":"Discover Scents That Define You","heading_color":"#1c1c1c","link_text":"Explore All Seasonal","link_url":"shopify:\/\/collections\/all","collection_list":["for-him","for-her"],"show_arrows":true}},"marquee_section_dxt8qp":{"type":"marquee-section","blocks":{"logo_KiT6Xw":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-1.svg"}},"logo_GPntEC":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-2.svg"}},"logo_YfRDKx":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-3.svg"}},"logo_VWae7e":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-4.svg"}},"logo_4mgRRX":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-5.svg"}},"logo_yPfWPt":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-6.svg"}},"logo_FLNgiX":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-1.svg"}},"logo_qnaxDR":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-2.svg"}},"logo_cG4b8p":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-3.svg"}},"logo_KMgJ7P":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-4.svg"}},"logo_PH7yVa":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-5.svg"}},"logo_NUD4nq":{"type":"logo","settings":{"logo_image":"shopify:\/\/shop_images\/tag-6.svg"}}},"block_order":["logo_KiT6Xw","logo_GPntEC","logo_YfRDKx","logo_VWae7e","logo_4mgRRX","logo_yPfWPt","logo_FLNgiX","logo_qnaxDR","logo_cG4b8p","logo_KMgJ7P","logo_PH7yVa","logo_NUD4nq"],"name":"Custom Marquee Slider","settings":{"bg_color":"#0c0c0c","scroll_speed":4}},"gift_section_VegNc4":{"type":"gift-collection","name":"Gift Collection","settings":{"main_heading":"Fragrances for the Season Ahead","heading_color":"#1c1c1c","button_link":"shopify:\/\/collections\/all","collection_list":["gift-for-him","gifr-for-her"],"show_arrows":true}},"custom_testimonials_EUmbby":{"type":"custom-testimonials","blocks":{"testimonial_jFzynn":{"type":"testimonial","settings":{"card_color":"#f7f7f7","testimonial_img":"shopify:\/\/shop_images\/testimonial-1.png","rating":4.5,"heading_text":"My go-to for gifts and personal favorites...","heading_color":"#1c1c1c","textarea":"I was looking for a gift for my sister and ended up buying one for myself too! The selection is unbeatable, and I love that I can trust every fragrance to be 100% authentic. This has become my one-stop shop for all things perfume.","text_color":"#1c1c1c","author":"Sophia L.","author_color":"#1c1c1c","verified_text":"Verified Customer","verified_color":"#1c1c1c"}},"testimonial_A9fy4m":{"type":"testimonial","settings":{"card_color":"#f7f7f7","testimonial_img":"shopify:\/\/shop_images\/testimonial-2.png","rating":4.5,"heading_text":"Luxury Made Simple","heading_color":"#1c1c1c","textarea":"I’ve shopped at many stores before, but this is the first time I’ve found every single luxury fragrance I could think of in one place. From Dior to Tom Ford, they have it all. The experience was seamless, and I finally found my signature scent without hopping between multiple stores.","text_color":"#1c1c1c","author":"Emily R.","author_color":"#1c1c1c","verified_text":"Verified Customer","verified_color":"#1c1c1c"}},"testimonial_kjtcWC":{"type":"testimonial","settings":{"card_color":"#f7f7f7","testimonial_img":"shopify:\/\/shop_images\/testimonial-3.png","rating":4.5,"heading_text":"A true fragrance paradise!","heading_color":"#1c1c1c","textarea":"“I’ve shopped at many stores before, but this is the first time I’ve found every single luxury fragrance I could think of in one place. From Dior to Tom Ford, they have it all. The experience was seamless, and I finally found my signature scent without hopping between multiple stores.","text_color":"#1c1c1c","author":"Amaar R.","author_color":"#1c1c1c","verified_text":"Verified Customer","verified_color":"#1c1c1c"}},"testimonial_AhirhV":{"type":"testimonial","settings":{"card_color":"#f7f7f7","testimonial_img":"shopify:\/\/shop_images\/testimonial-1.png","rating":4.5,"heading_text":"My go-to for gifts and personal favorites...","heading_color":"#1c1c1c","textarea":"I was looking for a gift for my sister and ended up buying one for myself too! The selection is unbeatable, and I love that I can trust every fragrance to be 100% authentic. This has become my one-stop shop for all things perfume.","text_color":"#1c1c1c","author":"Sophia L.","author_color":"#1c1c1c","verified_text":"Verified Customer","verified_color":"#1c1c1c"}},"testimonial_KJ4UTj":{"type":"testimonial","settings":{"card_color":"#f7f7f7","testimonial_img":"shopify:\/\/shop_images\/testimonial-2.png","rating":4.5,"heading_text":"Luxury Made Simple","heading_color":"#1c1c1c","textarea":"I’ve shopped at many stores before, but this is the first time I’ve found every single luxury fragrance I could think of in one place. From Dior to Tom Ford, they have it all. The experience was seamless, and I finally found my signature scent without hopping between multiple stores.","text_color":"#1c1c1c","author":"Emily R.","author_color":"#1c1c1c","verified_text":"Verified Customer","verified_color":"#1c1c1c"}},"testimonial_7E9MdQ":{"type":"testimonial","settings":{"card_color":"#f7f7f7","testimonial_img":"shopify:\/\/shop_images\/testimonial-3.png","rating":4.5,"heading_text":"A true fragrance paradise!","heading_color":"#1c1c1c","textarea":"“I’ve shopped at many stores before, but this is the first time I’ve found every single luxury fragrance I could think of in one place. From Dior to Tom Ford, they have it all. The experience was seamless, and I finally found my signature scent without hopping between multiple stores.","text_color":"#1c1c1c","author":"Amaar R.","author_color":"#1c1c1c","verified_text":"Verified Customer","verified_color":"#1c1c1c"}}},"block_order":["testimonial_jFzynn","testimonial_A9fy4m","testimonial_kjtcWC","testimonial_AhirhV","testimonial_KJ4UTj","testimonial_7E9MdQ"],"name":"Custom Testimonials","settings":{"heading_text":"Testimonials","heading_color":"#1c1c1c","textarea":"Hear from fragrance lovers who have discovered their signature scents with us. Their stories speak of elegance, authenticity, and unforgettable moments.","text_color":"#1c1c1c","show_pagination":true}},"stories_section_CjhHw9":{"type":"stories-section","blocks":{"story_card_FhE3GF":{"type":"story_card","settings":{"main_image":"shopify:\/\/shop_images\/story-1.png","product":"ombre-leather-1"}},"story_card_xbtFWa":{"type":"story_card","settings":{"main_image":"shopify:\/\/shop_images\/story-2.png","product":"defy"}},"story_card_6whdXj":{"type":"story_card","settings":{"main_image":"shopify:\/\/shop_images\/story-3.png","product":"orchid"}},"story_card_JUp6zp":{"type":"story_card","settings":{"main_image":"shopify:\/\/shop_images\/story-4.png","product":"romantic"}},"story_card_Hrgxjj":{"type":"story_card","settings":{"main_image":"shopify:\/\/shop_images\/story-1.png","product":"ombre-leather-1"}},"story_card_PBwLQQ":{"type":"story_card","settings":{"main_image":"shopify:\/\/shop_images\/story-2.png","product":"defy"}},"story_card_JN83pT":{"type":"story_card","settings":{"main_image":"shopify:\/\/shop_images\/story-3.png","product":"orchid"}},"story_card_k4bGFa":{"type":"story_card","settings":{"main_image":"shopify:\/\/shop_images\/story-4.png","product":"romantic"}}},"block_order":["story_card_FhE3GF","story_card_xbtFWa","story_card_6whdXj","story_card_JUp6zp","story_card_Hrgxjj","story_card_PBwLQQ","story_card_JN83pT","story_card_k4bGFa"],"name":"Stories Section","settings":{"heading_text":"Straight from the ‘Gram","heading_color":"#1c1c1c","subheading_text":"FOLLOW US @usernamehere","subheading_color":"#1c1c1c","show_pagination":true}},"faq_section_r4nU6e":{"type":"faq-section","blocks":{"question_UeyeBK":{"type":"question","settings":{"question_text":"Are your perfumes 100% authentic?","answer_text":"Yes, we only source from authorized distributors and trusted suppliers. Every fragrance is 100% genuine and brand-sealed.","question_image":"shopify:\/\/shop_images\/faq-1.jpg"}},"question_3TBHk3":{"type":"question","settings":{"question_text":"Do you offer international shipping?","answer_text":"Yes, we ship worldwide. Delivery times and rates vary based on your region.","question_image":"shopify:\/\/shop_images\/perfume-4.jpg"}},"question_w4DkYT":{"type":"question","settings":{"question_text":"Can I return or exchange a fragrance?","answer_text":"Returns are accepted if the item is unopened and unused within 14 days of purchase.","question_image":"shopify:\/\/shop_images\/perfume-2_436c521a-3c91-454f-a5eb-e7aed9ffa22e.jpg"}},"question_Rya4z4":{"type":"question","settings":{"question_text":"Do you offer gift wrapping or gift sets?","answer_text":"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters","question_image":"shopify:\/\/shop_images\/perfume-8.jpg"}}},"block_order":["question_UeyeBK","question_3TBHk3","question_w4DkYT","question_Rya4z4"],"name":"Faq Section","settings":{"heading":"Discover our FAQ"}},"details_section_yDhRDH":{"type":"details-section","blocks":{"detail_kMgtPr":{"type":"detail","settings":{"icon":"shopify:\/\/shop_images\/detail-1.svg","heading":"Easy Comparison","description":"Quickly compare prices, read customer reviews, and check ratings to make informed decisions."}},"detail_hpndac":{"type":"detail","settings":{"icon":"shopify:\/\/shop_images\/detail-2.svg","heading":"Wide Selection","description":"Access to a broader range of styles, sizes, and brands than a physical store might offer."}},"detail_3BTVBj":{"type":"detail","settings":{"icon":"shopify:\/\/shop_images\/detail-3.svg","heading":"Convenience","description":"Shop from the comfort of your home, 24\/7. Online stores eliminate the need for travel and allow you to browse."}}},"block_order":["detail_kMgtPr","detail_hpndac","detail_3BTVBj"],"name":"Details Section","settings":{}}},"order":["custom_banner_hB4UEW","custom_featured_collection_bKjact","collection_tabs_slider_MjVGbQ","custom_timer_n6rDig","custom_timer_zone_LYCTUb","seasonal_collection_yXdD7c","marquee_section_dxt8qp","gift_section_VegNc4","custom_testimonials_EUmbby","stories_section_CjhHw9","faq_section_r4nU6e","details_section_yDhRDH"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "custom_banner_hB4UEW": {
+      "type": "custom-banner",
+      "blocks": {
+        "banner_slide_Gphxbt": {
+          "type": "banner_slide",
+          "settings": {
+            "video": "shopify://files/videos/banner-bg.mp4",
+            "heading": "One Destination, Endless Fragrances",
+            "heading_color": "#e8e8e8",
+            "text": "Endless Fragrance Varieties, All in One Destination for Every Mood, Style, and Occasion",
+            "para_color": "#e8e8e8",
+            "button_link": "shopify://collections/all",
+            "button_text": "Explore Now",
+            "link_color": "#e8e8e8",
+            "content_position": "bottom_right"
+          }
+        },
+        "banner_slide_D6iF6p": {
+          "type": "banner_slide",
+          "settings": {
+            "video": "shopify://files/videos/banner-bg.mp4",
+            "heading": "One Destination, Endless Fragrances",
+            "heading_color": "#e8e8e8",
+            "text": "Endless Fragrance Varieties, All in One Destination for Every Mood, Style, and Occasion",
+            "para_color": "#e8e8e8",
+            "button_link": "shopify://collections/all",
+            "button_text": "Explore Now",
+            "link_color": "#e8e8e8",
+            "content_position": "bottom_right"
+          }
+        },
+        "banner_slide_wNXg4U": {
+          "type": "banner_slide",
+          "settings": {
+            "video": "shopify://files/videos/banner-bg.mp4",
+            "heading": "One Destination, Endless Fragrances",
+            "heading_color": "#e8e8e8",
+            "text": "Endless Fragrance Varieties, All in One Destination for Every Mood, Style, and Occasion",
+            "para_color": "#e8e8e8",
+            "button_link": "shopify://collections/all",
+            "button_text": "Explore Now",
+            "link_color": "#e8e8e8",
+            "content_position": "bottom_right"
+          }
+        }
+      },
+      "block_order": [
+        "banner_slide_Gphxbt",
+        "banner_slide_D6iF6p",
+        "banner_slide_wNXg4U"
+      ],
+      "name": "Custom Banner",
+      "settings": {}
+    },
+    "custom_featured_collection_bKjact": {
+      "type": "custom-featured-collection",
+      "name": "Custom Feature Collection",
+      "settings": {
+        "heading_text": "A World of Fragrances, Curated for You",
+        "heading_color": "#e8e8e8",
+        "first_link_text": "Explore Men's Collection",
+        "first_link_url": "shopify://collections/for-him",
+        "second_link_text": "Explore Women's Collection",
+        "second_link_url": "shopify://collections/for-her",
+        "link_color": "#e8e8e8",
+        "first_img": "shopify://shop_images/men-collection.png",
+        "second_img": "shopify://shop_images/women-collection.png"
+      }
+    },
+    "collection_tabs_slider_MjVGbQ": {
+      "type": "collection-tabs-slider",
+      "name": "Collection Tabs Slider",
+      "settings": {
+        "main_heading": "Discover Scents That Define You",
+        "heading_color": "#e8e8e8",
+        "button_link": "shopify://collections/all",
+        "collection_list": [
+          "newly-arrived",
+          "hot-selling",
+          "luxurious"
+        ]
+      }
+    },
+    "custom_timer_n6rDig": {
+      "type": "custom-timer",
+      "name": "Custom Timer",
+      "settings": {
+        "bg_img": "shopify://shop_images/timer-bg.jpg",
+        "content_alignment": "flex-end",
+        "sale_date": "2026-02-28-17:30",
+        "heading": "Uncover Timeless Fragrances",
+        "heading_color": "#ffffff",
+        "text": "Explore our curated selection of on-sale items and indulge in luxury for less.",
+        "text_color": "#ffffff",
+        "button_text": "View Sale",
+        "button_color": "#ffffff",
+        "button_link": "shopify://collections/all",
+        "timer_color": "#ffffff",
+        "timer_text_color": "#ffffff"
+      }
+    },
+    "custom_timer_zone_LYCTUb": {
+      "type": "custom-timer-zone",
+      "disabled": true,
+      "name": "Custom Timer Zone",
+      "settings": {
+        "bg_desktop": "shopify://shop_images/IMG_Holder.png",
+        "bg_mobile": "shopify://shop_images/season-product-4.png",
+        "section_height": "500",
+        "overlay_opacity": 40,
+        "overlay_color": "#000000",
+        "sale_date": "2026-02-28-18:00",
+        "timer_time": "18:00",
+        "time_zone": "Asia/Karachi",
+        "heading_small": "It starts with one.",
+        "heading": "Our first collab.",
+        "content_position": "center",
+        "text_alignment": "center",
+        "text_color": "#ffffff",
+        "content_bg": "rgba(0,0,0,0)",
+        "section_width": "1440",
+        "section_padding_top": 55,
+        "section_padding_bottom": 80
+      }
+    },
+    "seasonal_collection_yXdD7c": {
+      "type": "seasonal-collection",
+      "name": "Seasonal Collection",
+      "settings": {
+        "main_heading": "Discover Scents That Define You",
+        "heading_color": "#1c1c1c",
+        "link_text": "Explore All Seasonal",
+        "link_url": "shopify://collections/all",
+        "collection_list": [
+          "for-him",
+          "for-her"
+        ],
+        "show_arrows": true
+      }
+    },
+    "marquee_section_dxt8qp": {
+      "type": "marquee-section",
+      "blocks": {
+        "logo_KiT6Xw": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-1.svg"
+          }
+        },
+        "logo_GPntEC": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-2.svg"
+          }
+        },
+        "logo_YfRDKx": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-3.svg"
+          }
+        },
+        "logo_VWae7e": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-4.svg"
+          }
+        },
+        "logo_4mgRRX": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-5.svg"
+          }
+        },
+        "logo_yPfWPt": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-6.svg"
+          }
+        },
+        "logo_FLNgiX": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-1.svg"
+          }
+        },
+        "logo_qnaxDR": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-2.svg"
+          }
+        },
+        "logo_cG4b8p": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-3.svg"
+          }
+        },
+        "logo_KMgJ7P": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-4.svg"
+          }
+        },
+        "logo_PH7yVa": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-5.svg"
+          }
+        },
+        "logo_NUD4nq": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-6.svg"
+          }
+        }
+      },
+      "block_order": [
+        "logo_KiT6Xw",
+        "logo_GPntEC",
+        "logo_YfRDKx",
+        "logo_VWae7e",
+        "logo_4mgRRX",
+        "logo_yPfWPt",
+        "logo_FLNgiX",
+        "logo_qnaxDR",
+        "logo_cG4b8p",
+        "logo_KMgJ7P",
+        "logo_PH7yVa",
+        "logo_NUD4nq"
+      ],
+      "name": "Custom Marquee Slider",
+      "settings": {
+        "bg_color": "#0c0c0c",
+        "scroll_speed": 4
+      }
+    },
+    "gift_section_VegNc4": {
+      "type": "gift-collection",
+      "name": "Gift Collection",
+      "settings": {
+        "main_heading": "Fragrances for the Season Ahead",
+        "heading_color": "#1c1c1c",
+        "button_link": "shopify://collections/all",
+        "collection_list": [
+          "gift-for-him",
+          "gifr-for-her"
+        ],
+        "show_arrows": true
+      }
+    },
+    "custom_testimonials_EUmbby": {
+      "type": "custom-testimonials",
+      "blocks": {
+        "testimonial_jFzynn": {
+          "type": "testimonial",
+          "settings": {
+            "card_color": "#f7f7f7",
+            "testimonial_img": "shopify://shop_images/testimonial-1.png",
+            "rating": 4.5,
+            "heading_text": "My go-to for gifts and personal favorites...",
+            "heading_color": "#1c1c1c",
+            "textarea": "I was looking for a gift for my sister and ended up buying one for myself too! The selection is unbeatable, and I love that I can trust every fragrance to be 100% authentic. This has become my one-stop shop for all things perfume.",
+            "text_color": "#1c1c1c",
+            "author": "Sophia L.",
+            "author_color": "#1c1c1c",
+            "verified_text": "Verified Customer",
+            "verified_color": "#1c1c1c"
+          }
+        },
+        "testimonial_A9fy4m": {
+          "type": "testimonial",
+          "settings": {
+            "card_color": "#f7f7f7",
+            "testimonial_img": "shopify://shop_images/testimonial-2.png",
+            "rating": 4.5,
+            "heading_text": "Luxury Made Simple",
+            "heading_color": "#1c1c1c",
+            "textarea": "I’ve shopped at many stores before, but this is the first time I’ve found every single luxury fragrance I could think of in one place. From Dior to Tom Ford, they have it all. The experience was seamless, and I finally found my signature scent without hopping between multiple stores.",
+            "text_color": "#1c1c1c",
+            "author": "Emily R.",
+            "author_color": "#1c1c1c",
+            "verified_text": "Verified Customer",
+            "verified_color": "#1c1c1c"
+          }
+        },
+        "testimonial_kjtcWC": {
+          "type": "testimonial",
+          "settings": {
+            "card_color": "#f7f7f7",
+            "testimonial_img": "shopify://shop_images/testimonial-3.png",
+            "rating": 4.5,
+            "heading_text": "A true fragrance paradise!",
+            "heading_color": "#1c1c1c",
+            "textarea": "“I’ve shopped at many stores before, but this is the first time I’ve found every single luxury fragrance I could think of in one place. From Dior to Tom Ford, they have it all. The experience was seamless, and I finally found my signature scent without hopping between multiple stores.",
+            "text_color": "#1c1c1c",
+            "author": "Amaar R.",
+            "author_color": "#1c1c1c",
+            "verified_text": "Verified Customer",
+            "verified_color": "#1c1c1c"
+          }
+        },
+        "testimonial_AhirhV": {
+          "type": "testimonial",
+          "settings": {
+            "card_color": "#f7f7f7",
+            "testimonial_img": "shopify://shop_images/testimonial-1.png",
+            "rating": 4.5,
+            "heading_text": "My go-to for gifts and personal favorites...",
+            "heading_color": "#1c1c1c",
+            "textarea": "I was looking for a gift for my sister and ended up buying one for myself too! The selection is unbeatable, and I love that I can trust every fragrance to be 100% authentic. This has become my one-stop shop for all things perfume.",
+            "text_color": "#1c1c1c",
+            "author": "Sophia L.",
+            "author_color": "#1c1c1c",
+            "verified_text": "Verified Customer",
+            "verified_color": "#1c1c1c"
+          }
+        },
+        "testimonial_KJ4UTj": {
+          "type": "testimonial",
+          "settings": {
+            "card_color": "#f7f7f7",
+            "testimonial_img": "shopify://shop_images/testimonial-2.png",
+            "rating": 4.5,
+            "heading_text": "Luxury Made Simple",
+            "heading_color": "#1c1c1c",
+            "textarea": "I’ve shopped at many stores before, but this is the first time I’ve found every single luxury fragrance I could think of in one place. From Dior to Tom Ford, they have it all. The experience was seamless, and I finally found my signature scent without hopping between multiple stores.",
+            "text_color": "#1c1c1c",
+            "author": "Emily R.",
+            "author_color": "#1c1c1c",
+            "verified_text": "Verified Customer",
+            "verified_color": "#1c1c1c"
+          }
+        },
+        "testimonial_7E9MdQ": {
+          "type": "testimonial",
+          "settings": {
+            "card_color": "#f7f7f7",
+            "testimonial_img": "shopify://shop_images/testimonial-3.png",
+            "rating": 4.5,
+            "heading_text": "A true fragrance paradise!",
+            "heading_color": "#1c1c1c",
+            "textarea": "“I’ve shopped at many stores before, but this is the first time I’ve found every single luxury fragrance I could think of in one place. From Dior to Tom Ford, they have it all. The experience was seamless, and I finally found my signature scent without hopping between multiple stores.",
+            "text_color": "#1c1c1c",
+            "author": "Amaar R.",
+            "author_color": "#1c1c1c",
+            "verified_text": "Verified Customer",
+            "verified_color": "#1c1c1c"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_jFzynn",
+        "testimonial_A9fy4m",
+        "testimonial_kjtcWC",
+        "testimonial_AhirhV",
+        "testimonial_KJ4UTj",
+        "testimonial_7E9MdQ"
+      ],
+      "name": "Custom Testimonials",
+      "settings": {
+        "heading_text": "Testimonials",
+        "heading_color": "#1c1c1c",
+        "textarea": "Hear from fragrance lovers who have discovered their signature scents with us. Their stories speak of elegance, authenticity, and unforgettable moments.",
+        "text_color": "#1c1c1c",
+        "show_pagination": true
+      }
+    },
+    "stories_section_CjhHw9": {
+      "type": "stories-section",
+      "blocks": {
+        "story_card_FhE3GF": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-1.png",
+            "product": "ombre-leather-1"
+          }
+        },
+        "story_card_xbtFWa": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-2.png",
+            "product": "defy"
+          }
+        },
+        "story_card_6whdXj": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-3.png",
+            "product": "orchid"
+          }
+        },
+        "story_card_JUp6zp": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-4.png",
+            "product": "romantic"
+          }
+        },
+        "story_card_Hrgxjj": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-1.png",
+            "product": "ombre-leather-1"
+          }
+        },
+        "story_card_PBwLQQ": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-2.png",
+            "product": "defy"
+          }
+        },
+        "story_card_JN83pT": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-3.png",
+            "product": "orchid"
+          }
+        },
+        "story_card_k4bGFa": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-4.png",
+            "product": "romantic"
+          }
+        }
+      },
+      "block_order": [
+        "story_card_FhE3GF",
+        "story_card_xbtFWa",
+        "story_card_6whdXj",
+        "story_card_JUp6zp",
+        "story_card_Hrgxjj",
+        "story_card_PBwLQQ",
+        "story_card_JN83pT",
+        "story_card_k4bGFa"
+      ],
+      "name": "Stories Section",
+      "settings": {
+        "heading_text": "Straight from the ‘Gram",
+        "heading_color": "#1c1c1c",
+        "subheading_text": "FOLLOW US @usernamehere",
+        "subheading_color": "#1c1c1c",
+        "show_pagination": true
+      }
+    },
+    "faq_section_r4nU6e": {
+      "type": "faq-section",
+      "blocks": {
+        "question_UeyeBK": {
+          "type": "question",
+          "settings": {
+            "question_text": "Are your perfumes 100% authentic?",
+            "answer_text": "Yes, we only source from authorized distributors and trusted suppliers. Every fragrance is 100% genuine and brand-sealed.",
+            "question_image": "shopify://shop_images/faq-1.jpg"
+          }
+        },
+        "question_3TBHk3": {
+          "type": "question",
+          "settings": {
+            "question_text": "Do you offer international shipping?",
+            "answer_text": "Yes, we ship worldwide. Delivery times and rates vary based on your region.",
+            "question_image": "shopify://shop_images/perfume-4.jpg"
+          }
+        },
+        "question_w4DkYT": {
+          "type": "question",
+          "settings": {
+            "question_text": "Can I return or exchange a fragrance?",
+            "answer_text": "Returns are accepted if the item is unopened and unused within 14 days of purchase.",
+            "question_image": "shopify://shop_images/perfume-2_436c521a-3c91-454f-a5eb-e7aed9ffa22e.jpg"
+          }
+        },
+        "question_Rya4z4": {
+          "type": "question",
+          "settings": {
+            "question_text": "Do you offer gift wrapping or gift sets?",
+            "answer_text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters",
+            "question_image": "shopify://shop_images/perfume-8.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "question_UeyeBK",
+        "question_3TBHk3",
+        "question_w4DkYT",
+        "question_Rya4z4"
+      ],
+      "name": "Faq Section",
+      "settings": {
+        "heading": "Discover our FAQ"
+      }
+    },
+    "details_section_yDhRDH": {
+      "type": "details-section",
+      "blocks": {
+        "detail_kMgtPr": {
+          "type": "detail",
+          "settings": {
+            "icon": "shopify://shop_images/detail-1.svg",
+            "heading": "Easy Comparison",
+            "description": "Quickly compare prices, read customer reviews, and check ratings to make informed decisions."
+          }
+        },
+        "detail_hpndac": {
+          "type": "detail",
+          "settings": {
+            "icon": "shopify://shop_images/detail-2.svg",
+            "heading": "Wide Selection",
+            "description": "Access to a broader range of styles, sizes, and brands than a physical store might offer."
+          }
+        },
+        "detail_3BTVBj": {
+          "type": "detail",
+          "settings": {
+            "icon": "shopify://shop_images/detail-3.svg",
+            "heading": "Convenience",
+            "description": "Shop from the comfort of your home, 24/7. Online stores eliminate the need for travel and allow you to browse."
+          }
+        }
+      },
+      "block_order": [
+        "detail_kMgtPr",
+        "detail_hpndac",
+        "detail_3BTVBj"
+      ],
+      "name": "Details Section",
+      "settings": {}
+    }
+  },
+  "order": [
+    "custom_banner_hB4UEW",
+    "custom_featured_collection_bKjact",
+    "collection_tabs_slider_MjVGbQ",
+    "custom_timer_n6rDig",
+    "custom_timer_zone_LYCTUb",
+    "seasonal_collection_yXdD7c",
+    "marquee_section_dxt8qp",
+    "gift_section_VegNc4",
+    "custom_testimonials_EUmbby",
+    "stories_section_CjhHw9",
+    "faq_section_r4nU6e",
+    "details_section_yDhRDH"
+  ]
+}
