@@ -36,12 +36,13 @@
 
   <a href="{{ product.url }}">
     <img
-      src="{{ selected_variant.featured_image | img_url: '400x400' }}"
-      alt="{{ selected_variant.title }}"
+      src="{% if selected_variant.featured_image %}{{ selected_variant.featured_image | img_url: '400x400' }}{% else %}{{ product.featured_image | img_url: '400x400' }}{% endif %}"
+      alt="{% if selected_variant.featured_image %}{{ selected_variant.title }}{% else %}{{ product.title }}{% endif %}"
       class="product-card-img"
       width="400"
       height="400">
   </a>
+
 
   <p class="vendor">{{ product.vendor }}</p>
   <a href="{{ product.url }}">
