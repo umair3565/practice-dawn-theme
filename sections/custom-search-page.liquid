@@ -1,0 +1,237 @@
+{% schema %}
+  {
+    "name": "Custom Search Page",
+    "settings": [],
+    "presets": [
+      {
+        "name": "Custom Search Page"
+      }
+    ]
+  }
+{% endschema %}
+
+
+<style>
+
+  .search-page {
+    max-width: var(--page-width);
+    margin: var(--container-margin-desktop) auto;
+    padding: 0 var(--container-padding-desktop);
+  }
+
+  .search-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 32px;
+    transition: all 0.3s ease;
+  }
+
+  .search-generic-card {
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    padding: 16px;
+    background: #fff;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 360px;
+  }
+
+  .search-generic-card:hover {
+    border-color: #d3d3d3;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  }
+
+  .search-generic-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 12px;
+  }
+
+  .search-generic-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-text);
+  }
+
+  .search-generic-card p {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+
+  .item-label {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 8px;
+    background: #f4f4f4;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    color: #555;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  @media (max-width: 1200px) {
+    .search-page {
+      margin: var(--container-margin-desktop) auto var(--container-margin-tablet);
+      padding: 0 var(--container-padding-tablet);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .search-page {
+      margin: var(--container-margin-desktop) auto var(--container-margin-mobile);
+      padding: 0 var(--container-padding-mobile);
+    }
+  }
+
+  .no-products {
+    text-align: center;
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    margin-top: 40px;
+  }
+
+</style>
+
+<section
+  id="SearchPage"
+  class="search-page"
+  data-section-id="{{ section.id }}">
+
+  {% if search.results_count > 0 %}
+
+    {% paginate search.results by 12 %}
+
+      <div class="search-page-container">
+
+        {% for item in search.results %}
+
+          {% case item.object_type %}
+
+            {% when "product" %}
+              {% render 'product-card'
+                , product: item %}
+
+
+            {% when "collection" %}
+
+              <a href="{{ item.url }}" class="search-generic-card">
+                <span class="item-label">Collection</span>
+
+                {% if item.image %}
+                  <img
+                    src="{{ item.image | img_url: '400x' }}"
+                    width="400"
+                    height="400"
+                    alt="{{ item.title }}">
+                {% endif %}
+
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.description | strip_html | truncate: 120 }}</p>
+              </a>
+
+
+            {%- comment -%} PAGE CARD {%- endcomment -%}
+            {% when "page" %}
+              <a href="{{ item.url }}" class="search-generic-card">
+                <span class="item-label">Page</span>
+
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.content | strip_html | truncate: 140 }}</p>
+              </a>
+
+
+            {%- comment -%} ARTICLE CARD {%- endcomment -%}
+            {% when "article" %}
+              <a href="{{ item.url }}" class="search-generic-card">
+                <span class="item-label">Article</span>
+
+                {% if item.image %}
+                  <img
+                    src="{{ item.image | img_url: '400x' }}"
+                    width="400"
+                    height="400"
+                    alt="{{ item.title }}">
+                {% endif %}
+
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.excerpt | default: item.content | strip_html | truncate: 140 }}</p>
+              </a>
+
+          {% endcase %}
+
+        {% endfor %}
+
+      </div>
+
+      {% render 'custom-pagination'
+        , paginate: paginate %}
+
+    {% endpaginate %}
+
+  {% else %}
+    <p class="no-products">No results found.</p>
+  {% endif %}
+</section>
+
+
+<script>
+  
+  console.log('Custom Search Page--', {{ search.results |  json }});
+  
+  
+  const searchPage = document.getElementById('SearchPage');
+  const sectionId = searchPage?.dataset.sectionId;
+  
+  // Pagination Logic
+  function handlePagination() {
+  const paginationLinks = document.querySelectorAll('.products-pagination a');
+  if (!paginationLinks.length) return;
+  
+  paginationLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const url = new URL(link.href);
+      const params = url.searchParams.toString();
+      renderSection(params);
+    });
+  });
+  }
+  
+  // Section Rendering API
+  async function renderSection(params) {
+  const url = `${window.location.pathname}?section_id=${sectionId}${params ? '&' + params : ''}`;
+  
+  try {
+    const response = await fetch(url);
+    const html = await response.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const newSearchPage = doc.getElementById('SearchPage');
+  
+    if (newSearchPage) {
+      // Replace current content
+      searchPage.innerHTML = newSearchPage.innerHTML;
+      handlePagination();
+    }
+  
+    // Update browser URL without reload
+    const cleanUrl = `${window.location.pathname}${params ? '?' + params : ''}`;
+    history.replaceState({}, '', cleanUrl);
+  
+  } catch (error) {
+    console.error('Error rendering section:', error);
+  }
+  }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+  handlePagination();
+  });
+</script>

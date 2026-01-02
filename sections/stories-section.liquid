@@ -1,0 +1,371 @@
+{% schema %}
+  {
+    "name": "Stories Section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading_text",
+        "label": "Heading Text",
+        "default": "Straight from the ‘Gram"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading Color",
+        "default": "#1C1C1C"
+      },
+      {
+        "type": "text",
+        "id": "subheading_text",
+        "label": "Subheading Text",
+        "default": "FOLLOW US @usernamehere"
+      },
+      {
+        "type": "color",
+        "id": "subheading_color",
+        "label": "Subheading Color",
+        "default": "#1C1C1C"
+      }, {
+        "type": "checkbox",
+        "id": "show_pagination",
+        "label": "Show Pagination Dots",
+        "default": true
+      }
+
+    ],
+    "blocks": [
+      {
+        "type": "story_card",
+        "name": "Story Card",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "main_image",
+            "label": "Main Background Image (Optional)"
+          }, {
+            "type": "product",
+            "id": "product",
+            "label": "Select Product"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Stories Section",
+        "blocks": [
+          {
+            "type": "story_card"
+          }, {
+            "type": "story_card"
+          }, {
+            "type": "story_card"
+          }, {
+            "type": "story_card"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+
+  .stories-section {
+    max-width: var(--page-width);
+    margin: var(--container-margin-desktop) auto;
+    padding: 0 var(--container-padding-desktop);
+  }
+
+  .stories-section .stories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stories-header h3 {
+    color: {{ section.settings.heading_color }};
+  }
+  .stories-header p {
+    color: {{ section.settings.subheading_color }};
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .stories-container {
+    margin-top: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .storiesSwiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .storiesSwiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 360px;
+  }
+
+  .story-card {
+    position: relative;
+    max-width: 360px;
+  }
+
+  .story-card .story-card-img {
+    min-height: 660px;
+    max-height: 660px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+    cursor: pointer;
+    display: block;
+  }
+
+  .story-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, black, transparent);
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .story-card-content {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 312px;
+    z-index: 2;
+  }
+
+  .story-card-content > img {
+    border: 1px solid var(--text-primary);
+    width: 80px;
+    object-position: center;
+    object-fit: cover;
+  }
+
+  .story-card-content .content-right p:first-child {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--text-primary);
+  }
+
+  .story-card-content .content-right h4 {
+    margin-top: 4px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: var(--text-primary);
+  }
+
+  .stories-container .content-right p:last-child {
+    margin-top: 4px;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+    color: var(--text-primary);
+  }
+
+  .story-card-content .content-right .cart-row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .story-card-content .content-right .cart-row p {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    text-transform: uppercase;
+
+  }
+
+  .storiesSwiper .swiper-pagination {
+    position: relative !important;
+    margin-top: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100% !important;
+  }
+  .storiesSwiper .swiper-pagination-bullet {
+    width: 16px;
+    height: 4px;
+    background: var(--text-primary);
+    opacity: 1;
+    transition: all 0.3s ease;
+    border-radius: 0;
+  }
+  .storiesSwiper .swiper-pagination-bullet-active {
+    background: var(--text-secondary);
+  }
+
+  @media (max-width: 1200px) {
+    .stories-section {
+      padding: 0 var(--container-padding-tablet);
+    }
+  }
+
+
+  @media (max-width: 924px) {
+    .stories-section {
+      margin: 40px auto 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stories-section {
+      padding: 0 var(--container-padding-mobile);
+    }
+    .stories-section .stories-header {
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+</style>
+
+<section class="stories-section">
+
+  <div class="stories-header">
+    <h3 class="sub-heading">{{ section.settings.heading_text }}</h3>
+    <p>{{ section.settings.subheading_text }}</p>
+  </div>
+
+  <div class="stories-container">
+    <div class="swiper storiesSwiper">
+      <div class="swiper-wrapper">
+        {% if section.blocks.size > 0 %}
+
+          {% for block in section.blocks %}
+            {% assign product = all_products[block.settings.product] %}
+
+            <div class="swiper-slide">
+              <div class="story-card">
+                {% if block.settings.main_image != blank %}
+                  <img
+                    class="story-card-img"
+                    width="100%"
+                    height="100%"
+                    src="{{ block.settings.main_image | image_url }}"
+                    alt="{{ product.title | escape }}">
+                {% endif %}
+
+                <div class="story-card-content">
+                  {% if product.featured_image != blank %}
+                    <img
+                      width="80"
+                      height="80"
+                      src="{{ product.featured_image | image_url }}"
+                      alt="{{ product.title | escape }}">
+                  {% endif %}
+
+                  <div class="content-right">
+                    <div class="cart-row">
+                      <p>{{ product.vendor | default: 'Brand Name' }}</p>
+                      <img
+                        width="16"
+                        height="16"
+                        data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                        class="add-to-bag"
+                        src="{{ 'shopping-bag.svg' | asset_url }}"
+                        alt="Cart">
+                    </div>
+                    <h4>{{ product.title | default: 'Product Title' }}</h4>
+                    <p>
+                      {% if product.description != blank %}
+                        {{ product.description | strip_html | truncatewords: 10 }}
+                      {% else %}
+                        Men’s Fragrances • Water Notes, Fig Leaves, Bergamot, Grapefruit
+                      {% endif %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
+        {% endif %}
+      </div>
+      {% if section.settings.show_pagination %}
+        <div class="swiper-pagination"></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  
+  new Swiper('.storiesSwiper', {
+  slidesPerView: 'auto',
+  spaceBetween: 32,
+  centeredSlides: false,
+  pagination: {
+    el: '.stories-section .swiper-pagination',
+    clickable: true,
+  },
+  breakpoints: {
+    0: {                    
+      slidesPerView: 1,
+      centeredSlides: true,
+      spaceBetween: 20
+    },
+    426: {                  
+      slidesPerView: 'auto',
+      centeredSlides: false,  
+      spaceBetween: 32
+    }
+  }
+  });
+  
+    // Correct selector
+    const addToCartButtons = document.querySelectorAll('.stories-section .add-to-bag');
+  
+    const handleAddToCart = async (event) => {
+      const button = event.currentTarget;
+      const variantId = button.getAttribute('data-variant-id');
+  
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: variantId,
+            quantity: 1,
+          }),
+        });
+  
+        if (!response.ok) throw new Error('Failed to add to cart');
+  
+        const data = await response.json();
+        if (window.openCartDrawer) window.openCartDrawer();
+        updateCartCount();
+  
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        showToast('❌ Something went wrong');
+      }
+    };
+  
+    addToCartButtons.forEach((btn) => {
+      btn.addEventListener('click', handleAddToCart);
+    });
+  });
+</script>

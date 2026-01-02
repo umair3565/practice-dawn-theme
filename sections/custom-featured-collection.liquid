@@ -1,0 +1,174 @@
+{% schema %}
+  {
+    "name": "Custom Feature Collection",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading_text",
+        "label": "Heading Text",
+        "default": "A World of Fragrances, Curated for You"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading Color",
+        "default": "#E8E8E8"
+      },
+      {
+        "type": "text",
+        "id": "first_link_text",
+        "label": "First Link Text",
+        "default": "Explore Men's Collection"
+      },
+      {
+        "type": "url",
+        "id": "first_link_url",
+        "label": "First Link URL"
+      }, {
+        "type": "text",
+        "id": "second_link_text",
+        "label": "Second Link Text",
+        "default": "Explore Women's Collection"
+      }, {
+        "type": "url",
+        "id": "second_link_url",
+        "label": "Second Link URL"
+      }, {
+        "type": "color",
+        "id": "link_color",
+        "label": "Links Color",
+        "default": "#E8E8E8"
+      }, {
+        "type": "image_picker",
+        "id": "first_img",
+        "label": "First Image"
+      }, {
+        "type": "image_picker",
+        "id": "second_img",
+        "label": "Second Image"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Custom Feature Collection"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+
+  .featured-collection-wrapper {
+    background-color: black;
+  }
+
+  .featured-collection-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: var(--page-width);
+    padding: 100px var(--container-padding-desktop) 0;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .featured-collection-container h2 {
+    color: {{ section.settings.heading_color }};
+    text-align: center;
+  }
+
+  .collection-container {
+    margin-top: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+  }
+
+  .collection-container .link-btn {
+    gap: 8px;
+    color: {{ section.settings.link_color }};
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 24px;
+    font-size: 16px;
+  }
+
+  .collection-img {
+    margin-top: 16px;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  @media (max-width: 1200px) {
+    .featured-collection-container {
+      padding: 80px var(--container-padding-tablet) 0;
+    }
+  }
+
+
+  @media (max-width: 768px) {
+
+    .featured-collection-container {
+      padding: 40px var(--container-padding-mobile) 0;
+    }
+
+    .collection-container {
+      margin-top: 28px;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .collection-container .left,
+    .collection-container .right {
+      width: 100%;
+    }
+
+    .collection-container .link-btn {
+      justify-content: center;
+    }
+  }
+</style>
+
+<div class="featured-collection-wrapper">
+  <section class="featured-collection-container">
+    <h2 class="main-heading">{{ section.settings.heading_text }}</h2>
+
+    <div class="collection-container">
+
+      <div class="left">
+        <a href="{{ section.settings.first_link_url | default: '#' }}" class="link-btn">
+          <img
+            src="{{ 'link-icon.svg' | asset_url }}"
+            width="10"
+            height="10"
+            alt="">
+          <span>{{ section.settings.first_link_text }}</span>
+        </a>
+        {% if section.settings.first_img != blank %}
+          {{ section.settings.first_img | image_url: width: 1200 | image_tag: class: 'collection-img' }}
+        {% endif %}
+      </div>
+
+      <div class="right">
+        <a href="{{ section.settings.second_link_url | default: '#' }}" class="link-btn">
+          <img
+            src="{{ 'link-icon.svg' | asset_url }}"
+            width="10"
+            height="10"
+            alt="">
+          <span>{{ section.settings.second_link_text }}</span>
+        </a>
+        {% if section.settings.second_img != blank %}
+          {{ section.settings.second_img | image_url: width: 1200 | image_tag: class: 'collection-img' }}
+        {% endif %}
+      </div>
+
+    </div>
+
+  </section>
+</div>

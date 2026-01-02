@@ -1,0 +1,222 @@
+<style>
+  .filters-sidebar {
+    max-width: 360px;
+    overflow-y: auto;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    display: none;
+    transition: transform 0.3s ease;
+    z-index: 0;
+  }
+  .filters-sidebar.active {
+    display: flex;
+  }
+  .filter-group {
+    border-bottom: 1px solid #eee;
+    margin: 14px 0;
+  }
+  .filter-group:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .filter-header h4 {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-secondary)
+  }
+
+  .filter-header p {
+    font-size: 18px;
+    color: var(--text-secondary);
+  }
+
+  .filter-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.35s ease;
+  }
+  .filter-content.active {
+    max-height: 500px;
+    opacity: 1;
+    padding: 10px 0;
+    overflow-y: auto;
+  }
+  .filter-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    color: #333333;
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .filter-item input[type='checkbox'] {
+    accent-color: var(--text-secondary);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .checkbox-label {
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .price-range-container p {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333333;
+  }
+
+  .price-range {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: 16px;
+  }
+  .price-range input[type='number'] {
+    width: 90px;
+    padding: 6px 16px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background-color: #F0F0F0;
+    width: 126px;
+    height: 32px;
+  }
+  .price-range label {
+    font-size: 13px;
+    color: #555;
+  }
+
+  @media (max-width: 1110px) {
+
+    .filters-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      transform: translateX(-100%);
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+      overflow-y: auto;
+      background-color: #fff;
+      z-index: 1000;
+    }
+
+    .filters-sidebar.active {
+      transform: translateX(0);
+    }
+
+    .filter-close-icon {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      display: block;
+    }
+
+  }
+
+</style>
+
+<aside id="filtersSidebar" class="filters-sidebar">
+  <form id="filtersForm" method="get">
+    <img
+      class="filter-close-icon"
+      width="12"
+      height="12"
+      src="{{ 'filter-close.svg' | asset_url }}"
+      alt="filter icon">
+    {% for filter in collection.filters %}
+      <div class="filter-group">
+        <div class="filter-header{% if filter.active_values.size > 0 %} active{% endif %}">
+          <h4>{{ filter.label }}</h4>
+          <p>
+            {%- if forloop.first %}–{% else %}+{% endif -%}
+          </p>
+        </div>
+
+        <div class="filter-content {% if filter.active_values.size > 0 %} active{% endif %}">
+          {% case filter.type %}
+            {% when 'list' %}
+              {% for value in filter.values %}
+                {% if value.count > 0 %}
+
+                  <div class="filter-item">
+
+                    <div class="checkbox-wrapper">
+                      <input
+                        type="checkbox"
+                        name="{{ filter.param_name }}"
+                        value="{{ value.value }}"
+                        id="{{ filter.param_name | handleize }}-{{ forloop.index }}"
+                        {% if value.active %}
+                        checked
+                        {% endif %}>
+
+                      <label class="checkbox-label" for="{{ filter.param_name | handleize }}-{{ forloop.index }}">
+                        <p>{{ value.label }}</p>
+                      </label>
+
+                    </div>
+
+                    <p>({{ value.count }})</p>
+                  </div>
+
+                {% endif %}
+              {% endfor %}
+
+            {% when 'price_range' %}
+
+              <div class="price-range-container">
+                <p>The highest price is ${{ filter.range_max | divided_by: 100 }}</p>
+
+                <div class="price-range">
+                  <label>
+                    $
+                    <input
+                      type="number"
+                      name="{{ filter.min_value.param_name }}"
+                      value="{% if filter.min_value.value %}{{ filter.min_value.value | divided_by: 100 }}{% endif %}"
+                      placeholder="0">
+                  </label>
+                  <label for="">
+                    $
+                    <input
+                      type="number"
+                      name="{{ filter.max_value.param_name }}"
+                      value="{% if filter.max_value.value %}{{ filter.max_value.value | divided_by: 100 }}{% endif %}"
+                      placeholder="{{ filter.range_max | divided_by: 100 }}">
+                  </label>
+                </div>
+
+              </div>
+          {% endcase %}
+        </div>
+      </div>
+    {% endfor %}
+  </form>
+</aside>

@@ -1,0 +1,31 @@
+      <div class="sorts-wrapper">
+        <p>{{ collection.products_count }} Products</p>
+        |
+        <p>
+          {% for option in collection.sort_options %}
+            {% if option.value == collection.sort_by %}
+              {{ option.name }}
+            {% endif %}
+          {% endfor %}
+
+          {% if collection.sort_by == blank %}
+            Featured
+          {% endif %}
+        </p>
+        |
+        <form method="get" id="sortForm">
+          <label for="SortBy">Sort by:</label>
+          <select name="sort_by" id="SortBy">
+            {% for option in collection.sort_options %}
+              <option
+                value="{{ option.value }}"
+                {% if option.value == collection.sort_by %}
+                  selected
+                {% endif %}
+              >
+                {{ option.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </form>
+      </div>

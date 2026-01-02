@@ -1,0 +1,418 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "description",
+        "share"
+      ],
+      "disabled": true,
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "large",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "stacked",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "disabled": true,
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    },
+    "custom_products_details_PVQMWN": {
+      "type": "custom-products-details",
+      "blocks": {
+        "vendor_A6gNQL": {
+          "type": "vendor",
+          "settings": {}
+        },
+        "title_fcdP36": {
+          "type": "title",
+          "settings": {}
+        },
+        "quantity_xwryny": {
+          "type": "quantity",
+          "settings": {}
+        },
+        "short_text_aJMrGx": {
+          "type": "short-text",
+          "settings": {}
+        },
+        "description_iD38fd": {
+          "type": "description",
+          "settings": {}
+        },
+        "price_gBNFYp": {
+          "type": "price",
+          "settings": {}
+        },
+        "variants_T8tgLJ": {
+          "type": "variants",
+          "settings": {}
+        },
+        "quantity_update_z88iWw": {
+          "type": "quantity-update",
+          "settings": {}
+        },
+        "add_to_cart_G887M8": {
+          "type": "add-to-cart",
+          "settings": {}
+        },
+        "faqs_wPrdJx": {
+          "type": "faqs",
+          "settings": {}
+        },
+        "related_products_FkJ3Wn": {
+          "type": "related-products",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "vendor_A6gNQL",
+        "title_fcdP36",
+        "quantity_xwryny",
+        "short_text_aJMrGx",
+        "description_iD38fd",
+        "price_gBNFYp",
+        "variants_T8tgLJ",
+        "quantity_update_z88iWw",
+        "add_to_cart_G887M8",
+        "faqs_wPrdJx",
+        "related_products_FkJ3Wn"
+      ],
+      "name": "Product Details",
+      "settings": {
+        "shipping_calculation_text": "4 interest-free installments, or from $46.03/mo with",
+        "shippinig_info_text1": "Free International Shipping over $500",
+        "shippinig_info_text2": "Free Returns Within 30 days",
+        "help_box_bg": "#1c1c1c",
+        "help_text": "Need Help? Visit FAQ or Contact Our 24/7 Support Manager",
+        "help_link_text": "Read FAQs",
+        "help_URL": ""
+      }
+    },
+    "gift_section_Ew3P3a": {
+      "type": "gift-collection",
+      "name": "Gift Collection",
+      "settings": {
+        "main_heading": "Fragrances for the Season Ahead",
+        "heading_color": "#1c1c1c",
+        "button_link": "",
+        "collection_list": [
+          "gift-for-him",
+          "gifr-for-her"
+        ],
+        "show_arrows": true
+      }
+    },
+    "marquee_section_bDxiVW": {
+      "type": "marquee-section",
+      "blocks": {
+        "logo_7LMfRd": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-1.svg"
+          }
+        },
+        "logo_BaF8e7": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-2.svg"
+          }
+        },
+        "logo_AMKHyz": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-3.svg"
+          }
+        },
+        "logo_FrrnnD": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-4.svg"
+          }
+        },
+        "logo_Tzw4cm": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-5.svg"
+          }
+        },
+        "logo_94Ha3N": {
+          "type": "logo",
+          "settings": {
+            "logo_image": "shopify://shop_images/tag-6.svg"
+          }
+        }
+      },
+      "block_order": [
+        "logo_7LMfRd",
+        "logo_BaF8e7",
+        "logo_AMKHyz",
+        "logo_FrrnnD",
+        "logo_Tzw4cm",
+        "logo_94Ha3N"
+      ],
+      "name": "Custom Marquee Slider",
+      "settings": {
+        "bg_color": "#0c0c0c",
+        "scroll_speed": 4
+      }
+    },
+    "stories_section_zYDi3f": {
+      "type": "stories-section",
+      "blocks": {
+        "story_card_phnRBF": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-1.png",
+            "product": "ombre-leather-1"
+          }
+        },
+        "story_card_qAiDz7": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-2.png",
+            "product": "defy"
+          }
+        },
+        "story_card_tPTd3V": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-3.png",
+            "product": "orchid"
+          }
+        },
+        "story_card_3yaiaE": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-4.png",
+            "product": "romantic"
+          }
+        },
+        "story_card_6ritQB": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-1.png",
+            "product": "ombre-leather-1"
+          }
+        },
+        "story_card_3YwBwV": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-2.png",
+            "product": "defy"
+          }
+        },
+        "story_card_HWmGxi": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-3.png",
+            "product": "orchid"
+          }
+        },
+        "story_card_GnRxjL": {
+          "type": "story_card",
+          "settings": {
+            "main_image": "shopify://shop_images/story-4.png",
+            "product": "romantic"
+          }
+        }
+      },
+      "block_order": [
+        "story_card_phnRBF",
+        "story_card_qAiDz7",
+        "story_card_tPTd3V",
+        "story_card_3yaiaE",
+        "story_card_6ritQB",
+        "story_card_3YwBwV",
+        "story_card_HWmGxi",
+        "story_card_GnRxjL"
+      ],
+      "name": "Stories Section",
+      "settings": {
+        "heading_text": "Straight from the ‘Gram",
+        "heading_color": "#1c1c1c",
+        "subheading_text": "FOLLOW US @usernamehere",
+        "subheading_color": "#1c1c1c",
+        "show_pagination": true
+      }
+    },
+    "faq_section_QVH4jh": {
+      "type": "faq-section",
+      "blocks": {
+        "question_iqGAhe": {
+          "type": "question",
+          "settings": {
+            "question_text": "Are your perfumes 100% authentic?",
+            "answer_text": "Yes, we only source from authorized distributors and trusted suppliers. Every fragrance is 100% genuine and brand-sealed.",
+            "question_image": "shopify://shop_images/faq-1.jpg"
+          }
+        },
+        "question_xAMNfT": {
+          "type": "question",
+          "settings": {
+            "question_text": "Do you offer international shipping?",
+            "answer_text": "Yes, we ship worldwide. Delivery times and rates vary based on your region.",
+            "question_image": "shopify://shop_images/perfume-6013027_1280.jpg"
+          }
+        },
+        "question_wEWDTU": {
+          "type": "question",
+          "settings": {
+            "question_text": "Can I return or exchange a fragrance?",
+            "answer_text": "Returns are accepted if the item is unopened and unused within 14 days of purchase.",
+            "question_image": "shopify://shop_images/perfume-2.jpg"
+          }
+        },
+        "question_8GCDFG": {
+          "type": "question",
+          "settings": {
+            "question_text": "Do you offer gift wrapping or gift sets?",
+            "answer_text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters",
+            "question_image": "shopify://shop_images/perfume-8.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "question_iqGAhe",
+        "question_xAMNfT",
+        "question_wEWDTU",
+        "question_8GCDFG"
+      ],
+      "name": "Faq Section",
+      "settings": {
+        "heading": "Discover our FAQ"
+      }
+    },
+    "details_section_Y4UfKr": {
+      "type": "details-section",
+      "blocks": {
+        "detail_QeNaaJ": {
+          "type": "detail",
+          "settings": {
+            "icon": "shopify://shop_images/detail-1.svg",
+            "heading": "Easy Comparison",
+            "description": "Quickly compare prices, read customer reviews, and check ratings to make informed decisions."
+          }
+        },
+        "detail_kW7GtR": {
+          "type": "detail",
+          "settings": {
+            "icon": "shopify://shop_images/detail-2.svg",
+            "heading": "Wide Selection",
+            "description": "Access to a broader range of styles, sizes, and brands than a physical store might offer."
+          }
+        },
+        "detail_b43FB8": {
+          "type": "detail",
+          "settings": {
+            "icon": "shopify://shop_images/detail-3.svg",
+            "heading": "Convenience",
+            "description": "Shop from the comfort of your home, 24/7. Online stores eliminate the need for travel and allow you to browse."
+          }
+        }
+      },
+      "block_order": [
+        "detail_QeNaaJ",
+        "detail_kW7GtR",
+        "detail_b43FB8"
+      ],
+      "name": "Details Section",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "related-products",
+    "custom_products_details_PVQMWN",
+    "gift_section_Ew3P3a",
+    "marquee_section_bDxiVW",
+    "stories_section_zYDi3f",
+    "faq_section_QVH4jh",
+    "details_section_Y4UfKr"
+  ]
+}

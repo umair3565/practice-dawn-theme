@@ -1,0 +1,132 @@
+{% schema %}
+  {
+    "name": "Collection Banner",
+    "settings": [],
+    "presets": [
+      {
+        "name": "Collection Banner"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+  .collection-banner {
+    position: relative;
+    height: 650px;
+    overflow: hidden;
+  }
+
+  .collection-banner-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .collection-banner-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .banner-container {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 130px var(--container-padding-desktop);
+    max-width: var(--page-width);
+  }
+
+  .banner-container .breadcrumb {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--text-primary);
+  }
+
+  .banner-content {
+    max-width: 610px;
+  }
+
+  .banner-content h2 {
+    color: var(--text-primary);
+  }
+
+  .banner-content p {
+    margin-top: 24px;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 1200px) {
+    .banner-container {
+      padding: 120px var(--container-padding-tablet);
+    }
+  }
+
+  @media (max-width: 768px) {
+
+    .banner-container {
+      padding: 80px var(--container-padding-mobile);
+    }
+    .banner-content {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<section class="collection-banner">
+  <div class="collection-banner-bg">
+    {% if collection.image %}
+      <img
+        src="{{ collection.image | img_url: '1600x' }}"
+        alt="{{ collection.title | escape }}"
+        width="100%"
+        height="100%">
+    {% else %}
+      <img
+        src="{{ 'collection-banner-bg.jpg' | asset_url }}"
+        alt="Collection banner fallback"
+        width="100%"
+        height="100%">
+    {% endif %}
+  </div>
+
+  <div class="banner-container">
+    <div class="breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a>
+      — {{ collection.title }}
+    </div>
+
+    <div class="banner-content">
+      <h2 class="main-heading">
+        {{ collection.title | default: "Men’s Fragrances" }}
+      </h2>
+
+      <p>
+        {% if collection.description != blank %}
+          {{ collection.description }}
+        {% else %}
+          Discover a world of bold, timeless, and captivating scents crafted for the modern man. From fresh and
+ 
+          energizing notes to deep, woody, and sophisticated blends, our collection is designed to match every mood,
+          style, and occasion.
+          <br><br>
+          Elevate your presence and leave a lasting impression with fragrances that define confidence, elegance,
+ 
+          and individuality.
+        {% endif %}
+      </p>
+    </div>
+
+  </div>
+
+
+</section>

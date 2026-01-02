@@ -1,0 +1,251 @@
+<style>
+  .cart-related-product {
+    display: flex;
+    gap: 20px;
+    padding: 22px 0;
+  }
+
+  .cart-related-product .related-product-left {
+    flex: 1;
+    display: flex;
+    gap: 18px;
+  }
+
+  .cart-related-product .image {
+    max-width: 120px;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .cart-related-product .details {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .cart-related-product .title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .cart-related-product .price-row {
+    display: flex;
+    gap: 10px;
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .cart-related-product .price-row .compare-price {
+    text-decoration: line-through;
+  }
+
+  .cart-related-product .action-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+  }
+
+  .cart-related-product .quantity-control {
+    display: flex;
+    align-items: center;
+    background-color: #f3f3f3;
+    border-radius: 40px;
+    height: 45px;
+    padding: 0 6px;
+  }
+
+  .cart-related-product .quantity-control button {
+    width: 38px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .cart-related-product .quantity-control input {
+    width: 36px;
+    text-align: center;
+    font-size: 16px;
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+
+  .cart-related-product .add-cart-item {
+    background: none;
+    border-bottom: 2px solid var(--text-secondary);
+    font-size: 16px;
+    font-weight: medium;
+    cursor: pointer;
+    line-height: 1;
+  }
+</style>
+
+{% assign my_collection = section.settings.select_collection_products %}
+
+{% if my_collection.products_count > 0 %}
+  <div class="cart-swiper-container">
+    <p>You Might Also Like</p>
+
+    <div class="swiper cart-swiper">
+      <div class="swiper-wrapper">
+        {% for product in my_collection.products %}
+          {% assign variant = product.selected_or_first_available_variant %}
+
+          <div class="swiper-slide">
+            <div
+              class="cart-related-product"
+              data-variant-id="{{ variant.id }}"
+              data-inventory-quantity="{{ variant.inventory_quantity }}">
+
+              <div class="related-product-left">
+                {{ product.featured_image | image_url: width: 150 | image_tag: class: 'image' }}
+
+                <div class="details">
+                  <p class="title">{{ product.title }}</p>
+
+                  <div class="price-row">
+                    {% if variant.compare_at_price > variant.price %}
+                      <span class="compare-price">
+                        {{ variant.compare_at_price | money }}
+                      </span>
+                    {% endif %}
+
+                    <span class="current-price">
+                      {{ variant.price | money }}
+                    </span>
+                  </div>
+
+                  <div class="action-row">
+                    <div class="quantity-control">
+                      <button type="button" class="cart-decrement-btn">-</button>
+
+                      <input
+                        type="number"
+                        class="cart-display-quantity"
+                        value="1"
+                        min="1">
+
+                      <button type="button" class="cart-increment-btn">+</button>
+                    </div>
+
+                    <button type="button" class="add-cart-item">Add</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cart-loading-overlay">
+                <div class="cart-spinner"></div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+<script>
+  
+  function cartRelatedProductQtyUpdate () {
+    // Attach a single listener to the cartDrawer
+    cartDrawerContainer.addEventListener('click', async (e) => {
+      const cartRelatedProduct = e.target.closest('.cart-related-product');
+      if (!cartRelatedProduct) return;
+  
+      const maxQty = parseInt(cartRelatedProduct.dataset.inventoryQuantity) || 0;
+      const input = cartRelatedProduct.querySelector('.cart-display-quantity');
+  
+      // Increment
+      if (e.target.matches('.cart-increment-btn')) {
+        let qty = parseInt(input.value) || 1;
+        if (qty < maxQty) {
+          qty++;
+          input.value = qty;
+        } else {
+          showToast('ℹ️ Not enough quantity available');
+        }
+      }
+  
+      // Decrement
+      if (e.target.matches('.cart-decrement-btn')) {
+        let qty = parseInt(input.value) || 1;
+        if (qty > 1) {
+          qty--;
+          input.value = qty;
+        }
+      }
+  
+    });
+  
+    // Input change handler (delegation doesn't work for change events)
+    cartDrawerContainer.addEventListener('change', async (e) => {
+    const cartRelatedProduct = e.target.closest('.cart-related-product');
+      if (!cartRelatedProduct) return;
+  
+      const maxQty = parseInt(cartRelatedProduct.dataset.inventoryQuantity) || 0;
+      const input = cartRelatedProduct.querySelector('.cart-display-quantity');
+  
+      if (e.target.matches('.cart-display-quantity')) {
+        let qty = parseInt(input.value) || 1;
+        if (qty < 1) qty = 1;
+        if (qty > maxQty) {
+          qty = maxQty;
+          showToast('ℹ️ Not enough quantity available');
+        }
+        input.value = qty;
+      }
+    });
+  }
+  
+   function handleCartRelatedProdcutAdd() {
+       
+       cartDrawerContainer.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.add-cart-item');
+      if (!btn) return;
+  
+  
+      const productItem = btn.closest('.cart-related-product, #cartDrawer');
+      if (!productItem) return;
+  
+      const variantId = productItem.dataset.variantId;
+      const quantityInput = productItem.querySelector('.cart-display-quantity');
+      const quantity = parseInt(quantityInput.value) || 1;
+  
+    const overlay = document.getElementById('cartLoadingOverlay');
+  
+    productItem.style.opacity = '0.5';
+    productItem.style.pointerEvents = 'none';
+    overlay.style.display = 'flex';
+  
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: variantId, quantity })
+        });
+  
+        if (!response.ok) throw new Error('Failed to add item');
+  
+        const data = await response.json();
+        if (window.openCartDrawer) window.openCartDrawer();
+        updateCartCount();
+        console.log('Added to cart:', data);
+      } catch (err) {
+        console.error('Error adding to cart:', err);
+        showToast('❌ Something went wrong');
+      }  finally {
+      productItem.style.opacity = '';
+      productItem.style.pointerEvents = '';
+      overlay.style.display = 'none';
+    }
+    });
+  }
+</script>

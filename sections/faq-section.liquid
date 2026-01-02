@@ -1,0 +1,287 @@
+{% schema %}
+  {
+    "name": "Faq Section",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "default_image",
+        "label": "Default Image",
+        "info": "Used only if a question image is missing."
+      }, {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Discover our FAQ"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "question",
+        "name": "FAQ Question",
+        "limit": 4,
+        "settings": [
+          {
+            "type": "text",
+            "id": "question_text",
+            "label": "Question"
+          }, {
+            "type": "textarea",
+            "id": "answer_text",
+            "label": "Answer"
+          }, {
+            "type": "image_picker",
+            "id": "question_image",
+            "label": "Image for this Question"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Faq Section",
+        "category": "Content"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+  .faq-section {
+    width: 100%;
+    background-color: #0c0c0c;
+    margin: var(--container-margin-desktop) auto;
+  }
+
+  .faq-container {
+    max-width: 100%;
+    display: flex;
+  }
+
+  .faq-container .faq-img {
+    max-width: 50%;
+    min-height: 618px;
+    max-height: 618px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .faq-section .faq-content {
+    max-width: 50%;
+    max-height: 618px;
+    min-height: 618px;
+    padding: 80px var(--container-padding-desktop);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .faq-section .faq-content h2 {
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 48px;
+    color: var(--text-primary);
+  }
+
+  .faq-section .faq-questions-container {
+    margin-top: 40px;
+  }
+
+  .faq-section .faq-question {
+    border-bottom: 1px solid #676767;
+    padding: 20px 0;
+  }
+
+  .faq-section .faq-question:last-child {
+    border-bottom: none;
+  }
+
+  .faq-section .faq-question h4 {
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 400;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: var(--text-primary);
+  }
+
+  .faq-section .faq-question h4 span {
+    font-size: 22px;
+    line-height: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .faq-section .faq-question p {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-primary);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin-top: 0;
+    transition: all 0.35s ease;
+    font-family: Inter;
+    font-weight: 400;
+  }
+
+  .faq-section .faq-question.active p {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 24px;
+  }
+
+  @media (max-width: 1400px) {
+    .faq-section .faq-container {
+      flex-direction: column;
+    }
+
+    .faq-container .faq-img,
+    .faq-section .faq-content {
+      max-width: 100%;
+    }
+
+    .faq-container .faq-img {
+      height: 400px;
+    }
+
+    .faq-section .faq-content {
+      padding: 40px 24px;
+    }
+
+    .faq-section .faq-content h2 {
+      font-size: 32px;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .faq-section {
+      margin-top: var(--container-margin-tablet);
+    }
+  }
+
+  @media (max-width: 768px) {
+
+    .faq-section {
+      margin-top: var(--container-margin-mobile);
+    }
+
+    .faq-section .faq-content {
+      padding: 40px 16px;
+    }
+
+    .faq-section .faq-question {
+      padding: 16px 0;
+    }
+
+    .faq-section .faq-question h4 {
+      font-size: 18px;
+      line-height: 22px;
+    }
+
+    .faq-section .faq-question h4 span {
+      font-size: 18px;
+    }
+
+    .faq-section .faq-question p {
+      font-size: 12px;
+      line-height: 16px;
+    }
+    .faq-section .faq-question.active p {
+      margin-top: 14px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .faq-container .faq-img {
+      height: 300px;
+    }
+  }
+</style>
+
+<section class="faq-section">
+
+  <div class="faq-container">
+
+    {% assign first_block = section.blocks.first %}
+    {% assign first_img = first_block.settings.question_image | image_url: width: 880 %}
+    {% assign default_img = section.settings.default_image | image_url: width: 880 %}
+
+    <img
+      class="faq-img"
+      width="100%"
+      height="100%"
+      src="{{ first_img | default: default_img | default: 'image-placeholder.png' | asset_url }}"
+      alt="faq img"
+      id="faqMainImage">
+
+    <div class="faq-content">
+      <h2>{{ section.settings.heading }}</h2>
+      <div class="faq-questions-container">
+        {% if section.blocks.size > 0 %}
+          {% for block in section.blocks %}
+            <div class="faq-question {% if forloop.first %}active{% endif %}" data-img="{{ block.settings.question_image | image_url: width: 880 }}">
+              <h4>
+                {{ block.settings.question_text }}
+                <span>
+                  {%- if forloop.first %}–{% else %}+{% endif -%}
+                </span>
+              </h4>
+              <p>{{ block.settings.answer_text }}</p>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  
+  const faqSection = document.querySelector('.faq-section'); 
+  if (!faqSection) return;
+  
+    const questions = faqSection.querySelectorAll('.faq-question');
+    const faqImage = document.getElementById('faqMainImage');
+  
+    if (!questions.length) return;
+  
+    const firstQuestion = questions[0];
+    const firstImg = firstQuestion.getAttribute('data-img');
+    if (firstImg) faqImage.src = firstImg;
+  
+    questions.forEach((question) => {
+      const header = question.querySelector('h4');
+      const toggleIcon = header.querySelector('span');
+  
+      header.addEventListener('click', () => {
+        const isActive = question.classList.contains('active');
+  
+        questions.forEach((q) => {
+          q.classList.remove('active');
+          q.querySelector('span').textContent = '+';
+        });
+  
+        if (!isActive) {
+          question.classList.add('active');
+          toggleIcon.textContent = '–';
+          const newImg = question.getAttribute('data-img');
+          if (newImg) {
+            faqImage.style.opacity = '0';
+            faqImage.src = newImg;
+            faqImage.style.opacity = '1';
+          }
+        } else {
+          faqImage.style.opacity = '0';
+          faqImage.src = firstImg;
+          faqImage.style.opacity = '1';
+        }
+      });
+    });
+  });
+</script>

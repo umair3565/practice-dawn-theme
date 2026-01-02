@@ -1,0 +1,369 @@
+{% schema %}
+{
+  "name": "Predictive Search",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Predictive Search"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .search-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.705);
+    display: none;
+    z-index: 99;
+  }
+
+  .search-overlay.active {
+    display: block;
+  }
+
+  .search-form {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    max-width: 700px;
+    width: 90%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -5%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  .search-form.active {
+    display: block;
+  }
+
+  .search-input-wrapper {
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px 10px 10px 36px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+
+  .search-input-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .close-search {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #555;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .predictive-results {
+    display: none;
+    margin-top: 12px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    overflow: hidden;
+    max-height: 350px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  .predictive-inner {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+  }
+
+  .predictive-inner.single-column {
+    display: block;
+  }
+
+  .predictive-suggestions {
+    padding: 10px 0;
+  }
+
+  .predictive-products {
+    padding: 10px 0;
+    max-height: 350px;
+    overflow-y: auto;
+  }
+
+  .predictive-title {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 15px;
+    opacity: 0.6;
+    text-transform: uppercase;
+  }
+
+  .predictive-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 15px;
+    text-decoration: none;
+    color: #333;
+  }
+
+  .predictive-item:hover {
+    background: #f9f9f9;
+  }
+
+  .predictive-item img {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+
+  .see-all {
+    display: block;
+    text-align: center;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    text-decoration: none;
+    font-weight: 500;
+    color: #000;
+  }
+
+  .search-spinner {
+    display: none;
+    margin: 20px auto;
+    border: 4px solid #f3f3f3;
+    border-top: 2px solid #a2a2a2;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 0.8s linear infinite;
+    text-align: center;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+<div class="search-overlay"></div>
+
+<form class="search-form" role="search">
+  <div class="search-input-wrapper">
+    <svg
+      class="search-input-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <circle
+        cx="11"
+        cy="11"
+        r="8"
+        stroke="currentColor"
+        stroke-width="2" />
+      <line
+        x1="21"
+        y1="21"
+        x2="16.65"
+        y2="16.65"
+        stroke="currentColor"
+        stroke-width="2" />
+    </svg>
+
+    <input
+      type="search"
+      id="SearchInput"
+      class="search-input"
+      placeholder="Search products..."
+      autocomplete="off"
+    >
+  </div>
+
+  <div id="ResultsContainer" class="search-results">
+    <div id="SearchSpinner" class="search-spinner"></div>
+
+    <div class="predictive-inner">
+      <div class="predictive-suggestions" id="SuggestionResults"></div>
+      <div class="predictive-products" id="ProductResults"></div>
+    </div>
+    <a id="SeeAllLink" class="see-all"></a>
+  </div>
+</form>
+
+<script>
+  const searchForm = document.querySelector('.search-form');
+  const searchOverlay = document.querySelector('.search-overlay');
+  const searchInput = document.getElementById('SearchInput');
+  const resultsContainer = document.getElementById('ResultsContainer');
+  const predictiveInner = document.querySelector('.predictive-inner');
+  const searchSpinner = document.getElementById('SearchSpinner');
+
+  let controller;
+
+  function openSearchModal() {
+    document.querySelectorAll('.search-icon').forEach((icon) => {
+      icon.addEventListener('click', () => {
+        searchForm.classList.add('active');
+        searchOverlay.classList.add('active');
+        searchInput.focus();
+        resultsContainer.style.display = 'none';
+        predictiveInner.classList.remove('single-column');
+      });
+    });
+  }
+
+  function closeSearchModal() {
+    searchOverlay.addEventListener('click', () => {
+      searchForm.classList.remove('active');
+      searchOverlay.classList.remove('active');
+      searchInput.value = '';
+      clearResults();
+      resultsContainer.style.display = 'none';
+      predictiveInner.classList.remove('single-column');
+    });
+  }
+
+  function clearResults() {
+    document.getElementById('ProductResults').innerHTML = '';
+    document.getElementById('SuggestionResults').innerHTML = '';
+    const seeAllLink = document.getElementById('SeeAllLink');
+    seeAllLink.style.display = 'none';
+    seeAllLink.innerHTML = '';
+    predictiveInner.classList.remove('single-column');
+    searchSpinner.style.display = 'none';
+  }
+
+  function handleSearchInput() {
+    searchInput.addEventListener('input', async (e) => {
+      const query = e.target.value.trim();
+      const productBox = document.getElementById('ProductResults');
+      const suggestionBox = document.getElementById('SuggestionResults');
+      const seeAllLink = document.getElementById('SeeAllLink');
+
+      clearResults();
+
+      if (!query) {
+        resultsContainer.style.display = 'none';
+        return;
+      }
+
+      // Show spinner before fetch
+      searchSpinner.style.display = 'block';
+      resultsContainer.style.display = 'block';
+
+      if (controller) controller.abort();
+      controller = new AbortController();
+
+      try {
+        const res = await fetch(
+          `/search/suggest.json?q=${encodeURIComponent(
+            query
+          )}&resources[type]=product,page,collection,article&resources[limit]=6`,
+          { signal: controller.signal }
+        );
+
+        const data = await res.json();
+        const { products, pages, collections, articles } = data?.resources?.results || {};
+
+        // Hide spinner after data arrives
+        searchSpinner.style.display = 'none';
+
+        // PRODUCTS
+        let productHTML = '';
+        if (products.length) {
+          productHTML += `<div class="predictive-title">Products</div>`;
+          productHTML += products.map(
+              (item) => `<a href="${item.url}" class="predictive-item">
+                          <img src="${item.image}" alt="${item.title}">
+                          <div>
+                            <div>${item.title}</div>
+                            <small>Rs.${item.price}</small>
+                          </div>
+                        </a>`
+            )
+            .join('');
+        }
+        productBox.innerHTML = productHTML;
+
+        // SUGGESTIONS
+        let suggestions = '';
+        if (collections.length) {
+          suggestions += `<div class="predictive-title">Collections</div>`;
+          suggestions += collections.map((c) => `<a href="${c.url}" class="predictive-item">${c.title}</a>`).join('');
+        }
+        if (pages.length) {
+          suggestions += `<div class="predictive-title">Pages</div>`;
+          suggestions += pages.map((p) => `<a href="${p.url}" class="predictive-item">${p.title}</a>`).join('');
+        }
+        if (articles.length) {
+          suggestions += `<div class="predictive-title">Articles</div>`;
+          suggestions += articles.map((a) => `<a href="${a.url}" class="predictive-item">${a.title}</a>`).join('');
+        }
+        suggestionBox.innerHTML = suggestions;
+
+        // Layout adjustments
+        if (!collections.length && !pages.length && !articles.length) {
+          predictiveInner.classList.add('single-column');
+        } else {
+          predictiveInner.classList.remove('single-column');
+        }
+
+        // No results message
+        if (!products.length && !collections.length && !pages.length && !articles.length) {
+          productBox.innerHTML = `<div class="predictive-item">No results found</div>`;
+          predictiveInner.classList.add('single-column');
+        }
+
+        // See all link
+        if (products.length || collections.length || pages.length || articles.length) {
+          seeAllLink.href = `/search?q=${encodeURIComponent(query)}`;
+          seeAllLink.innerHTML = `See all results for "${query}"`;
+          seeAllLink.style.display = 'block';
+        }
+      } catch (err) {
+        searchSpinner.style.display = 'none';
+        if (err.name !== 'AbortError') console.error('Predictive error:', err);
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    openSearchModal();
+    closeSearchModal();
+    handleSearchInput();
+  });
+</script>

@@ -1,0 +1,383 @@
+{% schema %}
+  {
+    "name": "Custom Banner",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "banner_slide",
+        "name": "Video Slide",
+        "settings": [
+          {
+            "type": "video",
+            "id": "video",
+            "label": "Upload Video"
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Product Title Here"
+          },
+          {
+            "type": "color",
+            "id": "heading_color",
+            "label": "Heading Color",
+            "default": "#E8E8E8"
+          },
+          {
+            "type": "textarea",
+            "id": "text",
+            "label": "Text",
+            "default": "Product Text Here"
+          }, {
+            "type": "color",
+            "id": "para_color",
+            "label": "Text Color",
+            "default": "#E8E8E8"
+          }, {
+            "type": "url",
+            "id": "button_link",
+            "label": "Button Link"
+          }, {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button Text"
+          }, {
+            "type": "color",
+            "id": "link_color",
+            "label": "Link Color",
+            "default": "#E8E8E8"
+          }, {
+            "type": "select",
+            "id": "content_position",
+            "label": "Content position",
+            "default": "bottom_right",
+            "options": [
+              {
+                "value": "top_left",
+                "label": "Top Left"
+              },
+              {
+                "value": "top_right",
+                "label": "Top Right"
+              },
+              {
+                "value": "bottom_left",
+                "label": "Bottom Left"
+              },
+              {
+                "value": "bottom_right",
+                "label": "Bottom Right"
+              }, {
+                "value": "center",
+                "label": "Center"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Custom Banner",
+        "category": "Banner"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+  .bannerSwiper {
+    position: relative;
+    width: 100%;
+    height: 85vh;
+    overflow: hidden;
+    margin: 0;
+  }
+  .banner-slide {
+    position: relative;
+    width: 100%;
+    height: 85vh;
+  }
+  .bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 1;
+  }
+
+  .banner-content {
+    position: relative;
+    z-index: 2;
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0 var(--container-padding-desktop);
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .banner-card {
+    position: absolute;
+    z-index: 2;
+    max-width: 500px;
+  }
+
+  .pos-top_left {
+    top: 160px;
+    left: 96px;
+  }
+  .pos-top_right {
+    top: 160px;
+    right: 96px;
+  }
+  .pos-bottom_left {
+    bottom: 124px;
+    left: 96px;
+  }
+  .pos-bottom_right {
+    bottom: 124px;
+    right: 96px;
+  }
+  .pos-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .banner-card p {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    margin: 24px 0;
+  }
+
+  .banner-card .link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .banner-card .link-btn:hover {
+    opacity: 0.8;
+  }
+
+  .video-controls {
+    position: absolute;
+    bottom: 40px;
+    left: 60px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .video-controls img {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  .video-controls img:hover {
+    opacity: 0.8;
+  }
+  .pause-icon {
+    display: none;
+  }
+
+  .view-icon {
+    position: absolute;
+    bottom: 40px;
+    right: 60px;
+    z-index: 3;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  .view-icon:hover {
+    opacity: 0.8;
+  }
+
+  @media (max-width: 1200px) {
+    .banner-content {
+      padding: 0 var(--container-padding-tablet);
+    }
+    .pos-top_left,
+    .pos-top_right,
+    .pos-bottom_left,
+    .pos-bottom_right {
+      top: auto;
+      bottom: 10%;
+      left: 5%;
+      right: 5%;
+    }
+    .banner-card p {
+      font-size: 16px;
+      line-height: 20px;
+      margin: 12px 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .banner-content {
+      padding: 0 var(--container-padding-mobile);
+    }
+    .pos-top_left,
+    .pos-top_right,
+    .pos-bottom_left,
+    .pos-bottom_right {
+      top: auto;
+      bottom: 10%;
+      left: 5%;
+      right: 5%;
+    }
+    .banner-card p {
+      font-size: 14px;
+      margin: 6px 0;
+    }
+    .banner-card .link-btn {
+      font-size: clamp(10px, 3vw, 14px);
+    }
+    .video-controls {
+      bottom: 3%;
+      left: 5%;
+      gap: 8px;
+    }
+    .view-icon {
+      bottom: 3%;
+      right: 5%;
+      width: 24px;
+      height: 24px;
+    }
+  }
+</style>
+
+<section class="swiper bannerSwiper">
+  <div class="swiper-wrapper">
+    {% for block in section.blocks %}
+      <div class="swiper-slide">
+        <div class="banner-slide">
+          {{ block.settings.video | video_tag: autoplay: true, loop: true, playsinline: true, class: 'bg-video' }}
+
+          <div class="banner-content">
+
+            <div class="banner-card pos-{{ block.settings.content_position }}" style="color: {{ block.settings.heading_color }}">
+
+              <h2 class="main-heading" style="color: {{ block.settings.heading_color }}">
+                {{ block.settings.heading }}
+              </h2>
+
+              <p style="color: {{ block.settings.para_color }}">{{ block.settings.text }}</p>
+
+              <a
+                href="{{ block.settings.button_link }}"
+                class="link-btn"
+                style="color: {{ block.settings.link_color }}">
+                <img
+                  src="{{ 'link-icon.svg' | asset_url }}"
+                  width="10"
+                  height="10"
+                  alt="">
+                <span>{{ block.settings.button_text }}</span>
+              </a>
+
+            </div>
+
+            <div class="video-controls">
+              <img
+                class="play-icon"
+                src="{{ 'play-icon.svg' | asset_url }}"
+                width="28"
+                height="28"
+                alt="Play Icon">
+              <img
+                class="pause-icon"
+                src="{{ 'pause-icon.svg' | asset_url }}"
+                width="28"
+                height="28"
+                alt="Pause Icon">
+              <img
+                class="sound-icon"
+                src="{{ 'sound-icon.svg' | asset_url }}"
+                width="28"
+                height="28"
+                alt="Sound Icon">
+            </div>
+
+            <img
+              class="view-icon"
+              src="{{ 'view-icon.svg' | asset_url }}"
+              width="30"
+              height="30"
+              alt="View Icon">
+          </div>
+
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    new Swiper('.bannerSwiper', { loop: true });
+  
+    const bannerSlides = document.querySelector('.bannerSwiper');
+  
+      const video = bannerSlides.querySelector('.bg-video');
+      const playIcon = bannerSlides.querySelector('.play-icon');
+      const pauseIcon = bannerSlides.querySelector('.pause-icon');
+      const viewIcon = bannerSlides.querySelector('.view-icon');
+      const soundIcon = bannerSlides.querySelector('.sound-icon');
+  
+      // Initial state
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+  
+      const togglePlayPause = () => {
+        if (video.paused) {
+          video.play();
+          playIcon.style.display = 'none';
+          pauseIcon.style.display = 'block';
+        } else {
+          video.pause();
+          playIcon.style.display = 'block';
+          pauseIcon.style.display = 'none';
+        }
+      };
+  
+      video.addEventListener('click', togglePlayPause);
+      playIcon.addEventListener('click', togglePlayPause);
+      pauseIcon.addEventListener('click', togglePlayPause);
+  
+      soundIcon.addEventListener('click', () => {
+        video.muted = !video.muted;
+        soundIcon.src = video.muted ? '{{ "sound-off.svg" | asset_url }}' : '{{ "sound-icon.svg" | asset_url }}';
+      });
+  
+      viewIcon.addEventListener('click', () => {
+        if (video.requestFullscreen) video.requestFullscreen();
+        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+        else if (video.msRequestFullscreen) video.msRequestFullscreen();
+        video.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+      });
+  
+      video.addEventListener('ended', () => {
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+      });
+  
+    
+    
+  });
+</script>

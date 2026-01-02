@@ -1,0 +1,133 @@
+:root {
+  --container-width: 1728px;
+  --text-primary: #e8e8e8;
+  --text-secondary: #1c1c1c;
+  --text-para: #676767;
+  --container-padding-desktop: 96px;
+  --container-padding-tablet: 32px;
+  --container-padding-mobile: 16px;
+  --container-margin-desktop: 60px;
+  --container-margin-tablet: 40px;
+  --container-margin-mobile: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: black;
+  overflow-x: hidden;
+  font-family: var(--font-body-family, 'Satoshi');
+  /* font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight); */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.tabs-variant-box {
+  cursor: pointer;
+}
+.variant-box {
+  cursor: pointer;
+}
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
+}
+
+.main-heading {
+  font-weight: 300;
+  font-size: 64px;
+  line-height: 72px;
+  letter-spacing: -2.56px;
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+}
+
+@media (max-width: 1200px) {
+  .main-heading {
+    font-size: 48px;
+    line-height: 56px;
+    letter-spacing: -1.92px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-heading {
+    font-size: 32px;
+    line-height: 34px;
+    letter-spacing: -0.62px;
+  }
+}
+
+.sub-heading {
+  font-weight: 400;
+  line-height: 40px;
+  font-size: 32px;
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+}
+
+@media (max-width: 1024px) {
+  .sub-heading {
+    font-size: 22px;
+    line-height: 32px;
+  }
+}
+
+.main-btn {
+  font-weight: 700;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  line-height: 20px;
+  padding: 9px 18px;
+  letter-spacing: 2.4px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.small-btn {
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 18px;
+  transition: all 0.3s ease;
+  background-color: var(--text-secondary);
+  color: var(--text-primary);
+  width: fit-content;
+}
+
+.article-link {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 700;
+  border-bottom: 3px solid var(--text-para);
+  display: inline;
+  width: fit-content;
+}

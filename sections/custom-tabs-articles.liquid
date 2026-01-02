@@ -1,0 +1,294 @@
+{% schema %}
+  {
+    "name": "Custom Tabs Articles",
+    "settings": [],
+    "presets": [
+      {
+        "name": "Custom Tabs Articles"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+
+  .tabs-articles-section {
+    max-width: var(--page-width);
+    margin: 60px auto;
+    padding: 0 var(--container-padding-desktop);
+  }
+
+  .tabs-articles-section h3 {
+    text-align: center;
+  }
+
+  .articles-tabs-container {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    transition: all 0.3s ease;
+  }
+
+  .articles-tabs-container .tab-btn {
+    padding: 8px 20px;
+    border: 1px solid #000;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+  }
+
+  .articles-tabs-container .active {
+    background-color: #000;
+    color: #fff;
+
+  }
+
+  .articles-grid-container {
+    margin-top: 36px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    justify-items: center;
+    gap: 32px;
+  }
+
+  .article-card {
+    max-width: 360px;
+    max-height: 500px;
+    width: 100%;
+  }
+
+  .article-card .article-card-img {
+    width: 100%;
+    max-height: 360px;
+    min-height: 360px;
+    object-fit: cover;
+  }
+
+  .article-content {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .article-content h4 {
+    font-size: 18px;
+  }
+
+  .article-content .small-btn {
+    text-transform: uppercase;
+  }
+
+  .article-content .description {
+    font-size: 14px;
+    color: #555;
+    line-height: 16px;
+  }
+
+  @media (max-width: 1294px) {
+
+    .tabs-articles-section {
+      margin: var(--container-margin-tablet) auto;
+      padding: 0 var(--container-padding-tablet);
+    }
+
+  }
+
+  @media (max-width: 768px) {
+
+    .tabs-articles-section {
+      margin: var(--container-margin-mobile) auto;
+      padding: 0 var(--container-padding-mobile);
+    }
+
+    .articles-tabs-container {
+      gap: 12px;
+    }
+    .articles-tabs-container .tab-btn {
+      padding: 4px 12px;
+    }
+  }
+
+</style>
+
+{% assign custom_blog = blogs[blog.handle] %}
+
+<section
+  id="TabsArticlesSection"
+  class="tabs-articles-section"
+  data-section-id="{{ section.id }}">
+
+  {% comment %} <h3 class="main-heading">Articles</h3> {% endcomment %}
+
+  <div class="articles-tabs-container">
+
+    <p class="tab-btn {% if current_tags == blank %}active{% endif %}" data-tag="all">
+      All
+    </p>
+
+    {% assign unique_tags = '' %}
+    {% for article in custom_blog.articles %}
+      {% for tag in article.tags %}
+        {% assign tag_handle = tag | handle %}
+        {% unless unique_tags contains tag_handle %}
+          {% assign unique_tags = unique_tags | append: tag_handle | append: ',' %}
+          <p class="tab-btn {% if current_tags contains tag_handle or current_tags contains tag %}active{% endif %}" data-tag="{{ tag_handle }}">
+            {{ tag }}
+          </p>
+        {% endunless %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+
+  {% paginate blog.articles by 8 %}
+
+    <div class="articles-grid-container">
+
+      {% for article in blog.articles %}
+
+        {%- if current_tags == blank -%}
+          {%- assign show_article = true -%}
+        {%- else -%}
+          {%- assign show_article = false -%}
+          {%- for t in current_tags -%}
+            {%- if article.tags contains t -%}
+              {%- assign show_article = true -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+
+        {% if show_article %}
+          <div class="article-card">
+            {% if article.image %}
+              <img
+                width="100%"
+                height="100%"
+                class="article-card-img"
+                src="{{ article.image | img_url: '360x360' }}">
+            {% endif %}
+
+            <div class="article-content">
+              {% if article.tags.first %}
+                <p class="small-btn">{{ article.tags.first }}</p>
+              {% endif %}
+              <h4>{{ article.title | truncate: 30 }}</h4>
+              <div class="description">{{ article.content | strip_html | truncate: 100 }}</div>
+              <a class="article-link" href="{{ article.url }}">Read More</a>
+            </div>
+          </div>
+        {% endif %}
+
+      {% endfor %}
+
+    </div>
+
+    <div class="articles-pagination">
+      {% render 'custom-pagination'
+        , paginate: paginate %}
+    </div>
+
+  {% endpaginate %}
+
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  
+  
+    const sectionEl = document.getElementById("TabsArticlesSection");
+    const sectionId = sectionEl.dataset.sectionId;
+  
+    // Tab Filter Logic
+    function handleTabFilter () {
+      const tabs = sectionEl.querySelectorAll(".tab-btn");
+  
+      tabs.forEach(tab => {
+        tab.removeEventListener("click", tab._handler);
+  
+        const handler = (e) => {
+          e.preventDefault();
+  
+          const tag = tab.dataset.tag;
+          let href;
+  
+          if (tag === "all") {
+            href = "{{ blog.url }}";
+          } else {
+            href = "{{ blog.url }}/tagged/" + tag;
+          }
+  
+          loadSection(href);
+        };
+  
+        tab._handler = handler;
+        tab.addEventListener("click", handler);
+      });
+    }
+  
+  
+    // Pagination Logic
+    function handlePagination () {
+      const links = sectionEl.querySelectorAll(".articles-pagination a");
+  
+      links.forEach(link => {
+        link.removeEventListener("click", link._handler);
+  
+        const handler = (e) => {
+          e.preventDefault();
+          loadSection(link.href);
+        };
+  
+        link._handler = handler;
+        link.addEventListener("click", handler);
+      });
+    }
+  
+  
+    // URL Builder
+    function buildFetchUrl(href) {
+      const url = new URL(href, window.location.origin);
+      const qs = url.search;
+  
+      return `${url.pathname}?section_id=${sectionId}${qs ? "&" + qs.substring(1) : ""}`;
+    }
+  
+    // Section rendering API
+    async function loadSection(href) {
+      const realUrl = new URL(href, window.location.origin);
+      const fetchUrl = buildFetchUrl(href);
+  
+      try {
+        const res = await fetch(fetchUrl);
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+  
+        const newSection = doc.getElementById("TabsArticlesSection");
+  
+        if (newSection) {
+          sectionEl.innerHTML = newSection.innerHTML;
+  
+          // Re-bind events
+          handleTabFilter();
+          handlePagination();
+  
+          // Update browser URL
+          history.replaceState({}, "", realUrl.pathname + realUrl.search);
+  
+          // Scroll (optional)
+          sectionEl.scrollIntoView({ behavior: "smooth" });
+        }
+  
+      } catch (err) {
+        console.error("AJAX FILTER ERROR", err);
+      }
+    }
+  
+    
+    handleTabFilter();
+    handlePagination();
+  });
+</script>

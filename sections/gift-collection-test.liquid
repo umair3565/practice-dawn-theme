@@ -1,0 +1,354 @@
+{% schema %}
+  {
+    "name": "Gift Collection Test",
+    "settings": [
+      {
+        "type": "text",
+        "id": "main_heading",
+        "label": "Main Heading",
+        "default": "Fragrances for the Season Ahead"
+      }, {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading Color",
+        "default": "#1C1C1C"
+      }, {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      }, {
+        "type": "collection_list",
+        "id": "collection_list",
+        "label": "Collections"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Gift Collection Test"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+
+  .gift-collection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: var(--container-width);
+    padding: 0 var(--container-padding-desktop);
+    {% if template.name == 'collection' %}
+      margin: var(--container-margin-desktop) auto;
+    {% else %}
+      margin: var(--container-margin-desktop) auto 0;
+    {% endif %}
+    width: 100%;
+  }
+
+  .gift-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .gift-collection h3 {
+    color: {{ section.settings.heading_color }};
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .gift-header .link-btn {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .gift-header .collection-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+
+  .gift-collection .collection-tab {
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+  }
+
+  .gift-collection .collection-tab.active,
+  .gift-collection .collection-tab:hover {
+    background-color: #1c1c1c;
+    color: white;
+  }
+
+  .gift-collection .collection-content {
+    margin-top: 32px;
+    width: 100%;
+    position: relative;
+  }
+
+  .gift-collection .swiper-pagination-progressbar {
+    top: -50px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-primary);
+    border-radius: 10px;
+    overflow: visible;
+    z-index: -1;
+  }
+
+  .gift-collection .swiper-pagination-progressbar-fill {
+    background-color: #b9b9b9;
+    border-radius: 100px;
+    height: 8px;
+    margin-top: -3px;
+  }
+
+  .giftSwiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .giftSwiper .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .gift-product-card {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 360px;
+    width: 100%;
+    text-align: left;
+    color: var(--text-secondary);
+    overflow: hidden;
+  }
+
+  .gift-product-card .gift-img {
+    width: 100%;
+    height: 360px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .gift-img:hover {
+    transform: scale(1.05);
+  }
+
+  .gift-product-card .vendor {
+    margin-top: 16px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    text-transform: uppercase;
+  }
+
+  .gift-product-card h4 {
+    margin-top: 6px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    cursor: pointer;
+  }
+
+  .gift-product-card .description {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-para);
+  }
+
+  .gift-product-card .price-add-to-cart-container {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .price-container .variant-price {
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .price-container .compare-price {
+    text-decoration: line-through;
+    color: #bdbdbd;
+    font-size: 12px;
+  }
+
+  .gift-product-card .add-to-bag-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .gift-product-card .add-to-bag-btn button {
+    color: var(--text-secondary);
+    background-color: transparent;
+    border: none;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  @media (max-width: 1200px) {
+    .gift-collection {
+      padding: 0 var(--container-padding-tablet);
+      {% if template.name == 'collection' %}
+        margin: var(--container-margin-tablet) auto 60px;
+      {% else %}
+        margin: var(--container-margin-tablet) auto 0;
+      {% endif %}
+    }
+  }
+
+  @media (max-width: 768px) {
+
+    .gift-collection {
+      padding: 0 var(--container-padding-mobile);
+      {% if template.name == 'collection' %}
+        margin: var(--container-margin-mobile) auto 40px;
+      {% else %}
+        margin: var(--container-margin-mobile) auto 0;
+      {% endif %}
+    }
+
+    .gift-header {
+      flex-direction: column;
+      justify-content: center;
+    }
+    .gift-header h3 {
+      text-align: center;
+    }
+
+    .gift-header .collection-tabs {
+      gap: 10px;
+      margin-bottom: 50px;
+    }
+
+    .collection-tabs-container .collection-tab {
+      padding: 5px 8px;
+    }
+  }
+</style>
+
+<section id="gift-collection-section" class="gift-collection">
+
+  <div class="gift-header">
+    <h3 class="sub-heading">{{ section.settings.main_heading }}</h3>
+    
+    {% assign selected_collections = section.settings.collection_list %}
+    <div class="collection-tabs">
+      {% for collection_item in selected_collections %}
+        <div class="collection-tab{% if forloop.first %} active{% endif %}" data-collection-handle="{{ collection_item.handle }}">
+          {{ collection_item.title }}
+        </div>
+      {% endfor %}
+      <a href="{{ section.settings.button_link | default: '#' }}" class="link-btn">
+        <img src="{{ 'share-icon.svg' | asset_url }}" width="10" height="10" alt="">
+        <span>Explore All Gifts</span>
+      </a>
+    </div>
+  </div>
+
+  {% comment %}
+    Render only the first collection by default
+  {% endcomment %}
+  {% assign default_collection = collections[selected_collections[0].handle] %}
+  {% if default_collection.products_count != blank %}
+    <div class="collection-content active" id="{{ default_collection.handle }}">
+      <div class="swiper-pagination"></div>
+      <div class="swiper giftSwiper">
+        <div class="swiper-wrapper">
+          {% for product in default_collection.products %}
+            <div class="swiper-slide">
+              <div class="gift-product-card">
+                {% if product.featured_image %}
+                  <a href="{{ product.url }}">
+                    <img src="{{ product.featured_image | img_url: '400x400' }}" alt="{{ product.title }}" width="400" height="400" class="gift-img">
+                  </a>
+                {% endif %}
+                <p class="vendor">{{ product.vendor }}</p>
+                <a href="{{ product.url }}">
+                  <h4>{{ product.title }}</h4>
+                </a>
+                <p class="description">{{ product.description }}</p>
+                <div class="price-add-to-cart-container">
+                  <div class="price-container">
+                    <p class="variant-price">{{ product.selected_or_first_available_variant.price | money }}</p>
+                    {% if product.selected_or_first_available_variant.compare_at_price > 0 %}
+                      <p class="compare-price">{{ product.selected_or_first_available_variant.compare_at_price | money }}</p>
+                    {% endif %}
+                  </div>
+                  <div class="add-to-bag-btn">
+                    <img src="{{ 'shopping-icon.svg' | asset_url }}" width="20" height="20" alt="">
+                    <button class="add-to-cart-btn" data-variant-id="{{ product.selected_or_first_available_variant.id }}">Add To Bag</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+</section>
+
+
+<script>
+ document.addEventListener('DOMContentLoaded', function () {
+  const section = document.querySelector('.gift-collection');
+  if (!section) return;
+
+  const tabs = section.querySelectorAll('.collection-tab');
+  const contentWrapper = section.querySelector('.collection-content');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const handle = tab.dataset.collectionHandle;
+
+      // Fetch the section for the selected collection
+      fetch(`/?sections=${section.id}&collection_handle=${handle}`)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newContent = doc.querySelector('.collection-content');
+          contentWrapper.replaceWith(newContent);
+
+          // Reinitialize Swiper
+          new Swiper(newContent.querySelector('.giftSwiper'), {
+            slidesPerView: 4,
+            spaceBetween: 30,
+            pagination: { el: newContent.querySelector('.swiper-pagination'), type: 'progressbar' },
+            breakpoints: {
+              0: { slidesPerView: 1, spaceBetween: 20 },
+              768: { slidesPerView: 2, spaceBetween: 25 },
+              1024: { slidesPerView: 3, spaceBetween: 30 },
+              1440: { slidesPerView: 4, spaceBetween: 30 },
+            },
+          });
+        });
+    });
+  });
+});
+
+</script>

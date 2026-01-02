@@ -1,0 +1,154 @@
+{% schema %}
+  {
+    "name": "Details Section",
+    "max_blocks": 3,
+    "blocks": [
+      {
+        "type": "detail",
+        "name": "Detail Card",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "icon",
+            "label": "Icon"
+          }, {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Easy Comparison"
+          }, {
+            "type": "text",
+            "id": "description",
+            "label": "Description",
+            "default": "Quickly compare prices, read customer reviews, and check ratings to make informed decisions."
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Details Section",
+        "blocks": [
+          {
+            "type": "detail"
+          }, {
+            "type": "detail"
+          }, {
+            "type": "detail"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+
+  .details-section {
+    max-width: var(--page-width);
+    padding: 80px var(--container-padding-desktop);
+    margin: 0 auto;
+  }
+
+  .details-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 32px;
+  }
+
+  .detail-card {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    max-width: 374px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+  }
+
+  .detail-card:nth-child(2)::before,
+  .detail-card:nth-child(2)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #B9B9B9;
+  }
+
+  .detail-card:nth-child(2)::before {
+    left: -103px;
+  }
+
+  .detail-card:nth-child(2)::after {
+    right: -103px;
+  }
+
+  .detail-card img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .detail-card h4 {
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 32px;
+    color: var(--text-secondary);
+  }
+
+  .detail-card p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-secondary);
+  }
+
+
+  @media (max-width: 1600px) {
+    .detail-card:nth-child(2)::before,
+    .detail-card:nth-child(2)::after {
+      content: none !important;
+    }
+  }
+
+  @media (max-width: 1400px) {
+    .details-section {
+      padding: 40px var(--container-padding-mobile);
+    }
+  }
+
+  @media (max-width: 1170px) {
+    .details-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+</style>
+
+<section class="details-section">
+  <div class="details-container">
+
+    {% for block in section.blocks %}
+      <div class="detail-card" {{ block.shopify_attributes }}>
+        {% if block.settings.icon %}
+          <img
+            src="{{ block.settings.icon | image_url: width: 48 }}"
+            width="48"
+            height="48"
+            alt="{{ block.settings.heading | escape }}">
+        {% endif %}
+        {% if block.settings.heading != blank %}
+          <h4>{{ block.settings.heading }}</h4>
+        {% endif %}
+        {% if block.settings.description != blank %}
+          <p>{{ block.settings.description }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+  </div>
+</section>

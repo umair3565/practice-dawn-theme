@@ -1,0 +1,39 @@
+<!-- Toast Alert Snippet -->
+<div id="toast-alert" class="toast-alert"></div>
+
+<style>
+  .toast-alert {
+    position: fixed;
+    top: 20px;
+    right: -350px;
+    background-color: #111;
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.4s ease;
+  }
+
+  .toast-alert.show {
+    right: 20px;
+    opacity: 1;
+  }
+</style>
+
+<script>
+  window.showToast = function(message) {
+    const toast = document.getElementById('toast-alert');
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.classList.add('show');
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2000);
+  };
+</script>

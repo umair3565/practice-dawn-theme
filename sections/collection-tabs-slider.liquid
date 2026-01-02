@@ -1,0 +1,738 @@
+{% schema %}
+  {
+    "name": "Collection Tabs Slider",
+    "settings": [
+      {
+        "type": "text",
+        "id": "main_heading",
+        "label": "Main Heading",
+        "default": "Discover Scents That Define You"
+      }, {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading Color",
+        "default": "#E8E8E8"
+      }, {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      }, {
+        "type": "collection_list",
+        "id": "collection_list",
+        "label": "Collections"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Collection Tabs Slider"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+  .collection-tabs-wrapper {
+    background: #000;
+    padding: 130px var(--container-padding-desktop) 171px;
+  }
+
+  .collection-tabs-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: var(--container-width);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .collection-tabs-header {
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .collection-tabs-header h2 {
+    color: {{ section.settings.heading_color }};
+    margin-bottom: 30px;
+  }
+
+  .collection-tabs-header .collection-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 80px;
+    justify-content: center;
+  }
+
+  .collection-tabs-header .collection-tab {
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    transition: 0.2s;
+  }
+
+  .collection-tabs-header .collection-tab.active {
+    background: var(--text-secondary);
+  }
+
+  .collection-tabs-header .link-btn {
+    margin-top: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+  }
+
+  .collection-tabs-container .collection-content {
+    display: none;
+    width: 100%;
+    position: relative;
+  }
+
+ .collection-tabs-container .collection-content.active {
+    display: block;
+  }
+
+  .collection-tabs-container .swiper-pagination-progressbar {
+    top: -50px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-primary);
+    border-radius: 10px;
+    overflow: visible;
+    z-index: 1;
+  }
+
+  .collection-tabs-container .swiper-pagination-progressbar-fill {
+    background-color: #b9b9b9;
+    border-radius: 10px;
+    height: 8px;
+    margin-top: -3px;
+  }
+
+  /* relevant code start */
+  .collectionTabSwiper {
+    width: 100%;
+    position: relative;
+  }
+
+  .collectionTabSwiper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .collectionTabSwiper .grid-collection-slide {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+    color: var(--text-primary);
+  }
+
+
+  .left-product .left-product-img {
+    max-width: 754px;
+    width: 100%;
+    max-height: 877px;
+    min-height: 877px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .left-product-img:hover {
+    transform: scale(1.02);
+  }
+
+  .tabs-vendor {
+    margin-top: 12px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .collectionTabSwiper h3 {
+    margin-top: 6px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: var(--text-primary);
+  }
+
+  .collectionTabSwiper h3 a {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .tabs-variant-values {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: var(--text-primary);
+  }
+
+  .tabs-variant-box {
+    border: 1px solid var(--text-primary);
+    padding: 4px 8px;
+    font-size: 12px;
+    color: var(--text-primary);
+  }
+
+  .tabs-variant-box.selected {
+    background-color: var(--text-primary);
+    color: var(--text-secondary);
+  }
+
+  .tabs-price-cartBtn-container {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .tabs-price-container .variant-price {
+    font-weight: 500;
+    font-size: 16px;
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  .tabs-price-container .compare-price {
+    text-decoration: line-through;
+    color: #bdbdbd;
+    font-size: 12px;
+  }
+
+  .tabs-price-cartBtn-container .cart-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .add-to-bag-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .right-products {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+    max-width: 360px;
+    overflow: hidden;
+    justify-content: space-between;
+  }
+
+  .product-card-img {
+    max-width: 360px;
+    width: 100%;
+    max-height: 360px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .product-card .product-card-img:hover {
+    transform: scale(1.05);
+  }
+
+  .grid-8 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+
+  .empty {
+    color: var(--text-primary);
+    opacity: 0.7;
+  }
+
+  .empty.small {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 1300px) {
+    .collection-tabs-wrapper {
+      padding: 80px var(--container-padding-tablet);
+    }
+  }
+
+  @media (max-width: 1150px) {
+    .collectionTabSwiper .grid-collection-slide {
+      grid-template-columns: 1fr;
+    }
+    .grid-8 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+
+  .collection-tabs-wrapper {
+      padding: 40px var(--container-padding-mobile);
+    }
+
+    .collection-tabs-header .collection-tabs {
+      gap: 10px;
+    }
+    .collectionTabSwiper .grid-collection-slide {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 500px) {
+
+    .collection-tabs-wrapper {
+      padding: 40px 5px;
+    }
+
+    .left-product .left-product-img {
+      max-width: 754px;
+      width: 100%;
+      max-height: 637px;
+      min-height: 637px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-card .product-card-img {
+      max-height: 200px;
+    }
+
+    .right-products {
+      gap: 10px;
+    }
+    .grid-8 {
+      gap: 10px;
+    }
+
+    .tabs-price-cartBtn-container {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+  }
+</style>
+
+<section class="collection-tabs-wrapper">
+
+  <div class="collection-tabs-container">
+
+    <div class="collection-tabs-header">
+      <h2 class="main-heading">{{ section.settings.main_heading }}</h2>
+
+      {% assign selected_collections = section.settings.collection_list %}
+      <div class="collection-tabs">
+        {% for coll in selected_collections %}
+          {% if coll %}
+            <button class="collection-tab{% if forloop.first %} active{% endif %}" data-handle="{{ coll.handle }}">
+              {{ coll.title }}
+            </button>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <a href="{{ section.settings.button_link }}" class="link-btn">
+        <img
+          src="{{ 'link-icon.svg' | asset_url }}"
+          width="10"
+          height="10"
+          alt="">
+        <span>Explore All Collections</span>
+      </a>
+    </div>
+
+    {% for coll in selected_collections %}
+      {% if coll %}
+        {% assign content_id = 'ctab-' | append: coll.handle %}
+
+        <div class="collection-content{% if forloop.first %} active{% endif %}" id="{{ content_id }}">
+          <div class="swiper-pagination"></div>
+
+          <div class="swiper collectionTabSwiper" data-content="{{ content_id }}">
+            <div class="swiper-wrapper">
+              {% assign p_first = coll.products.first %}
+
+              <div class="swiper-slide">
+                <div class="grid-collection-slide">
+
+                  <div class="left-product">
+                    {% if p_first %}
+                      {% if p_first.featured_image %}
+                        <a href="{{ p_first.url }}">
+                          <img
+                            src="{{ p_first.featured_image | img_url: '800x' }}"
+                            alt="{{ p_first.title }}"
+                            width="800"
+                            height="800"
+                            loading="lazy"
+                            class="left-product-img">
+                        </a>
+                      {% endif %}
+
+                      <p class="tabs-vendor">{{ p_first.vendor }}</p>
+
+                      <h3>
+                        <a href="{{ p_first.url }}">{{ p_first.title }}</a>
+                      </h3>
+
+                      {% if p_first.variants.size > 1 %}
+                        <div class="tabs-variant-values">
+                          {% for variant in p_first.variants %}
+                            <button
+                              class="tabs-variant-box {% if forloop.first %}selected{% endif %}"
+                              data-variant-id="{{ variant.id }}"
+                              data-variant-price="{{ variant.price | money }}"
+                              data-variant-compare-price="{{ variant.compare_at_price | money }}"
+                              data-variant-quantity="{{ variant.inventory_quantity }}">
+                              {{ variant.title }}
+                            </button>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+
+                      <div class="tabs-price-cartBtn-container">
+
+                        <div class="tabs-price-container">
+                          <p class="variant-price">
+                            {{ p_first.selected_or_first_available_variant.price | money }}
+                          </p>
+
+                          {% if p_first.selected_or_first_available_variant.compare_at_price > 0 %}
+                            <p class="compare-price">
+                              {{ p_first.selected_or_first_available_variant.compare_at_price | money }}
+                            </p>
+                          {% endif %}
+                        </div>
+
+                        <a class="add-to-bag-btn">
+                          <img
+                            src="{{ 'shopping-bag.svg' | asset_url }}"
+                            width="20"
+                            height="20"
+                            alt="">
+                          <span>Add to Bag</span>
+                        </a>
+                      </div>
+
+                    {% else %}
+                      <div class="empty">No products in this collection.</div>
+                    {% endif %}
+                  </div>
+
+                  <div class="right-products">
+                    {% assign right_count = 0 %}
+                    {% for product in coll.products offset: 1 limit: 4 %}
+                      {% assign right_count = right_count | plus: 1 %}
+
+                      <article class="product-card">
+                        {% if product.featured_image %}
+                          <a href="{{ product.url }}">
+                            <img
+                              src="{{ product.featured_image | img_url: '400x400' }}"
+                              alt="{{ product.title }}"
+                              width="400"
+                              height="400"
+                              loading="lazy"
+                              class="product-card-img">
+                          </a>
+                        {% endif %}
+                        <p class="tabs-vendor">{{ product.vendor }}</p>
+                        <h3>
+                          <a href="{{ product.url }}">{{ product.title }}</a>
+                        </h3>
+
+                        {% if product.variants.size > 1 %}
+                          <div class="tabs-variant-values">
+                            {% for variant in product.variants %}
+                              <button
+                                id="selectedVariant"
+                                class="tabs-variant-box {% if forloop.first %}selected{% endif %}"
+                                data-variant-id="{{ variant.id }}"
+                                data-variant-price="{{ variant.price | money }}"
+                                data-variant-compare-price="{{ variant.compare_at_price | money }}"
+                                data-variant-quantity="{{ variant.inventory_quantity }}">
+                                {{ variant.title }}
+                              </button>
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+
+                        <div class="tabs-price-cartBtn-container">
+
+                          <div class="tabs-price-container">
+                            <p class="variant-price">
+                              {{ product.selected_or_first_available_variant.price | money }}
+                            </p>
+
+                            {% if p_first.selected_or_first_available_variant.compare_at_price > 0 %}
+                              <p class="compare-price">
+                                {{ product.selected_or_first_available_variant.compare_at_price | money }}
+                              </p>
+                            {% endif %}
+                          </div>
+
+                          <a class="add-to-bag-btn">
+                            <img
+                              src="{{ 'shopping-bag.svg' | asset_url }}"
+                              width="20"
+                              height="20"
+                              alt="">
+                            <span>Add to Bag</span>
+                          </a>
+                        </div>
+                      </article>
+
+                    {% endfor %}
+
+                    {% if right_count == 0 %}
+                      <div class="empty small">Not enough products to fill the grid.</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="swiper-slide">
+                <div class="grid-8">
+                  {% assign eight_count = 0 %}
+                  {% for product in coll.products offset: 5 limit: 8 %}
+                    {% assign eight_count = eight_count | plus: 1 %}
+
+                    <article class="product-card">
+                      {% if product.featured_image %}
+                        <a href="{{ product.url }}">
+                          <img
+                            src="{{ product.featured_image | img_url: '400x400' }}"
+                            alt="{{ product.title }}"
+                            width="400"
+                            height="400"
+                            loading="lazy"
+                            class="product-card-img">
+                        </a>
+                      {% endif %}
+                      <p class="tabs-vendor">{{ product.vendor }}</p>
+                      <h3>
+                        <a href="{{ product.url }}">{{ product.title }}</a>
+                      </h3>
+
+                      {% if product.variants.size > 1 %}
+                        <div class="tabs-variant-values">
+                          {% for variant in product.variants %}
+                            <button
+                              id="selectedVariant"
+                              class="tabs-variant-box {% if forloop.first %}selected{% endif %}"
+                              data-variant-id="{{ variant.id }}"
+                              data-variant-price="{{ variant.price | money }}"
+                              data-variant-compare-price="{{ variant.compare_at_price | money }}"
+                              data-variant-quantity="{{ variant.inventory_quantity }}">
+                              {{ variant.title }}
+                            </button>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+
+                      <div class="tabs-price-cartBtn-container">
+
+                        <div class="tabs-price-container">
+
+
+                          <p class="variant-price">
+                            {{ product.selected_or_first_available_variant.price | money }}
+                          </p>
+
+                          {% if p_first.selected_or_first_available_variant.compare_at_price > 0 %}
+                            <p class="compare-price">
+                              {{ product.selected_or_first_available_variant.compare_at_price | money }}
+                            </p>
+                          {% endif %}
+                        </div>
+
+                        <a class="add-to-bag-btn">
+                          <img
+                            src="{{ 'shopping-bag.svg' | asset_url }}"
+                            width="20"
+                            height="20"
+                            alt="">
+                          <span>Add to Bag</span>
+                        </a>
+                      </div>
+                    </article>
+
+                  {% endfor %}
+
+                  {% if eight_count == 0 %}
+                    <div class="empty">Need at least 6th–13th products to fill this slide.</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+  
+    const container = document.querySelector('.collection-tabs-container');
+    if (!container) return;
+  
+    const swipers = new Map();
+  
+    function initSwiperFor(contentEl) {
+      const key = contentEl.id;
+      if (swipers.has(key)) {
+        swipers.get(key).update();
+        return;
+      }
+  
+      const el = contentEl.querySelector('.collectionTabSwiper');
+      const paginationEl = contentEl.querySelector('.swiper-pagination');
+  
+      if (!el || !paginationEl) return;
+  
+      const instance = new Swiper(el, {
+        slidesPerView: 1,
+        spaceBetween: 32,
+        pagination: {
+          el: paginationEl,
+          type: 'progressbar',
+        },
+        loop: true,
+      });
+  
+      swipers.set(key, instance);
+    }
+  
+    // Init first visible swiper
+    const firstActive = container.querySelector('.collection-content.active');
+    if (firstActive) initSwiperFor(firstActive);
+  
+    // Tabs logic
+    const tabs = container.querySelectorAll('.collection-tab');
+    const contents = container.querySelectorAll('.collection-content');
+  
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const handle = tab.dataset.handle;
+  
+        tabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+  
+        contents.forEach((c) => c.classList.remove('active'));
+        const toShow = Array.from(contents).find((c) => c.id === 'ctab-' + handle);
+  
+        if (toShow) {
+          toShow.classList.add('active');
+          initSwiperFor(toShow);
+        }
+      });
+    });
+  });
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const allSwipers = document.querySelectorAll('.collectionTabSwiper');
+  
+    allSwipers.forEach((swiperEl) => {
+      const productCards = swiperEl.querySelectorAll('.product-card, .left-product');
+  
+    productCards.forEach((card) => {
+  
+        const variantBoxes = card.querySelectorAll('.tabs-variant-box');
+        const priceElement = card.querySelector('.variant-price');
+        const comparePrice = card.querySelector('.compare-price');
+  
+        if (variantBoxes.length === 0) return;
+  
+        let selectedVariantId = variantBoxes[0].dataset.variantId;
+        variantBoxes[0].classList.add('selected');
+  
+        variantBoxes.forEach((box) => {
+            const quantity = parseInt(box.dataset.variantQuantity);
+  
+            if (quantity <= 0) {
+                box.disabled = true;
+                box.style.opacity = '0.6';
+                box.style.pointerEvents = 'none';
+                return;
+            }
+  
+            box.addEventListener('click', () => {
+                variantBoxes.forEach((b) => b.classList.remove('selected'));
+                box.classList.add('selected');
+                selectedVariantId = box.dataset.variantId;
+  
+                const selectedVariantPrice = box.dataset.variantPrice;
+                if (priceElement) priceElement.textContent = selectedVariantPrice;
+  
+                const selectedVariantComparePrice = box.dataset.variantComparePrice;
+                if (comparePrice) comparePrice.textContent = selectedVariantComparePrice;
+            });
+        });
+  
+        // --- Add to Cart ---
+        const addToCartBtns = card.querySelectorAll('.add-to-bag-btn');
+  
+        addToCartBtns.forEach((btn) => {
+            btn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/cart/add.js', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id: selectedVariantId,
+                            quantity: 1,
+                        }),
+                    });
+  
+                    const data = await response.json();
+                    if (response.ok) {
+                        if (window.openCartDrawer) window.openCartDrawer();
+                        updateCartCount();
+                    } else {
+                        showToast(`❌ Shopify Error: ${data.message}`);
+                    }
+                } catch (error) {
+                    showToast('❌ Something went wrong, please try again.');
+                    console.error(error);
+                }
+            });
+        });
+    });
+  
+    });
+  });
+</script>

@@ -1,0 +1,142 @@
+{% schema %}
+  {
+    "name": "Custom Marquee Slider",
+    "settings": [
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background Color",
+        "default": "#0C0C0C"
+      }, {
+        "type": "range",
+        "id": "scroll_speed",
+        "label": "Scroll Speed",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "default": 4
+      }
+    ],
+    "blocks": [
+      {
+        "type": "logo",
+        "name": "Logo",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "logo_image",
+            "label": "Upload Logo"
+          }
+        ]
+      }
+    ],
+    "max_blocks": 20,
+    "presets": [
+      {
+        "name": "Custom Marquee Slider",
+        "category": "Custom"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+  .marquee-slider {
+    overflow: hidden;
+    width: 100%;
+    margin: var(--container-margin-desktop) auto;
+    padding: 40px 0;
+    background-color: {{ section.settings.bg_color }};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .marquee-slider .swiper-wrapper {
+    transition-timing-function: linear !important;
+  }
+
+  .marquee-slider .swiper-slide {
+    width: auto !important;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 60px;
+  }
+
+  .marquee-slider .swiper-slide img {
+    width: 200px;
+    height: 40px;
+    display: block;
+  }
+
+  @media (max-width: 1200px) {
+    .marquee-slider {
+      margin: var(--container-margin-tablet) auto 0;
+      padding: 30px 0;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .marquee-slider {
+      margin: var(--container-margin-mobile) auto 0;
+      padding: 30px 0;
+    }
+    .marquee-slider .swiper-slide {
+      margin-right: 36px;
+    }
+    .marquee-slider .swiper-slide img {
+      max-width: 100px;
+      height: 30px;
+    }
+  }
+</style>
+
+<section class="marquee-slider" id="marquee-slider-{{ section.id }}">
+  <div class="swiper tags-swiper-{{ section.id }}">
+    <div class="swiper-wrapper">
+      {% if section.blocks.size < 6 %}
+        <p style="color:red; display:flex; justify-content:center; align-items:center;">
+          Please add at least 6 logos to display the marquee slider.
+        </p>
+
+      {% elsif section.blocks.size == 6 %}
+        {% assign all_blocks = section.blocks | concat: section.blocks %}
+        {% for block in all_blocks %}
+          {% if block.settings.logo_image != blank %}
+            <div class="swiper-slide" {{ block.shopify_attributes }}>
+              {{ block.settings.logo_image | image_url: width: 200 | image_tag: width: '200', height: '40', alt: 'Logo' }}
+            </div>
+          {% endif %}
+        {% endfor %}
+
+      {% else %}
+        {% for block in section.blocks %}
+          {% if block.settings.logo_image != blank %}
+            <div class="swiper-slide" {{ block.shopify_attributes }}>
+              {{ block.settings.logo_image | image_url: width: 200 | image_tag: width: '200', height: '40', alt: 'Logo' }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    new Swiper("#marquee-slider-{{ section.id }} .tags-swiper-{{ section.id }}", {
+      slidesPerView: "auto",
+      spaceBetween: 0,
+      loop: true,
+      speed: {{ section.settings.scroll_speed | times: 1000 }},
+      autoplay: {
+        delay: 0,
+        disableOnInteraction: false,
+      },
+      allowTouchMove: false,
+      loopedSlides: 20,
+    });
+  });
+</script>

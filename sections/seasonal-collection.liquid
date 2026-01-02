@@ -1,0 +1,284 @@
+{% schema %}
+  {
+    "name": "Seasonal Collection",
+    "settings": [
+      {
+        "type": "text",
+        "id": "main_heading",
+        "label": "Main Heading",
+        "default": "Fragrances for the Season Ahead"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading Color",
+        "default": "#1C1C1C"
+      },
+      {
+        "type": "text",
+        "id": "link_text",
+        "label": "Link Text",
+        "default": "Explore All Seasonal"
+      },
+      {
+        "type": "url",
+        "id": "link_url",
+        "label": "Link URL"
+      }, {
+        "type": "collection_list",
+        "id": "collection_list",
+        "label": "Collections"
+      }, {
+        "type": "checkbox",
+        "id": "show_arrows",
+        "label": "Show Arrows",
+        "default": true
+      }
+    ],
+    "presets": [
+      {
+        "name": "Seasonal Collection"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+  .seasonal-collection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: var(--container-width);
+    padding: 0 var(--container-padding-desktop);
+    width: 100%;
+    margin: var(--container-margin-desktop) auto;
+  }
+
+  .seasonal-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .seasonal-collection h3 {
+    color: {{ section.settings.heading_color }};
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .seasonal-header .link-btn {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .seasonal-header .collection-tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 50px;
+  }
+
+  .seasonal-header .collection-tab {
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+  }
+
+  .seasonal-header .collection-tab.active,
+  .seasonal-header .collection-tab:hover {
+    background-color: #1c1c1c;
+    color: white;
+  }
+
+  .seasonal-collection .collection-content {
+    margin-top: 32px;
+    display: none;
+    width: 100%;
+    position: relative;
+  }
+
+  .seasonal-collection .collection-content.active {
+    display: block;
+  }
+
+  .seasonal-collection .swiper-pagination-progressbar {
+    top: -50px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-primary);
+    border-radius: 10px;
+    overflow: visible;
+    z-index: -1;
+  }
+
+  .seasonal-collection .swiper-pagination-progressbar-fill {
+    background-color: #b9b9b9;
+    border-radius: 10px;
+    height: 8px;
+    margin-top: -3px;
+  }
+
+  .collection-content .swiper-button-next,
+  .collection-content .swiper-button-prev {
+    color: #1c1c1c;
+    width: 42px;
+    height: 42px;
+    background: #fff;
+    border-radius: 100px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .collection-content .swiper-button-next::after,
+  .collection-content .swiper-button-prev::after {
+    font-size: 14px;
+  }
+
+  .seasonalSwiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .seasonalSwiper .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  @media (max-width: 1200px) {
+    .seasonal-collection {
+      padding: 0 var(--container-padding-tablet);
+      margin: var(--container-margin-tablet) auto 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .seasonal-collection {
+      padding: 0 var(--container-padding-mobile);
+      margin: var(--container-margin-mobile) auto 0;
+    }
+    .seasonal-header {
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+</style>
+
+<section class="seasonal-collection">
+  <div class="seasonal-header">
+    <h3 class="sub-heading">{{ section.settings.main_heading }}</h3>
+
+    {% assign selected_collections = section.settings.collection_list %}
+
+    <div class="collection-tabs">
+      {% for collection_item in selected_collections %}
+        {% assign col = collections[collection_item.handle] %}
+        {% if col != null %}
+          <div class="collection-tab{% if forloop.first %} active{% endif %}" data-collection-handle="{{ col.handle }}">
+            {{ col.title }}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <a href="{{ section.settings.link_url | default: '#' }}" class="link-btn">
+        <img
+          src="{{ 'share-icon.svg' | asset_url }}"
+          width="10"
+          height="10"
+          alt="">
+        <span>
+          {{ section.settings.link_text }}
+        </span>
+      </a>
+    </div>
+  </div>
+
+  {% for collection_item in selected_collections %}
+    {% assign col = collections[collection_item.handle] %}
+    {% if col != null and col.products_count > 0 %}
+      <div class="collection-content{% if forloop.first %} active{% endif %}" id="{{ col.handle }}">
+        <div class="swiper-pagination"></div>
+
+        <div class="swiper seasonalSwiper">
+          <div class="swiper-wrapper">
+            {% for product in col.products %}
+              <div class="swiper-slide">
+                {% render 'product-card'
+                  , product: product %}
+              </div>
+            {% endfor %}
+          </div>
+          {% if section.settings.show_arrows %}
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const section = document.querySelector('.seasonal-collection');
+    if (!section) return;
+  
+    // Swiper Initialization
+    section.querySelectorAll('.collection-content').forEach((content) => {
+      new Swiper(content.querySelector('.seasonalSwiper'), {
+        slidesPerView: 4,
+        spaceBetween: 30,
+        pagination: {
+          el: content.querySelector('.swiper-pagination'),
+          type: 'progressbar',
+        },
+          navigation: {
+          nextEl: content.querySelector('.swiper-button-next'),
+          prevEl: content.querySelector('.swiper-button-prev'),
+        },
+        breakpoints: {
+          0: { slidesPerView: 1, spaceBetween: 20 },
+          768: { slidesPerView: 2, spaceBetween: 25 },
+          1024: { slidesPerView: 3, spaceBetween: 30 },
+          1440: { slidesPerView: 4, spaceBetween: 30 },
+        },
+      });
+    });
+  
+    // Tabs Logic
+  
+    function handleTabsCollection() {
+      const collectionTabs = section.querySelectorAll('.collection-tab');
+      const contents = section.querySelectorAll('.collection-content');
+  
+      collectionTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          collectionTabs.forEach((t) => t.classList.remove('active'));
+          tab.classList.add('active');
+  
+          const handle = tab.dataset.collectionHandle;
+          contents.forEach((content) => {
+            content.classList.toggle('active', content.id === handle);
+          });
+        });
+      });
+    }
+  
+    handleTabsCollection();
+  });
+</script>

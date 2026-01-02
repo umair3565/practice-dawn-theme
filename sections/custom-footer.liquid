@@ -1,0 +1,473 @@
+{% schema %}
+  {
+    "name": "Custom Footer",
+    "settings": [
+      {
+        "type": "color",
+        "id": "footer_bg",
+        "label": "Footer Background Color",
+        "default": "#0C0C0C"
+      }, {
+        "type": "link_list",
+        "id": "footer_menu",
+        "label": "Footer Navigation Menu"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Custom Footer"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+
+  .footer {
+    background-color: {{ section.settings.footer_bg }};
+    padding: 48px var(--container-padding-desktop);
+  }
+
+  .footer-wrapper {
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .footer-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1.5fr 1fr 3fr;
+    gap: 60px;
+    align-items: start;
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .footer-container .footer-right {
+    max-width: 491px;
+  }
+
+  .footer-right img {
+    display: block;
+  }
+
+  .footer-right h4 {
+    margin-top: 32px;
+    color: white;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  .footer-right p {
+    margin-top: 16px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: white;
+  }
+
+  .quick-links-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .quick-links-header p {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: var(--text-primary);
+  }
+
+  .footer-links {
+    margin-top: 24px;
+    list-style: none;
+  }
+
+  .footer-links li {
+    margin-bottom: 16px;
+  }
+
+  .footer-links a {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-primary);
+  }
+
+  .footer-links a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  .footer-right {
+    text-align: left;
+    max-width: 360px;
+    margin-left: auto;
+  }
+
+  .footer-right h2 {
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 48px;
+    color: white;
+  }
+
+  .footer-right p {
+    margin-top: 24px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: white;
+  }
+
+  .subscribe-form {
+    margin-top: 24px;
+    position: relative;
+    max-width: 100%;
+    margin-bottom: 24px;
+  }
+
+  .subscribe-form input {
+    width: 100%;
+    padding: 18px 130px 18px 18px;
+    border: none;
+    border-radius: 0;
+    outline: none;
+    font-size: 14px;
+  }
+
+  .subscribe-form input::placeholder {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #676767;
+  }
+
+  .subscribe-form button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: black;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    outline: none;
+    padding: 8px 24px;
+    margin: 8px 8px 8px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .subscribe-form button:hover {
+    background-color: #333;
+    color: #fff;
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-bottom-center {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-bottom-center p {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    margin: 0 0 8px;
+  }
+
+  .footer-bottom-center .footer-bottom-links {
+    display: inline-flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footer-bottom-center a {
+    color: #F8F8F8;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+
+  .footer-bottom-center a:hover {
+    color: #fff;
+  }
+
+  .payment-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+    max-width: 250px;
+  }
+
+  .payment-icons img {
+    width: 44px;
+    height: 26px;
+    display: block;
+  }
+
+
+  .toggle-icon {
+    display: none;
+  }
+
+  @media (max-width: 1200px) {
+    .footer {
+      padding: 48px var(--container-padding-tablet);
+    }
+  }
+
+  @media (max-width: 1150px) {
+    .footer-container {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .footer-right {
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .footer {
+      padding: 40px var(--container-padding-mobile);
+    }
+  }
+
+  @media (max-width: 700px) {
+
+    .footer-container {
+      gap: 20px;
+    }
+
+    .toggle-icon {
+      display: inline-block;
+      color: var(--text-primary);
+    }
+
+    .footer-bottom {
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+    .payment-icons {
+      justify-content: center;
+    }
+
+    .quick-links {
+      width: 100%;
+    }
+
+    .footer-links {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.4s ease
+      , opacity 0.4s ease;
+    }
+
+    .footer-links.open {
+      max-height: 500px;
+      opacity: 1;
+    }
+  }
+
+</style>
+
+<footer class="footer">
+
+  <div class="footer-wrapper">
+
+    <div class="footer-container">
+
+      <div class="footer-right">
+        <img
+          width="237"
+          height="60"
+          src="{{ 'logo.svg' | asset_url }}"
+          alt="logo">
+        <h4>Bringing the World’s Finest Fragrances to You.</h4>
+        <p>
+          Based in the USA, our mission is simple: to make luxury fragrances accessible to everyone, everywhere. From timeless classics to modern favorites, from fresh summer notes to warm winter blends, we curate perfumes for every season, every occasion, and every personality.
+          <br><br>
+          With authenticity, variety, and customer care at our core, we ensure you’ll always find the perfect fragrance—no matter the mood, moment, or memory you wish to create.
+        </p>
+      </div>
+
+      {% if section.settings.footer_menu != blank %}
+        {% for link in section.settings.footer_menu.links %}
+
+          <div class="quick-links">
+            <div class="quick-links-header">
+              <p>{{ link.title }}</p>
+              {% if link.links != blank %}
+                <span class="toggle-icon">+</span>
+              {% endif %}
+            </div>
+
+            {% if link.links != blank %}
+              <ul class="footer-links">
+                {% for sublink in link.links %}
+                  <li>
+                    <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+
+          </div>
+
+        {% endfor %}
+
+      {% else %}
+
+        <div class="quick-links">
+          <div class="quick-links-header">
+            <p>Shop</p>
+            <span class="toggle-icon">+</span>
+          </div>
+          <ul class="footer-links">
+            <li>
+              <a href="#">Men</a>
+            </li>
+            <li>
+              <a href="#">Women</a>
+            </li>
+            <li>
+              <a href="#">Accessories</a>
+            </li>
+            <li>
+              <a href="#">Hot Selling</a>
+            </li>
+            <li>
+              <a href="#">Luxurious</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="quick-links">
+          <div class="quick-links-header">
+            <p>Customer Care</p>
+            <span class="toggle-icon">+</span>
+          </div>
+          <ul class="footer-links">
+            <li>
+              <a href="#">Shipping & Delivery Info</a>
+            </li>
+            <li>
+              <a href="#">Returns & Exchanges</a>
+            </li>
+            <li>
+              <a href="#">Order Tracking</a>
+            </li>
+            <li>
+              <a href="#">Size/Usage Guides</a>
+            </li>
+            <li>
+              <a href="#">FAQs</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="quick-links">
+          <div class="quick-links-header">
+            <p>Account</p>
+            <span class="toggle-icon">+</span>
+          </div>
+          <ul class="footer-links">
+            <li>
+              <a href="#">Login</a>
+            </li>
+            <li>
+              <a href="#">Wishlist</a>
+            </li>
+            <li>
+              <a href="#">Cart</a>
+            </li>
+            <li>
+              <a href="#">Gift Cards</a>
+            </li>
+          </ul>
+        </div>
+
+      {% endif %}
+
+      <div class="footer-right">
+        <h2>Subscribe today and receive a monthly discount code!</h2>
+        <p>Subscribe today and unlock monthly discounts with exclusive codes!</p>
+        <form class="subscribe-form">
+          <input
+            type="email"
+            placeholder="Write your email..."
+            required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+      <div class="footer-bottom-left"></div>
+
+
+      <div class="footer-bottom-center">
+        <p>© All Rights Reserved® 2025 · BrandNameHere</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
+          <a href="#">Refund Policy</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+
+      <div class="payment-icons">
+        {% assign payment_icons = "payment-1.svg,payment-2.svg,payment-3.svg,payment-4.svg,payment-5.svg,payment-6.svg,payment-7.svg,payment-8.svg" | split: "," %}
+
+        {% for icon in payment_icons %}
+          <img
+            width="44"
+            height="26"
+            src="{{ icon | asset_url }}"
+            alt="Payment Icon {{ forloop.index }}">
+        {% endfor %}
+      </div>
+
+    </div>
+
+  </div>
+</footer>
+
+<script>
+  
+    document.querySelectorAll('.quick-links-header').forEach((header) => {
+    header.addEventListener('click', () => {
+      const links = header.nextElementSibling;
+      const icon = header.querySelector('.toggle-icon');
+  
+      if (links) {
+        links.classList.toggle('open');
+  
+        if (links.classList.contains('open')) {
+          icon.textContent = '–';
+        } else {
+          icon.textContent = '+';
+        }
+      }
+    });
+  });
+</script>

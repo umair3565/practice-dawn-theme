@@ -1,0 +1,201 @@
+<style>
+  .section-container {
+    margin-top: 24px;
+    max-width: 100%;
+  }
+
+  .section-container h3 {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+  }
+
+  .products-container {
+    display: flex;
+    gap: 16px;
+    position: relative;
+  }
+
+  .products-container .swiper-pagination-progressbar {
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-primary);
+    border-radius: 10px;
+    overflow: visible;
+    z-index: -1;
+  }
+
+  .products-container .swiper-pagination-progressbar-fill {
+    background-color: #b9b9b9;
+    border-radius: 10px;
+    height: 8px;
+    margin-top: -3px;
+  }
+
+  .relatedProductsSwiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .relatedProductsSwiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .related-product-card {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  .related-product-card .product-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .related-product-card .product-card-img:hover {
+    transform: scale(1.05);
+  }
+
+  .related-product-card .vendor {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .related-product-card h4 {
+    margin-top: 4px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-secondary);
+  }
+
+  .related-product-card .price-add-to-cart-container {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .related-product-card .price-container {
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 0;
+  }
+
+  .relatedProductsSwiper .swiper-button-next,
+  .relatedProductsSwiper .swiper-button-prev {
+    color: #1c1c1c;
+    width: 42px;
+    height: 42px;
+    background: #fff;
+    border-radius: 100px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .relatedProductsSwiper .swiper-button-next::after,
+  .relatedProductsSwiper .swiper-button-prev::after {
+    font-size: 14px;
+  }
+
+  @media (max-width: 425px) {
+    .section-container {
+      margin-top: 5px;
+    }
+  }
+
+</style>
+
+<section class="section-container">
+  {% assign related_products = product.metafields.custom.related_products.value %}
+
+  {% if related_products != blank %}
+    <h3>Discover The Full Collection</h3>
+
+    <div class="products-container">
+
+      <div class="swiper-pagination"></div>
+
+      <div class="swiper relatedProductsSwiper">
+        <div class="swiper-wrapper">
+          {% for related_product in related_products %}
+            <div class="swiper-slide">
+              <div class="related-product-card">
+                <a href="{{ related_product.url }}">
+                  <img
+                    class="product-card-img"
+                    width="422"
+                    height="422"
+                    src="{{ related_product.featured_image | img_url: '600x600' }}"
+                    alt="{{ related_product.title }}">
+                </a>
+                <p class="vendor">{{ product.vendor }}</p>
+                <h4>{{ related_product.title | truncate: 20 }}</h4>
+
+                <div class="price-add-to-cart-container">
+                  <div class="price-container">
+                    <p>{{ product.price | money }}</p>
+                  </div>
+
+                  <a href="{{ related_product.url }}" class="add-to-cart-btn">
+                    <img
+                      src="{{ 'shopping-icon.svg' | asset_url }}"
+                      width="20"
+                      height="20"
+                      alt="">
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        {% if section.settings.show_arrows %}
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+        {% endif %}
+      </div>
+
+    </div>
+  {% endif %}
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const section = document.querySelector('.section-container');
+    var relatedProductsSwiper = new Swiper('.relatedProductsSwiper', {
+      slidesPerView: 3,
+      spaceBetween: 16,
+      pagination: {
+          el: section.querySelector('.swiper-pagination'),
+          type: 'progressbar',
+        },
+         navigation: {
+          nextEl: section.querySelector('.swiper-button-next'),
+          prevEl: section.querySelector('.swiper-button-prev'),
+        },
+      breakpoints: {
+        0: { slidesPerView: 1, spaceBetween: 16, centerSlide: true },
+        464: { slidesPerView: 2, spaceBetween: 16 },
+        664: { slidesPerView: 3, spaceBetween: 16 },
+      }
+    });
+  });
+</script>

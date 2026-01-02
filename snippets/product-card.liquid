@@ -1,0 +1,59 @@
+<div class="product-card">
+  {% if product.featured_image %}
+    <a href="{{ product.url }}">
+      <img
+        src="{{ product.featured_image | img_url: '400x400' }}"
+        alt="{{ product.title }}"
+        class="product-card-img"
+        width="400"
+        height="400">
+    </a>
+  {% endif %}
+
+  <p class="vendor">{{ product.vendor }}</p>
+  <a href="{{ product.url }}">
+    <h4>{{ product.title }}</h4>
+  </a>
+
+  {% if product.variants.size > 1 %}
+    <div class="variant-values">
+      {% for variant in product.variants %}
+        <button
+          class="variant-box {% if forloop.first %}selected{% endif %}"
+          data-variant-id="{{ variant.id }}"
+          data-variant-price="{{ variant.price | money }}"
+          data-variant-compare-price="{{ variant.compare_at_price | money }}"
+          data-variant-quantity="{{ variant.inventory_quantity }}">
+          {{ variant.title }}
+        </button>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="price-add-to-cart-container">
+    
+    <div class="price-container">
+      <p class="variant-price">{{ product.selected_or_first_available_variant.price | money }}</p>
+
+      {% if product.selected_or_first_available_variant.compare_at_price > 0 %}
+        <p class="compare-price">
+          {{ product.selected_or_first_available_variant.compare_at_price | money }}
+        </p>
+      {% endif %}
+    </div>
+
+    <div class="add-to-bag-btn">
+      <img
+        src="{{ 'shopping-icon.svg' | asset_url }}"
+        width="20"
+        height="20"
+        alt="Cart icon">
+      <button
+        type="button"
+        class="add-to-cart-btn"
+        data-product-id="{{ product.id }}">
+        Add To Bag
+      </button>
+    </div>
+  </div>
+</div>

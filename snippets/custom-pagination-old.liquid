@@ -1,0 +1,124 @@
+<style>
+  .products-pagination {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pagination-number,
+  .pagination-arrow {
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding: 8px 16px;
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+  }
+
+  .pagination-number.active,
+  .pagination-number:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+  }
+
+  .pagination-arrow.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .pagination-arrow.disabled svg path {
+    stroke: #b9b9b9;
+  }
+</style>
+
+
+{% if paginate.pages > 1 %}
+  <div class="products-pagination">
+    {%- if paginate.previous -%}
+      <a href="{{ paginate.previous.url }}" class="pagination-arrow prev">
+        <svg
+          width="8"
+          height="14"
+          viewBox="0 0 8 14"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M6.75 0.75L0.75 6.75L6.75 12.75"
+            stroke="#1C1C1C"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </a>
+    {%- else -%}
+      <span class="pagination-arrow prev disabled">
+        <svg
+          width="8"
+          height="14"
+          viewBox="0 0 8 14"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M6.75 0.75L0.75 6.75L6.75 12.75"
+            stroke="#999999"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </span>
+    {%- endif -%}
+
+    {%- for part in paginate.parts -%}
+      {%- if part.is_link -%}
+        <a href="{{ part.url }}" class="pagination-number">{{ part.title }}</a>
+      {%- else -%}
+        <span class="pagination-number active">{{ part.title }}</span>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if paginate.next -%}
+      <a href="{{ paginate.next.url }}" class="pagination-arrow next">
+        <svg
+          width="8"
+          height="14"
+          viewBox="0 0 8 14"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M0.75 0.75L6.75 6.75L0.75 12.75"
+            stroke="#1C1C1C"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </a>
+    {%- else -%}
+      <span class="pagination-arrow next disabled">
+        <svg
+          width="8"
+          height="14"
+          viewBox="0 0 8 14"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M0.75 0.75L6.75 6.75L0.75 12.75"
+            stroke="#999999"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </span>
+    {%- endif -%}
+  </div>
+{% endif %}

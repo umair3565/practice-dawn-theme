@@ -1,0 +1,47 @@
+    <div>
+      {% assign has_active = false %}
+      {% for filter in collection.filters %}
+        {% if filter.active_values.size > 0 %}
+          {% assign has_active = true %}
+
+        {% elsif filter.type == 'price_range' %}
+          {% if filter.min_value.value or filter.max_value.value %}
+            {% assign has_active = true %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {% if has_active %}
+        <div class="active-filters">
+          {% for filter in collection.filters %}
+            {% case filter.type %}
+              {% when 'list' %}
+                {% for value in filter.active_values %}
+                  <a
+                    id="activeFilter"
+                    href="{{ value.url_to_remove }}"
+                    class="active-filter-item"
+                    data-filter="{{ value.param_name }}={{ value.value }}"
+                  >
+                    {{ filter.label }}: {{ value.label }} ✕
+                  </a>
+                {% endfor %}
+
+              {% when 'price_range' %}
+                {% if filter.min_value.value or filter.max_value.value %}
+                  <a
+                    id="activeFilter"
+                    href="{{ filter.url_to_remove }}"
+                    class="active-filter-item"
+                    data-filter="price={{ filter.min_value.value }}-{{ filter.max_value.value }}"
+                  >
+                    {{ filter.label }}: {{ filter.min_value.value | money_without_trailing_zeros }} –
+                    {{ filter.max_value.value | money_without_trailing_zeros }} ✕
+                  </a>
+                {% endif %}
+            {% endcase %}
+          {% endfor %}
+          <button class="clear-filters-btn">Clear</button>
+        </div>
+      {% endif %}
+    </div>

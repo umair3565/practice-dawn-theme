@@ -1,0 +1,108 @@
+<style>
+  .product-detail-faqs .faq-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .product-detail-faqs .faq-questions-container {
+    margin-top: 40px;
+  }
+
+  .product-detail-faqs .faq-question {
+    border-bottom: 1px solid #E8E8E8;
+    padding: 24px 0;
+  }
+
+  .product-detail-faqs .faq-question:last-child {
+    border-bottom: none;
+  }
+
+  .product-detail-faqs .faq-question h4 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: var(--text-secondary);
+  }
+
+  .product-detail-faqs .faq-question h4 span {
+    line-height: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .product-detail-faqs .faq-question .faq-answer {
+    color: var(--text-secondary);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin-top: 0;
+    transition: all 0.35s ease;
+    font-family: Satoshi;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .product-detail-faqs .faq-answer strong {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-secondary);
+  }
+
+  .product-detail-faqs .faq-question.active .faq-answer {
+    max-height: 500px;
+    opacity: 1;
+    margin-top: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .product-detail-faqs .faq-questions-container {
+      margin-top: 20px;
+    }
+
+    .product-detail-faqs .faq-question {
+      padding: 16px 0;
+    }
+
+  }
+
+  @media (max-width: 425px) {
+    .product-detail-faqs .faq-question h4 {
+      font-size: 14px;
+    }
+  }
+
+</style>
+
+<section class="product-detail-faqs">
+
+  {% assign faqs = product.metafields.custom.faqs_section.value %}
+  {% if faqs %}
+    <div class="faq-content">
+      <div class="faq-questions-container">
+        {% for item in faqs %}
+          <div class="faq-question {% if forloop.first %}active{% endif %}">
+            <h4>
+              {{ item.question }}
+              <span>
+                {% if forloop.first %}–{% else %}+{% endif %}
+              </span>
+            </h4>
+            <div class="faq-answer">{{ item.answer | metafield_tag }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+
+<script>
+    const faqs = {{ faqs | json }};
+    console.log("faqs--", faqs);
+</script>

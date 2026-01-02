@@ -1,0 +1,400 @@
+{% schema %}
+{
+  "name": "Custom Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading Text",
+      "default": "Testimonials"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "textarea",
+      "id": "textarea",
+      "label": "Text",
+      "default": "Hear from fragrance lovers who have discovered their signature scents with us. Their stories speak of elegance, authenticity, and unforgettable moments."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show Pagination Dots",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "color",
+          "id": "card_color",
+          "label": "Card Background Color",
+          "default": "#F7F7F7"
+        },
+        {
+          "type": "image_picker",
+          "id": "testimonial_img",
+          "label": "Testimonial Image"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star Rating",
+          "min": 1,
+          "max": 5,
+          "step": 0.5,
+          "default": 4.5
+        },
+        {
+          "type": "text",
+          "id": "heading_text",
+          "label": "Testimonial Heading Text",
+          "default": "Heading Text Here"
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Testimonial Heading Color",
+          "default": "#1C1C1C"
+        },
+        {
+          "type": "textarea",
+          "id": "textarea",
+          "label": "Testimonial Text",
+          "default": "Testimonial description here"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Testimonial Text Color",
+          "default": "#1C1C1C"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "Author Name Here"
+        },
+        {
+          "type": "color",
+          "id": "author_color",
+          "label": "Author Name Color",
+          "default": "#1C1C1C"
+        },
+        {
+          "type": "text",
+          "id": "verified_text",
+          "label": "Verified Text",
+          "default": "Verified Customer"
+        },
+        {
+          "type": "color",
+          "id": "verified_color",
+          "label": "Verified Text Color",
+          "default": "#1C1C1C"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Testimonials"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .testimonial-section {
+    max-width: 100%;
+    margin: var(--container-margin-desktop) auto;
+  }
+
+  .testimonial-header {
+    padding: 0 var(--container-padding-mobile);
+  }
+
+  .testimonial-header h3 {
+    text-align: center;
+    color: {{ section.settings.heading_color }};
+  }
+
+  .testimonial-header p {
+    text-align: center;
+    max-width: 737px;
+    margin: 8px auto 0;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: {{ section.settings.text_color }};
+  }
+
+  .testimonial-container {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+  }
+
+  .testimonialSwiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .testimonialSwiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .testimonial-card {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    max-width: 752px;
+    width: 100%;
+    padding: 24px;
+    background-color: #f7f7f7;
+  }
+
+  .testimonial-card .testimonial-img {
+    display: block;
+    width: 336px;
+    height: 317px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .testimonial-card .right-content h4 {
+    margin-top: 24px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .testimonial-card .right-content > p {
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .testimonial-card .right-content strong {
+    display: block;
+    margin-top: 24px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  .testimonial-card .verified-customer {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .star-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .star-rating svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .testimonialSwiper .swiper-pagination {
+    position: relative !important;
+    margin-top: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100% !important;
+  }
+  .testimonialSwiper .swiper-pagination-bullet {
+    width: 16px;
+    height: 4px;
+    background: var(--text-primary);
+    opacity: 1;
+    transition: all 0.3s ease;
+    border-radius: 0;
+  }
+  .testimonialSwiper .swiper-pagination-bullet-active {
+    background: var(--text-secondary);
+  }
+
+  @media (max-width: 1200px) {
+    .testimonial-section {
+      margin: var(--container-margin-tablet) auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .testimonial-header {
+      margin: var(--container-margin-mobile) auto;
+    }
+  }
+
+  @media (max-width: 700px) {
+
+    .testimonial-card {
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      max-width: 480px;
+      padding: 0;
+    }
+    .testimonial-card .testimonial-img {
+      width: 100%;
+    }
+    .testimonial-card .right-content {
+      padding: 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .testimonial-section {
+      margin: var(--container-margin-mobile) auto;
+    }
+  }
+</style>
+
+<section class="testimonial-section">
+  <div class="testimonial-header">
+    <h3 class="sub-heading">{{ section.settings.heading_text }}</h3>
+    <p>{{ section.settings.textarea }}</p>
+  </div>
+
+  <div class="testimonial-container">
+    <div class="swiper testimonialSwiper">
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          {% assign rating = block.settings.rating | plus: 0 %}
+          {% assign full_stars = rating | floor %}
+          {% assign half_star = 0 %}
+          {% if rating > full_stars %}
+            {% assign half_star = 1 %}
+          {% endif %}
+          {% assign empty_stars = 5 | minus: full_stars | minus: half_star %}
+
+          <div class="swiper-slide">
+            <div class="testimonial-card" style="background-color: {{ block.settings.card_color }};">
+              {% if block.settings.testimonial_img != blank %}
+                {{
+                  block.settings.testimonial_img
+                  | image_url: width: 336
+                  | image_tag: class: 'testimonial-img', alt: 'Testimonial image'
+                }}
+              {% else %}
+                <img
+                  class="testimonial-img"
+                  width="336"
+                  height="317"
+                  src="{{ 'testimonial-1.png' | asset_url }}"
+                  alt="Default testimonial image"
+                >
+              {% endif %}
+
+              <div class="right-content">
+                <div class="star-rating">
+                  {% for i in (1..full_stars) %}
+                    <svg
+                      viewBox="0 0 16 15"
+                      fill="#E6AC00"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M7.608 0L9.724 5.088L15.217 5.528L11.032 9.112L12.311 14.472L7.608 11.6L2.906 14.472L4.185 9.112L0 5.528L5.492 5.088L7.608 0Z" />
+                    </svg>
+                  {% endfor %}
+                  {% if half_star == 1 %}
+                    <svg viewBox="0 0 16 15" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <linearGradient id="halfStarGradient">
+                          <stop offset="50%" stop-color="#E6AC00" />
+                          <stop offset="50%" stop-color="#ccc" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M7.608 0L9.724 5.088L15.217 5.528L11.032 9.112L12.311 14.472L7.608 11.6L2.906 14.472L4.185 9.112L0 5.528L5.492 5.088L7.608 0Z" fill="url(#halfStarGradient)" />
+                    </svg>
+                  {% endif %}
+                  {% for i in (1..empty_stars) %}
+                    <svg
+                      viewBox="0 0 16 15"
+                      fill="#ccc"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M7.608 0L9.724 5.088L15.217 5.528L11.032 9.112L12.311 14.472L7.608 11.6L2.906 14.472L4.185 9.112L0 5.528L5.492 5.088L7.608 0Z" />
+                    </svg>
+                  {% endfor %}
+                </div>
+
+                <h4 style="color: {{ block.settings.heading_color }}">
+                  {{ block.settings.heading_text | truncate: 25 }}
+                </h4>
+                <p style="color: {{ block.settings.text_color }}">{{ block.settings.textarea | truncate: 220 }}</p>
+                <strong style="color: {{ block.settings.author_color }}">{{ block.settings.author }}</strong>
+                <div class="verified-customer">
+                  <img
+                    width="16"
+                    height="16"
+                    src="{{ 'verified-badge.svg' | asset_url }}"
+                    alt="Verified badge"
+                  >
+                  <span style="color: {{ block.settings.verified_color }}">{{ block.settings.verified_text }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      {% if section.settings.show_pagination %}
+        <div class="swiper-pagination"></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    new Swiper('.testimonialSwiper', {
+      slidesPerView: 'auto',
+      spaceBetween: 32,
+      centeredSlides: true,
+      initialSlide: 1,
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      breakpoints: {
+        0: { slidesPerView: 1, centeredSlides: true },
+        768: { slidesPerView: 1.2, spaceBetween: 12, centeredSlides: false },
+        900: { slidesPerView: 1.4 },
+        1064: { slidesPerView: 1.5 },
+        1200: { slidesPerView: 1.8 },
+        1400: { slidesPerView: 2.1 },
+        1650: { slidesPerView: 2.2 },
+        1700: { slidesPerView: 2.25 },
+        2000: { slidesPerView: 2.8 },
+        2200: { slidesPerView: 3.2 },
+      },
+    });
+  });
+</script>

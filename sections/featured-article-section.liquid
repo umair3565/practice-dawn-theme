@@ -1,0 +1,230 @@
+{% schema %}
+  {
+    "name": "Featured Article Section",
+    "settings": [
+      {
+        "type": "article",
+        "id": "featured_article",
+        "label": "Select Featured Article"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured Article Section"
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+  .featured-article-section {
+    background-color: var(--text-primary);
+  }
+  .featured-articles-container {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--container-padding-desktop);
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 40px;
+  }
+
+  .featured-article .main-heading,
+  .recent-articles .main-heading {
+    font-size: 48px;
+  }
+
+  .featured-article .featured-card {
+    margin-top: 24px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  }
+  .featured-article img {
+    max-width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+  .featured-article-content {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .featured-article-content h4 {
+    font-size: 22px;
+    line-height: 24px;
+    font-weight: 500;
+  }
+
+  .featured-article-content .description {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 400;
+    color: var(--text-para);
+  }
+
+  .recent-articles-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .recent-articles .recent-article-card {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .recent-articles .recent-article-card img {
+    max-width: 200px;
+    height: 140px;
+    object-fit: cover;
+  }
+  .recent-article-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .featured-article-section .small-btn {
+    text-transform: uppercase;
+  }
+
+  .recent-article-content h5 {
+    font-size: 18px;
+    line-height: 18px;
+    font-weight: 400;
+  }
+
+  .recent-article-content .description {
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 400;
+    color: var(--text-para);
+  }
+
+  .recent-article-content p:last-child {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: var(--text-para);
+  }
+
+  @media (max-width: 1600px) {
+    .featured-articles-container {
+      padding: 80px var(--container-padding-tablet);
+    }
+  }
+
+  @media (max-width: 1470px) {
+    .featured-articles-container {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+  }
+
+  @media (max-width: 1294px) {
+    .featured-articles-container {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+  @media (max-width: 768px) {
+    .featured-articles-container {
+      padding: 40px var(--container-padding-mobile);
+    }
+  }
+
+  @media (max-width: 600px) {
+
+    .recent-articles .recent-article-card {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .recent-articles .recent-article-card img {
+      max-width: 400px;
+      height: 300px;
+      object-fit: cover;
+    }
+
+  }
+
+</style>
+
+{%  assign custom_blog = blogs[blog.handle]  %}
+
+{% if section.settings.featured_article != blank %}
+  {% assign featured = articles[section.settings.featured_article] %}
+{% else %}
+  {% assign featured = blog.articles.first %}
+{% endif %}
+
+
+<section class="featured-article-section">
+
+  <div class="featured-articles-container">
+
+    <div class="featured-article">
+
+      <h3 class="main-heading">Featured</h3>
+
+      {% if featured %}
+        <div class="featured-card">
+          {% if featured.image %}
+            <img
+              src="{{ featured.image | img_url: '900x' }}"
+              width="100%"
+              height="400"
+              alt="{{ featured.title }}">
+          {% endif %}
+          <div class="featured-article-content">
+            {% if featured.tags.first %}
+              <p class="small-btn">{{ featured.tags.first }}</p>
+            {% endif %}
+            <h4>{{ featured.title }}</h4>
+            <div class="description">{{ featured.content | strip_html | truncate: 200 }}</div>
+            <a class="article-link" href="{{ featured.url }}">Read More</a>
+          </div>
+        </div>
+      {% else %}
+        <p>No articles available.</p>
+      {% endif %}
+    </div>
+
+    <div class="recent-articles">
+      <h3 class="main-heading">Recent</h3>
+      <div class="recent-articles-container">
+
+        {% for article in custom_blog.articles limit: 5 %}
+          {% if featured.id != article.id %}
+            <div class="recent-article-card">
+              {% if article.image %}
+                <img
+                  src="{{ article.image | img_url: '400x400' }}"
+                  width="100%"
+                  height="100%"
+                  alt="{{ article.title }}">
+              {% else %}
+                <img
+                  src="{{ 'image-placeholder.png' | asset_url }}"
+                  width="100%"
+                  height="100%"
+                  alt="">
+              {% endif %}
+              <div class="recent-article-content">
+                {% if article.tags.first %}
+                  <p class="small-btn">{{ article.tags.first }}</p>
+                {% endif %}
+                <h5>{{ article.title | truncate: 30 }}</h5>
+                <div class="description">{{ article.content | strip_html | truncate: 120 }}</div>
+                <a class="article-link" href="{{ article.url }}">Read More</a>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+</section>
