@@ -163,6 +163,7 @@
         "faqs_wPrdJx",
         "related_products_FkJ3Wn"
       ],
+      "disabled": true,
       "name": "Product Details",
       "settings": {
         "shipping_calculation_text": "4 interest-free installments, or from $46.03/mo with",
@@ -171,7 +172,81 @@
         "help_box_bg": "#1c1c1c",
         "help_text": "Need Help? Visit FAQ or Contact Our 24/7 Support Manager",
         "help_link_text": "Read FAQs",
-        "help_URL": ""
+        "help_URL": "",
+        "show_arrows": true
+      }
+    },
+    "custom_products_details_test_fMfyCB": {
+      "type": "custom-products-details-Test",
+      "blocks": {
+        "vendor_4iLgx3": {
+          "type": "vendor",
+          "settings": {}
+        },
+        "title_8yjnXA": {
+          "type": "title",
+          "settings": {}
+        },
+        "quantity_rP9b36": {
+          "type": "quantity",
+          "settings": {}
+        },
+        "short_text_MVXWUP": {
+          "type": "short-text",
+          "settings": {}
+        },
+        "description_Dyecjq": {
+          "type": "description",
+          "settings": {}
+        },
+        "price_jpGCVL": {
+          "type": "price",
+          "settings": {}
+        },
+        "variants_eAm6wY": {
+          "type": "variants",
+          "settings": {}
+        },
+        "quantity_update_dzdyCY": {
+          "type": "quantity-update",
+          "settings": {}
+        },
+        "add_to_cart_CRj8TX": {
+          "type": "add-to-cart",
+          "settings": {}
+        },
+        "faqs_hPqLte": {
+          "type": "faqs",
+          "settings": {}
+        },
+        "related_products_MjBVit": {
+          "type": "related-products",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "vendor_4iLgx3",
+        "title_8yjnXA",
+        "quantity_rP9b36",
+        "short_text_MVXWUP",
+        "description_Dyecjq",
+        "price_jpGCVL",
+        "variants_eAm6wY",
+        "quantity_update_dzdyCY",
+        "add_to_cart_CRj8TX",
+        "faqs_hPqLte",
+        "related_products_MjBVit"
+      ],
+      "name": "Product Details Test",
+      "settings": {
+        "shipping_calculation_text": "4 interest-free installments, or from $46.03/mo with",
+        "shippinig_info_text1": "Free International Shipping over $500",
+        "shippinig_info_text2": "Free Returns Within 30 days",
+        "help_box_bg": "#1C1C1C",
+        "help_text": "Need Help? Visit FAQ or Contact Our 24/7 Support Manager",
+        "help_link_text": "Read FAQs",
+        "help_URL": "",
+        "show_arrows": true
       }
     },
     "gift_section_Ew3P3a": {
@@ -409,6 +484,7 @@
     "main",
     "related-products",
     "custom_products_details_PVQMWN",
+    "custom_products_details_test_fMfyCB",
     "gift_section_Ew3P3a",
     "marquee_section_bDxiVW",
     "stories_section_zYDi3f",
