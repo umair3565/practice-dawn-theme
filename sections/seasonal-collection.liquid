@@ -1,46 +1,48 @@
 {% schema %}
-  {
-    "name": "Seasonal Collection",
-    "settings": [
-      {
-        "type": "text",
-        "id": "main_heading",
-        "label": "Main Heading",
-        "default": "Fragrances for the Season Ahead"
-      },
-      {
-        "type": "color",
-        "id": "heading_color",
-        "label": "Heading Color",
-        "default": "#1C1C1C"
-      },
-      {
-        "type": "text",
-        "id": "link_text",
-        "label": "Link Text",
-        "default": "Explore All Seasonal"
-      },
-      {
-        "type": "url",
-        "id": "link_url",
-        "label": "Link URL"
-      }, {
-        "type": "collection_list",
-        "id": "collection_list",
-        "label": "Collections"
-      }, {
-        "type": "checkbox",
-        "id": "show_arrows",
-        "label": "Show Arrows",
-        "default": true
-      }
-    ],
-    "presets": [
-      {
-        "name": "Seasonal Collection"
-      }
-    ]
-  }
+{
+  "name": "Seasonal Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main Heading",
+      "default": "Fragrances for the Season Ahead"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Link Text",
+      "default": "Explore All Seasonal"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "collection_list",
+      "id": "collection_list",
+      "label": "Collections"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show Arrows",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Seasonal Collection"
+    }
+  ]
+}
 {% endschema %}
 
 <style>
@@ -200,7 +202,8 @@
           src="{{ 'share-icon.svg' | asset_url }}"
           width="10"
           height="10"
-          alt="">
+          alt=""
+        >
         <span>
           {{ section.settings.link_text }}
         </span>
@@ -218,8 +221,7 @@
           <div class="swiper-wrapper">
             {% for product in col.products %}
               <div class="swiper-slide">
-                {% render 'product-card'
-                  , product: product %}
+                {% render 'product-card', product: product %}
               </div>
             {% endfor %}
           </div>
@@ -237,7 +239,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     const section = document.querySelector('.seasonal-collection');
     if (!section) return;
-  
+
     // Swiper Initialization
     section.querySelectorAll('.collection-content').forEach((content) => {
       new Swiper(content.querySelector('.seasonalSwiper'), {
@@ -247,7 +249,7 @@
           el: content.querySelector('.swiper-pagination'),
           type: 'progressbar',
         },
-          navigation: {
+        navigation: {
           nextEl: content.querySelector('.swiper-button-next'),
           prevEl: content.querySelector('.swiper-button-prev'),
         },
@@ -259,26 +261,30 @@
         },
       });
     });
-  
+
     // Tabs Logic
-  
+
     function handleTabsCollection() {
       const collectionTabs = section.querySelectorAll('.collection-tab');
       const contents = section.querySelectorAll('.collection-content');
-  
+
       collectionTabs.forEach((tab) => {
         tab.addEventListener('click', () => {
           collectionTabs.forEach((t) => t.classList.remove('active'));
           tab.classList.add('active');
-  
-          const handle = tab.dataset.collectionHandle;
+
+          const handle = tab.getAttribute('data-collection-handle');
           contents.forEach((content) => {
-            content.classList.toggle('active', content.id === handle);
+            if (content.id === handle) {
+              content.classList.add('active');
+            } else {
+              content.classList.remove('active');
+            }
           });
         });
       });
     }
-  
+
     handleTabsCollection();
   });
 </script>

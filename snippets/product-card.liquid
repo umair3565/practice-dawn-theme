@@ -1,88 +1,79 @@
-<style>
-
-  /* Color swatches modifier for buttons */
-  .variant-box.color-swatch {
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    border-radius: 50%;
-    border: 1px solid #ddd;
-    background-clip: content-box;
-  }
-
-  /* Hover effect */
-  .variant-box.color-swatch:hover {
-    transform: scale(1.2);
-    border-color: #999;
-  }
-
-  /* Selected state */
-  .variant-box.color-swatch.selected {
-    border: 2px solid #000;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Remove default text styling */
-  .variant-box.color-swatch::after {
-    content: '';
-  }
-
-</style>
-
-
 <div class="product-card">
 
   {% assign selected_variant = product.selected_or_first_available_variant %}
 
+  {% assign selected_image = selected_variant.featured_image | default: product.featured_image %}
+
   <a href="{{ product.url }}">
     <img
-      src="{% if selected_variant.featured_image %}{{ selected_variant.featured_image | img_url: '400x400' }}{% else %}{{ product.featured_image | img_url: '400x400' }}{% endif %}"
-      alt="{% if selected_variant.featured_image %}{{ selected_variant.title }}{% else %}{{ product.title }}{% endif %}"
       class="product-card-img"
       width="400"
-      height="400">
+      height="400"
+      src="{{ selected_image | img_url: '360x360' }}"
+      alt="{{ selected_variant.title | default: product.title }}">
   </a>
 
+  <div class="vendor-view-row">
+    <p class="vendor">{{ product.vendor }}</p>
 
-  <p class="vendor">{{ product.vendor }}</p>
+    <img
+      width="40"
+      height="40"
+      src="{{ 'view-model.png' | asset_url }}"
+      alt="Quick view"
+      class="quick-shop-trigger"
+      data-product-url='{{ product.url }}'>
+
+    {% render 'quick-shop-modal'
+      , product: product %}
+
+
+  </div>
+
   <a href="{{ product.url }}">
     <h4>{{ product.title }}</h4>
   </a>
 
   {% if product.variants.size > 1 %}
     <div class="variant-values">
-      {% for variant in product.variants %}
 
-        {% assign has_color_swatch = false %}
-        {% for option in variant.options %}
-          {% if option.swatch and option.swatch.color %}
-            {% assign has_color_swatch = true %}
+      {% assign first_option_index = 0 %}
+
+      {% for value in product.options_with_values[first_option_index].values %}
+
+        {% assign matching_variant = product.variants | where: "option1", value | first %}
+
+        {% if matching_variant %}
+          {% assign has_color_swatch = false %}
+          {% if matching_variant.options[first_option_index] and matching_variant.options[first_option_index] != blank %}
+
+            {% for option in matching_variant.options %}
+              {% if option.swatch and option.swatch.color %}
+                {% assign has_color_swatch = true %}
+              {% endif %}
+            {% endfor %}
           {% endif %}
-        {% endfor %}
 
-        {% if has_color_swatch %}
-          {% for option in variant.options %}
-            {% if option.swatch and option.swatch.color %}
-              <button
-                style="background-color: {{ option.swatch.color }};"
-                class="variant-box color-swatch {% if forloop.first %}selected{% endif %}"
-                data-variant-id="{{ variant.id }}"
-                data-variant-quantity="{{ variant.inventory_quantity }}"
-                data-variant-color="{{ option.swatch.color | downcase | strip }}"
-                data-variant-image="{{ variant.image | img_url: '400x400' }}"></button>
-            {% endif %}
-          {% endfor %}
-        {% else %}
-          <button
-            class="variant-box {% if forloop.first %}selected{% endif %}"
-            data-variant-id="{{ variant.id }}"
-            data-variant-price="{{ variant.price | money }}"
-            data-variant-compare-price="{{ variant.compare_at_price | money }}"
-            data-variant-quantity="{{ variant.inventory_quantity }}">
-            {{ variant.title }}
-          </button>
+          {% if has_color_swatch %}
+            <button
+              style="background-color: {{ value | downcase | strip }};"
+              class="variant-box color-swatch {% if forloop.first %}selected{% endif %}"
+              data-variant-id="{{ matching_variant.id }}"
+              data-variant-quantity="{{ matching_variant.inventory_quantity }}"
+              data-variant-color="{{ value | downcase | strip }}"
+              data-variant-image="{{ matching_variant.featured_image | img_url: '400x400' }}"></button>
+          {% else %}
+            <button
+              class="variant-box {% if forloop.first %}selected{% endif %}"
+              data-variant-id="{{ matching_variant.id }}"
+              data-variant-price="{{ matching_variant.price | money }}"
+              data-variant-compare-price="{{ matching_variant.compare_at_price | money }}"
+              data-variant-quantity="{{ matching_variant.inventory_quantity }}">
+              {{ value }}
+            </button>
+          {% endif %}
+
         {% endif %}
-
       {% endfor %}
     </div>
   {% endif %}

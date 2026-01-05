@@ -122,44 +122,27 @@
   class="tabs-articles-section"
   data-section-id="{{ section.id }}">
 
-  {% comment %} <h3 class="main-heading">Articles</h3> {% endcomment %}
-
   <div class="articles-tabs-container">
 
     <p class="tab-btn {% if current_tags == blank %}active{% endif %}" data-tag="all">
       All
     </p>
 
-    {% assign unique_tags = '' %}
-    {% for article in custom_blog.articles %}
-      {% for tag in article.tags %}
-        {% assign tag_handle = tag | handle %}
-        {% unless unique_tags contains tag_handle %}
-          {% assign unique_tags = unique_tags | append: tag_handle | append: ',' %}
-          <p class="tab-btn {% if current_tags contains tag_handle or current_tags contains tag %}active{% endif %}" data-tag="{{ tag_handle }}">
-            {{ tag }}
-          </p>
-        {% endunless %}
-      {% endfor %}
+    {% for tag in custom_blog.all_tags %}
+      <p class="tab-btn {% if current_tags contains tag %}active{% endif %}" data-tag="{{ tag | handle }}">
+        {{ tag }}
+      </p>
     {% endfor %}
+
   </div>
 
-  {% paginate blog.articles by 8 %}
 
+  {% paginate blog.articles by 8 %}
     <div class="articles-grid-container">
 
       {% for article in blog.articles %}
+        {% assign show_article = article.tags.size %}
 
-        {%- if current_tags == blank -%}
-          {%- assign show_article = true -%}
-        {%- else -%}
-          {%- assign show_article = false -%}
-          {%- for t in current_tags -%}
-            {%- if article.tags contains t -%}
-              {%- assign show_article = true -%}
-            {%- endif -%}
-          {%- endfor -%}
-        {%- endif -%}
 
         {% if show_article %}
           <div class="article-card">
@@ -190,7 +173,6 @@
       {% render 'custom-pagination'
         , paginate: paginate %}
     </div>
-
   {% endpaginate %}
 
 </section>
@@ -198,97 +180,60 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
   
-  
-    const sectionEl = document.getElementById("TabsArticlesSection");
-    const sectionId = sectionEl.dataset.sectionId;
-  
-    // Tab Filter Logic
-    function handleTabFilter () {
-      const tabs = sectionEl.querySelectorAll(".tab-btn");
-  
-      tabs.forEach(tab => {
-        tab.removeEventListener("click", tab._handler);
-  
-        const handler = (e) => {
-          e.preventDefault();
-  
-          const tag = tab.dataset.tag;
-          let href;
-  
-          if (tag === "all") {
-            href = "{{ blog.url }}";
-          } else {
-            href = "{{ blog.url }}/tagged/" + tag;
-          }
-  
-          loadSection(href);
-        };
-  
-        tab._handler = handler;
-        tab.addEventListener("click", handler);
-      });
-    }
-  
-  
-    // Pagination Logic
-    function handlePagination () {
-      const links = sectionEl.querySelectorAll(".articles-pagination a");
-  
-      links.forEach(link => {
-        link.removeEventListener("click", link._handler);
-  
-        const handler = (e) => {
-          e.preventDefault();
-          loadSection(link.href);
-        };
-  
-        link._handler = handler;
-        link.addEventListener("click", handler);
-      });
-    }
-  
-  
-    // URL Builder
-    function buildFetchUrl(href) {
-      const url = new URL(href, window.location.origin);
-      const qs = url.search;
-  
-      return `${url.pathname}?section_id=${sectionId}${qs ? "&" + qs.substring(1) : ""}`;
-    }
-  
-    // Section rendering API
-    async function loadSection(href) {
-      const realUrl = new URL(href, window.location.origin);
-      const fetchUrl = buildFetchUrl(href);
-  
-      try {
-        const res = await fetch(fetchUrl);
-        const html = await res.text();
-        const doc = new DOMParser().parseFromString(html, "text/html");
-  
-        const newSection = doc.getElementById("TabsArticlesSection");
-  
-        if (newSection) {
-          sectionEl.innerHTML = newSection.innerHTML;
-  
-          // Re-bind events
-          handleTabFilter();
-          handlePagination();
-  
-          // Update browser URL
-          history.replaceState({}, "", realUrl.pathname + realUrl.search);
-  
-          // Scroll (optional)
-          sectionEl.scrollIntoView({ behavior: "smooth" });
-        }
-  
-      } catch (err) {
-        console.error("AJAX FILTER ERROR", err);
+  const sectionEl = document.getElementById("TabsArticlesSection");
+  const sectionId = sectionEl.getAttribute("data-section-id");
+
+  const handleTabFilter = () => {
+    sectionEl.querySelectorAll(".tab-btn").forEach(tab => {
+      tab.removeEventListener("click", tab._handler);
+      const handler = e => {
+        e.preventDefault();
+        const tag = tab.getAttribute("data-tag");
+        const href = tag === "all" ? "{{ blog.url }}" : "{{ blog.url }}/tagged/" + tag;
+        loadSection(href);
+      };
+      tab._handler = handler;
+      tab.addEventListener("click", handler);
+    });
+  };
+
+  const handlePagination = () => {
+    sectionEl.querySelectorAll(".articles-pagination a").forEach(link => {
+      link.removeEventListener("click", link._handler);
+      const handler = e => {
+        e.preventDefault();
+        loadSection(link.href);
+      };
+      link._handler = handler;
+      link.addEventListener("click", handler);
+    });
+  };
+
+  const buildFetchUrl = href => {
+    const url = new URL(href, window.location.origin);
+    const qs = url.search;
+    return `${url.pathname}?section_id=${sectionId}${qs ? "&" + qs.substring(1) : ""}`;
+  };
+
+  const loadSection = async href => {
+    try {
+      const res = await fetch(buildFetchUrl(href));
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const newSection = doc.getElementById("TabsArticlesSection");
+      if (newSection) {
+        sectionEl.innerHTML = newSection.innerHTML;
+        handleTabFilter();
+        handlePagination();
+        history.replaceState({}, "", new URL(href, window.location.origin).pathname + new URL(href, window.location.origin).search);
+        sectionEl.scrollIntoView({ behavior: "smooth" });
       }
+    } catch (err) {
+      console.error("AJAX FILTER ERROR", err);
     }
-  
-    
-    handleTabFilter();
-    handlePagination();
+  };
+
+  handleTabFilter();
+  handlePagination();
   });
 </script>

@@ -404,7 +404,12 @@
   
         const handle = tab.dataset.collectionHandle;
         contents.forEach((content) => {
-          content.classList.toggle('active', content.id === handle);
+          if(content.id === handle) {
+            content.classList.add('active');
+          }
+          else {
+            content.classList.remove('active');
+          }
         });
       });
     });

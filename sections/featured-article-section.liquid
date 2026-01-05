@@ -154,7 +154,7 @@
 {%  assign custom_blog = blogs[blog.handle]  %}
 
 {% if section.settings.featured_article != blank %}
-  {% assign featured = articles[section.settings.featured_article] %}
+  {% assign featured = section.settings.featured_article %}
 {% else %}
   {% assign featured = blog.articles.first %}
 {% endif %}

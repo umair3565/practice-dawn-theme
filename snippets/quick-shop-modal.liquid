@@ -1,0 +1,477 @@
+<style>
+  .quick-shop-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .quick-shop-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Modal wrapper */
+  .quick-shop-wrapper {
+    max-width: 60vw;
+    max-height: 70vh;
+    width: 60vw;
+    height: 70vh;
+    background: #fff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .quick-shop-modal.active .quick-shop-wrapper {
+    transform: scale(1);
+  }
+
+  /* Close button */
+  .quick-shop-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  /* Modal container */
+  .shop-modal-container {
+    display: flex;
+    flex: 1;
+    height: 100%;
+  }
+
+  /* Left column */
+  .shop-modal-left {
+    width: 40%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .shop-modal-left::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shop-modal-left .shop-modal-left-img,
+  .shop-modal-left .shop-modal-left-thumbs {
+    max-width: 360px;
+    max-height: 300px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  /* Right column - flex column layout */
+  .shop-modal-right {
+    width: 60%;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* pushes quantity/cart to bottom */
+    height: 100%;
+  }
+
+  /* Stock info */
+  .shop-modal-container .shop-modal-products-stock {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .shop-modal-products-stock .modal-stock-icon.sold circle {
+    fill: #333333;
+    stroke: #bababa;
+  }
+
+  .modal-stock-icon circle {
+    transition: fill 0.2s ease
+    , stroke 0.2s ease;
+  }
+
+  .shop-modal-products-stock .modal-stock-text {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #00A52F;
+  }
+
+  .price-container {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .modal-price-container p {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: var(--text-secondary);
+  }
+
+  .modal-compare-price {
+    font-weight: 300;
+    text-decoration: line-through;
+    color: #bababa;
+    font-size: 16px;
+  }
+
+  /* Variant options */
+  .modal-product-variant-option-name {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .modal-product-option-values {
+    margin-top: 8px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .modal-product-variant-box {
+    padding: 8px 16px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-secondary);
+    border: 1px solid #B9B9B9;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+
+  .modal-product-variant-box:hover {
+    border-color: #0b0b0b;
+  }
+
+  .modal-product-variant-box.selected {
+    background: var(--text-secondary);
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+  }
+
+  /* Quantity + Add to Cart */
+  .modal-quantity-cartBtn {
+    margin-top: 20px;
+    /* gap from product info */
+    padding-bottom: 10px;
+    /* space from bottom */
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .modal-qunatity-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid #B9B9B9;
+    overflow: hidden;
+    height: 48px;
+    min-width: 130px;
+  }
+
+  .modal-qunatity-control button {
+    width: 40px;
+    text-align: center;
+    font-size: 18px;
+    user-select: none;
+    cursor: pointer;
+  }
+
+  .modal-qunatity-control input {
+    width: 40px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+
+  .modal-cart-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    border: none;
+    background: var(--text-secondary);
+    color: var(--text-primary);
+    padding: 0 18px;
+    cursor: pointer;
+    transition: background 0.12s ease;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .modal-cart-btn:hover {
+    background: #222;
+  }
+
+  .modal-cart-btn .modal-cart-btn-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .modal-cart-btn p {
+    margin: 0;
+  }
+</style>
+
+<style>
+  .modal-variant-box {
+    position: relative;
+    min-width: 44px;
+    height: 44px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    padding: 0;
+    margin: 0 8px 8px 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .modal-variant-box:hover {
+    border-color: #000;
+    transform: scale(1.05);
+  }
+
+  .modal-variant-box.selected {
+    border-color: #000;
+    border-width: 2px;
+    box-shadow: 0 0 0 1px #000;
+  }
+
+  .modal-color-swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: block;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-variant-box:not(.modal-color-option) {
+    font-size: 12px;
+    padding: 0 8px;
+    border-radius: 4px;
+    width: auto;
+    min-width: auto;
+  }
+
+  .modal-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<div id="quickShopModal" class="quick-shop-modal">
+  <div class="quick-shop-wrapper">
+    <button class="quick-shop-close" type="button">×</button>
+    <div class="shop-modal-container">
+
+      <!-- Left Column -->
+      <div class="shop-modal-left">
+        <img
+          class="shop-modal-left-img"
+          width="100%"
+          height="100%"
+          src="{{ product.featured_image | img_url: 'master' }}"
+          alt="{{ product.title }}">
+
+        {% if product.images.size > 1 %}
+          <div class="shop-modal-left-thumbs">
+            {% for image in product.images %}
+              {% if image.id != product.featured_image.id %}
+                <img
+                  class="shop-modal-thumb-img"
+                  width="100%"
+                  height="100%"
+                  src="{{ image.src | img_url: '360x360' }}"
+                  alt="{{ image.alt | escape }}">
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Right Column -->
+      <div class="shop-modal-right">
+        <!-- First div: all product info -->
+        <div class="modal-info">
+          <h3>{{ product.title | default: 'Heading Title' }}</h3>
+          <div class="shop-modal-products-stock">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              class="modal-stock-icon"
+              xmlns="http://www.w3.org/2000/svg">
+              <circle
+                cx="8"
+                cy="8"
+                r="6"
+                fill="#00A52F"
+                stroke="#C5F5D2"
+                stroke-width="4" />
+            </svg>
+            {% assign selected_variant_qty = product.selected_or_first_available_variant.inventory_quantity %}
+            <span class="modal-stock-text">Available in stock ({{ selected_variant_qty }})</span>
+          </div>
+
+          <div class="modal-price-container">
+            <p class="modal-sale-price">{{ product.selected_or_first_available_variant.price | money }}</p>
+
+            {% if product.selected_or_first_available_variant.compare_at_price > 0 %}
+              <p style="color: #bababa;" class="modal-compare-price">{{ product.selected_or_first_available_variant.compare_at_price | money }}</p>
+            {% endif %}
+          </div>
+
+          <div class="description">
+            {{ product.description | truncatewords: 50 | strip }}
+          </div>
+
+          {% if product.options.size > 0 %}
+            {% for option in product.options_with_values %}
+
+              {% if option.name == 'Color' %}
+                <div class="modal-product-variant-option" data-option-index="{{ forloop.index0 }}">
+                  <h4 class="modal-product-variant-option-name">{{ option.name }}</h4>
+                  <div class="modal-product-option-values">
+                    {% for value in option.values %}
+                      {% assign selected_variant = product.variants | where: 'option1', value | first %}
+                      {% assign hex_color = value.swatch.color %}
+
+                      {% for variant in product.variants %}
+                        {% if variant.options contains value %}
+                          {% assign color_metafield = variant.metafields.custom.color %}
+                          {% if color_metafield != blank %}
+                            {% assign hex_color = color_metafield.value %}
+                          {% endif %}
+                          {% break %}
+                        {% endif %}
+                      {% endfor %}
+
+                      <button
+                        class="modal-variant-box modal-color-option {% if forloop.first %}selected{% endif %}"
+                        data-variant-id="{{ selected_variant.id }}"
+                        data-variant-img="{% if selected_variant and selected_variant.image %}{{ selected_variant.image.src | img_url: 'master' }}{% else %}{{ product.featured_image.src | img_url: 'master' }}{% endif %}"
+                        data-option-name="{{ option.name }}"
+                        data-option-value="{{ value }}"
+                        title="{{ value }}">
+                        <span class="modal-color-swatch" style="background-color: {{ hex_color }};">
+                          <span class="modal-sr-only">{{ value }}</span>
+                        </span>
+                      </button>
+
+
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <!-- Second div: quantity + Add to Cart -->
+        <div class="modal-quantity-cartBtn">
+          <div class="modal-qunatity-control">
+            <button id="modalDecrementBtn">-</button>
+            <input
+              type="number"
+              id="modalDisplayQuantity"
+              value="1"
+              min="1">
+            <button id="modalIncrementBtn">+</button>
+          </div>
+
+          <button class="modal-cart-btn">
+            <div class="modal-cart-btn-left">
+              <img
+                width="16px"
+                height="16px"
+                src="{{ 'shopping-bag.svg' | asset_url }}"
+                alt="cart">
+              <span class="modal-cart-text">Add to Bag</span>
+            </div>
+            <p class="modal-sale-price">{{ product.price | money }}</p>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // Function to initialize Quick Shop modal
+  function initQuickShopModal() {
+    const quickShopModal = document.getElementById('quickShopModal');
+    if (!quickShopModal) return;
+  
+    const quickShopWrapper = quickShopModal.querySelector('.quick-shop-wrapper');
+    const quickShopCloseBtn = quickShopModal.querySelector('.quick-shop-close');
+    const quickShopTriggers = document.querySelectorAll('.quick-shop-trigger');
+  
+    // OPEN MODAL
+    quickShopTriggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const dataProductUrl = trigger.dataset.productUrl;
+        console.log('Product URL--', dataProductUrl);
+        quickShopModal.classList.add('active');
+      });
+    });
+  
+    // CLOSE VIA X BUTTON
+    quickShopCloseBtn.addEventListener('click', () => {
+      quickShopModal.classList.remove('active');
+    });
+  
+    // CLOSE WHEN CLICKING OUTSIDE MODAL
+    quickShopModal.addEventListener('click', (event) => {
+      if (!quickShopWrapper.contains(event.target)) {
+        quickShopModal.classList.remove('active');
+      }
+    });
+  }
+  
+  // Call once on DOM load
+  document.addEventListener('DOMContentLoaded', () => {
+    initQuickShopModal();
+  });
+</script>

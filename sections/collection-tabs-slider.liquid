@@ -351,10 +351,10 @@
 
       {% assign selected_collections = section.settings.collection_list %}
       <div class="collection-tabs">
-        {% for coll in selected_collections %}
-          {% if coll %}
-            <button class="collection-tab{% if forloop.first %} active{% endif %}" data-handle="{{ coll.handle }}">
-              {{ coll.title }}
+        {% for collection_item in selected_collections %}
+          {% if collection_item %}
+            <button class="collection-tab{% if forloop.first %} active{% endif %}" data-handle="{{ collection_item.handle }}">
+              {{ collection_item.title }}
             </button>
           {% endif %}
         {% endfor %}
@@ -370,16 +370,16 @@
       </a>
     </div>
 
-    {% for coll in selected_collections %}
-      {% if coll %}
-        {% assign content_id = 'ctab-' | append: coll.handle %}
+    {% for collection_item in selected_collections %}
+      {% if collection_item %}
+        {% assign content_id = 'ctab-' | append: collection_item.handle %}
 
         <div class="collection-content{% if forloop.first %} active{% endif %}" id="{{ content_id }}">
           <div class="swiper-pagination"></div>
 
           <div class="swiper collectionTabSwiper" data-content="{{ content_id }}">
             <div class="swiper-wrapper">
-              {% assign p_first = coll.products.first %}
+              {% assign p_first = collection_item.products.first %}
 
               <div class="swiper-slide">
                 <div class="grid-collection-slide">
@@ -450,7 +450,7 @@
 
                   <div class="right-products">
                     {% assign right_count = 0 %}
-                    {% for product in coll.products offset: 1 limit: 4 %}
+                    {% for product in collection_item.products offset: 1 limit: 4 %}
                       {% assign right_count = right_count | plus: 1 %}
 
                       <article class="product-card">
@@ -523,7 +523,7 @@
               <div class="swiper-slide">
                 <div class="grid-8">
                   {% assign eight_count = 0 %}
-                  {% for product in coll.products offset: 5 limit: 8 %}
+                  {% for product in collection_item.products offset: 5 limit: 8 %}
                     {% assign eight_count = eight_count | plus: 1 %}
 
                     <article class="product-card">
@@ -644,7 +644,7 @@
   
     tabs.forEach((tab) => {
       tab.addEventListener('click', () => {
-        const handle = tab.dataset.handle;
+        const handle = tab.getAttribute('data-handle');
   
         tabs.forEach((t) => t.classList.remove('active'));
         tab.classList.add('active');
@@ -690,12 +690,12 @@
             box.addEventListener('click', () => {
                 variantBoxes.forEach((b) => b.classList.remove('selected'));
                 box.classList.add('selected');
-                selectedVariantId = box.dataset.variantId;
+                selectedVariantId = box.getAttribute('data-variant-id');
   
-                const selectedVariantPrice = box.dataset.variantPrice;
+                const selectedVariantPrice = box.getAttribute('data-variant-price');
                 if (priceElement) priceElement.textContent = selectedVariantPrice;
   
-                const selectedVariantComparePrice = box.dataset.variantComparePrice;
+                const selectedVariantComparePrice = box.getAttribute('data-variant-compare-price');
                 if (comparePrice) comparePrice.textContent = selectedVariantComparePrice;
             });
         });

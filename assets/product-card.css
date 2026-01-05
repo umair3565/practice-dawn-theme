@@ -1,92 +1,126 @@
 .product-card {
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    max-width: 360px;
-    width: 100%;
-    justify-content: space-between;
-  }
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-width: 360px;
+  width: 100%;
+  justify-content: space-between;
+}
 
-  .product-card .product-card-img {
-    max-width: 360px;
-    height: 360px;
-    object-fit: cover;
-    transition: transform 0.3s ease-in-out;
-  }
+.product-card .product-card-img {
+  max-width: 360px;
+  height: 360px;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
 
-  .product-card .product-card-img:hover {
-    transform: scale(1.05);
-  }
+.product-card .product-card-img:hover {
+  transform: scale(1.05);
+}
 
-  .product-card .vendor {
-    margin-top: 16px;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
-    text-transform: uppercase;
-    text-align: left;
-  }
+.product-card .vendor-view-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .product-card h4 {
-    margin-top: 6px;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 26px;
-    text-align: left;
-  }
+.product-card .vendor-view-row > img:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+}
 
-  .product-card .variant-values {
-    margin-top: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+.product-card .vendor {
+  margin-top: 16px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  text-transform: uppercase;
+  text-align: left;
+}
 
-  .product-card .variant-box {
-    border: 1px solid var(--text-secondary);
-    padding: 4px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
+.product-card h4 {
+  margin-top: 6px;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+  text-align: left;
+}
 
-  .product-card .variant-box:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  .product-card .variant-box.selected {
-    background-color: #000;
-    color: #fff;
-  }
+.product-card .variant-values {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
 
-  .product-card .price-add-to-cart-container {
-    margin-top: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.product-card .variant-box {
+  border: 1px solid var(--text-secondary);
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
 
-  .product-card .price-container .variant-price {
-    font-weight: 500;
-    font-size: 16px;
-  }
+.product-card .variant-box:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.product-card .variant-box.selected {
+  background-color: #000;
+  color: #fff;
+}
 
-  .price-container .compare-price {
-    text-decoration: line-through;
-    color: #bdbdbd;
-    font-size: 12px;
-  }
+.product-card .price-add-to-cart-container {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .product-card .add-to-bag-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+.product-card .price-container .variant-price {
+  font-weight: 500;
+  font-size: 16px;
+}
 
-  .product-card .add-to-bag-btn button {
-    color: var(--text-secondary);
-    background-color: transparent;
-    border: none;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
-  }
+.price-container .compare-price {
+  text-decoration: line-through;
+  color: #bdbdbd;
+  font-size: 12px;
+}
+
+.product-card .add-to-bag-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-card .add-to-bag-btn button {
+  color: var(--text-secondary);
+  background-color: transparent;
+  border: none;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.variant-box.color-swatch {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background-clip: content-box;
+}
+
+.variant-box.color-swatch:hover {
+  transform: scale(1.2);
+  border-color: #999;
+}
+
+.variant-box.color-swatch.selected {
+  border: 2px solid #000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.variant-box.color-swatch::after {
+  content: '';
+}

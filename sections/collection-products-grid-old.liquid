@@ -138,100 +138,99 @@
   }
 </style>
 
-<section id="collectionPGWrapper">
+<section
+  id="productsGrid"
+  class="products-grid"
+  data-section-id="{{ section.id }}">
 
-  <div
-    id="productsGrid"
-    class="products-grid"
-    data-section-id="{{ section.id }}">
-
-    <div class="filter-sort-header">
-      <div id="filtersSidebarBtn" class="filters-wrapper">
-        <img
-          class="filter-toggle-icon"
-          width="12"
-          height="12"
-          src="{{ 'filter-icon.svg' | asset_url }}"
-          alt="filter icon">
-        <span>Filters</span>
-      </div>
-
-      {% render 'collection-sorts' %}
+  <div class="filter-sort-header">
+    <div id="filtersSidebarBtn" class="filters-wrapper">
+      <img
+        class="filter-toggle-icon"
+        width="12"
+        height="12"
+        src="{{ 'filter-icon.svg' | asset_url }}"
+        alt="filter icon">
+      <span>Filters</span>
     </div>
 
-    {% render 'active-filters' %}
-
-    <div class="products-grid-wrapper">
-      {% render 'collection-filters' %}
-
-      {% if collection.products_count > 0 %}
-        <div class="product-grid-pagination">
-          {% paginate collection.products by 12 %}
-
-            <div class="products-grid-container">
-              {% for product in collection.products %}
-
-                {% render 'product-card' product: product %}
-
-              {% endfor %}
-            </div>
-
-            {% render 'custom-pagination'
-              , paginate: paginate %}
-
-          {% endpaginate %}
-        </div>
-      {% else %}
-        <p class="no-products">No products found in this collection.</p>
-      {% endif %}
-    </div>
-
+    {% render 'collection-sorts' %}
   </div>
+
+  {% render 'active-filters' %}
+
+  <div class="products-grid-wrapper">
+    {% render 'collection-filters' %}
+
+    {% if collection.products_count > 0 %}
+      <div class="product-grid-pagination">
+        {% paginate collection.products by 12 %}
+
+          <div class="products-grid-container">
+            {% for product in collection.products %}
+
+              {% render 'product-card' product: product %}
+
+            {% endfor %}
+          </div>
+
+          {% render 'custom-pagination'
+            , paginate: paginate %}
+
+        {% endpaginate %}
+      </div>
+    {% else %}
+      <p class="no-products">No products found in this collection.</p>
+    {% endif %}
+  </div>
+
 
 </section>
 
 
 <script>
-  const collectionPGWrapper = document.getElementById('collectionPGWrapper');
+  
   const container = document.getElementById('productsGrid');
   const sectionId = container?.dataset.sectionId;
-
-  // Sorting Logic
+  const clearFilterBtn = container.querySelector('.clear-filters-btn');
+  
+  //  Sorting Logic
   function handleSorting() {
-    collectionPGWrapper.addEventListener('change', (e) => {
-      const sortForm = e.target.closest('#sortForm');
-      if (!sortForm) return;
-
+    const sortForm = document.querySelector('#sortForm');
+    if (!sortForm) return;
+  
+    sortForm.addEventListener('change', (e) => {
       const sortBy = e.target.value;
       const params = new URLSearchParams(window.location.search);
       params.set('sort_by', sortBy);
       renderCollection(params.toString());
     });
   }
-
-  // Filtering Logic
+  
+  //  Filtering Logic
   function handleFiltering() {
-    collectionPGWrapper.addEventListener('change', (e) => {
-      const filtersForm = e.target.closest('#filtersForm');
-      if (!filtersForm) return;
-
-      // Single-select color filters
-      if (e.target.classList.contains('color-filter')) {
-        const colorCheckboxes = filtersForm.querySelectorAll('.color-filter');
-        if (e.target.checked) {
-          colorCheckboxes.forEach(cb => {
-            if (cb !== e.target) cb.checked = false;
-          });
-        }
-      }
-
-      // Trigger collection rendering
-      const formData = new FormData(filtersForm);
-      const searchParams = new URLSearchParams(formData).toString();
-      renderCollection(searchParams);
+  const filtersForm = document.getElementById('filtersForm');
+  if (!filtersForm) return;
+  
+  
+  // logic for single select color filters
+  const colorCheckboxes = filtersForm.querySelectorAll('.color-filter');
+  colorCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+      if (!checkbox.checked) return;
+      colorCheckboxes.forEach((cb) => {
+        if (cb !== checkbox) cb.checked = false;
+      });
     });
+  });
+  
+  filtersForm.addEventListener('change', () => {
+    const formData = new FormData(filtersForm);
+    const searchParams = new URLSearchParams(formData).toString();
+    renderCollection(searchParams);
+  });
   }
-
+  
   function handleSidebar() {
     const filtersSidebar = document.getElementById('filtersSidebar');
     const filterIcon = document.querySelector('.filter-toggle-icon');
@@ -292,70 +291,74 @@
       });
     });
   }
-
-  // Pagination (delegated)
+  
+  // Pagination Logic
   function handlePagination() {
-    collectionPGWrapper.addEventListener('click', (e) => {
-      const link = e.target.closest('.products-pagination a');
-      if (!link) return;
-
-      e.preventDefault();
-      const url = new URL(link.href);
-      const params = url.searchParams.toString();
-      renderCollection(params);
+    const paginationLinks = document.querySelectorAll('.products-pagination a');
+    if (!paginationLinks.length) return;
+  
+    paginationLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const url = new URL(link.href);
+        const params = url.searchParams.toString();
+        renderCollection(params);
+      });
     });
   }
-
+  
   // Section Rendering API
   async function renderCollection(params) {
+    
     const filtersSidebar = document.getElementById('filtersSidebar');
-    const wasSidebarActive = filtersSidebar?.classList.contains('active');
-
+    const filtersSidebarBtn = document.getElementById('filtersSidebarBtn');
+    
+    const wasSidebarActive = filtersSidebar.classList.contains('active');
+  
     const url = `${window.location.pathname}?section_id=${sectionId}${params ? '&' + params : ''}`;
+  
     try {
       const response = await fetch(url);
       const html = await response.text();
       const doc = new DOMParser().parseFromString(html, 'text/html');
       const newProductsGrid = doc.getElementById('productsGrid');
-
+  
       if (newProductsGrid) {
         container.innerHTML = newProductsGrid.innerHTML;
-
-        // Restore sidebar state
+  
+        // Restore sidebar state after re-render
         if (wasSidebarActive) {
           const newSidebar = document.getElementById('filtersSidebar');
-          newSidebar?.classList.add('active');
+          newSidebar.classList.add('active');
           const filterIcon = document.querySelector('.filter-toggle-icon');
-          if (filterIcon) filterIcon.src = "{{ 'filter-close.svg' | asset_url }}";
+          if (filterIcon) {
+            filterIcon.src = "{{ 'filter-close.svg' | asset_url }}";
+          }
         }
-
-        handleSidebar();
-        handleFilterButtons();
-        handleCollapsibleFilters();
-        handleProductCards();
-        initQuickShopModal();
+  
+        bindEvents();
       }
-
+  
       const cleanUrl = `${window.location.pathname}${params ? '?' + params : ''}`;
       history.replaceState({}, '', cleanUrl);
     } catch (error) {
       console.error('Error rendering collection:', error);
     }
   }
-
-  // Bind events once (delegated for everything possible)
+  
+  // Event Rebinding (after render)
   function bindEvents() {
     handleSorting();
     handleFiltering();
-    
     handleFilterButtons();
     handleSidebar();
     handlePagination();
-    handleCollapsibleFilters();
     handleProductCards();
+    handleCollapsibleFilters();
     initQuickShopModal();
   }
-
+  
+  // Initial Load
   document.addEventListener('DOMContentLoaded', () => {
     bindEvents();
   });

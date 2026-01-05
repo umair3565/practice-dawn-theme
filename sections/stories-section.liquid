@@ -41,7 +41,7 @@
           {
             "type": "image_picker",
             "id": "main_image",
-            "label": "Main Background Image (Optional)"
+            "label": "Main Background Image"
           }, {
             "type": "product",
             "id": "product",
@@ -252,9 +252,8 @@
     <div class="swiper storiesSwiper">
       <div class="swiper-wrapper">
         {% if section.blocks.size > 0 %}
-
           {% for block in section.blocks %}
-            {% assign product = all_products[block.settings.product] %}
+            {% assign product = block.settings.product %}
 
             <div class="swiper-slide">
               <div class="story-card">
@@ -300,7 +299,6 @@
               </div>
             </div>
           {% endfor %}
-
         {% endif %}
       </div>
       {% if section.settings.show_pagination %}
@@ -312,60 +310,61 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-  
-  new Swiper('.storiesSwiper', {
-  slidesPerView: 'auto',
-  spaceBetween: 32,
-  centeredSlides: false,
-  pagination: {
-    el: '.stories-section .swiper-pagination',
-    clickable: true,
-  },
-  breakpoints: {
-    0: {                    
-      slidesPerView: 1,
-      centeredSlides: true,
-      spaceBetween: 20
-    },
-    426: {                  
+    
+    new Swiper('.storiesSwiper', {
       slidesPerView: 'auto',
-      centeredSlides: false,  
-      spaceBetween: 32
-    }
-  }
-  });
-  
-    // Correct selector
-    const addToCartButtons = document.querySelectorAll('.stories-section .add-to-bag');
-  
-    const handleAddToCart = async (event) => {
-      const button = event.currentTarget;
-      const variantId = button.getAttribute('data-variant-id');
-  
-      try {
-        const response = await fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id: variantId,
-            quantity: 1,
-          }),
-        });
-  
-        if (!response.ok) throw new Error('Failed to add to cart');
-  
-        const data = await response.json();
-        if (window.openCartDrawer) window.openCartDrawer();
-        updateCartCount();
-  
-      } catch (error) {
-        console.error('Error adding to cart:', error);
-        showToast('❌ Something went wrong');
+      spaceBetween: 32,
+      centeredSlides: false,
+      pagination: {
+        el: '.stories-section .swiper-pagination',
+        clickable: true,
+      },
+      breakpoints: {
+        0: {                    
+          slidesPerView: 1,
+          centeredSlides: true,
+          spaceBetween: 20
+        },
+        426: {                  
+          slidesPerView: 'auto',
+          centeredSlides: false,  
+          spaceBetween: 32
+        }
       }
-    };
-  
-    addToCartButtons.forEach((btn) => {
-      btn.addEventListener('click', handleAddToCart);
     });
+
+    const addToCartButtons = document.querySelectorAll('.stories-section .add-to-bag');
+
+    addToCartButtons.forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const selectedVariantId = btn.getAttribute('data-variant-id');
+
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              id: selectedVariantId,
+              quantity: 1,
+            }),
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            if (window.openCartDrawer) window.openCartDrawer();
+            if (window.updateCartCount) updateCartCount();
+          } else {
+            if (window.showToast) showToast(`Shopify Error: ${data.message}`);
+          }
+        } catch (error) {
+          if (window.showToast) showToast('❌ Something went wrong, please try again.');
+          console.error(error);
+        }
+      });
+    });
+
   });
 </script>
