@@ -22,11 +22,7 @@
       src="{{ 'view-model.png' | asset_url }}"
       alt="Quick view"
       class="quick-shop-trigger"
-      data-product-url='{{ product.url }}'>
-
-    {% render 'quick-shop-modal'
-      , product: product %}
-
+      data-product-handle='{{ product.handle }}'>
 
   </div>
 
@@ -61,7 +57,8 @@
               data-variant-id="{{ matching_variant.id }}"
               data-variant-quantity="{{ matching_variant.inventory_quantity }}"
               data-variant-color="{{ value | downcase | strip }}"
-              data-variant-image="{{ matching_variant.featured_image | img_url: '400x400' }}"></button>
+              data-variant-image="{{ matching_variant.featured_image | img_url: '400x400' }}">
+              </button>
           {% else %}
             <button
               class="variant-box {% if forloop.first %}selected{% endif %}"

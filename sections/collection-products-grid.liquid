@@ -190,7 +190,6 @@
 
 </section>
 
-
 <script>
   const collectionPGWrapper = document.getElementById('collectionPGWrapper');
   const container = document.getElementById('productsGrid');
@@ -233,44 +232,53 @@
   }
 
   function handleSidebar() {
-    const filtersSidebar = document.getElementById('filtersSidebar');
-    const filterIcon = document.querySelector('.filter-toggle-icon');
-    const filterClose = document.querySelector('.filter-close-icon');
-  
-    function openSidebar() {
+  collectionPGWrapper.addEventListener('click', (e) => {
+    const filterIcon  = e.target.closest('.filter-toggle-icon');
+    const filterClose = e.target.closest('.filter-close-icon');
+
+    
+    const filtersSidebar = collectionPGWrapper.querySelector('#filtersSidebar');
+    if (!filtersSidebar) return;
+
+    if (filterIcon) {
       const isActive = filtersSidebar.classList.toggle('active');
-      filterIcon.src = isActive ? "{{ 'filter-close.svg' |  asset_url }}" : "{{ 'filter-icon.svg' |  asset_url }}";
+      filterIcon.src = isActive
+        ? "{{ 'filter-close.svg' | asset_url }}"
+        : "{{ 'filter-icon.svg' | asset_url }}";
+      return;
     }
-    filterIcon.addEventListener('click', openSidebar);
-  
-    function closeSidebar() {
+
+    if (filterClose) {
       filtersSidebar.classList.remove('active');
-      filterIcon.src = "{{ 'filter-icon.svg' |  asset_url }}";
+
+      const icon = collectionPGWrapper.querySelector('.filter-toggle-icon');
+      if (icon) {
+        icon.src = "{{ 'filter-icon.svg' | asset_url }}";
+      }
     }
-    filterClose.addEventListener('click', closeSidebar);
+  });
   }
   
   function handleFilterButtons() {
-    const clearFilterBtn = document.querySelector('.clear-filters-btn');
-    const activeFilters = document.querySelectorAll('#activeFilter');
-  
-    if (clearFilterBtn) {
-      clearFilterBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const filtersForm = document.getElementById('filtersForm');
-        filtersForm?.reset();
-        renderCollection('');
-      });
+  collectionPGWrapper.addEventListener('click', (e) => {
+    const clearBtn     = e.target.closest('.clear-filters-btn');
+    const activeFilter = e.target.closest('#activeFilter');
+
+    if (clearBtn) {
+      e.preventDefault();
+      const filtersForm = collectionPGWrapper.querySelector('#filtersForm');
+      filtersForm?.reset();
+      renderCollection('');
+      return;
     }
-  
-    activeFilters.forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const url = e.target.getAttribute('href');
-        const params = url.split('?')[1];
-        renderCollection(params);
-      });
-    });
+
+    if (activeFilter) {
+      e.preventDefault();
+      const url = activeFilter.getAttribute('href');
+      const params = url?.split('?')[1] || '';
+      renderCollection(params);
+    }
+  });
   }
   
   function handleCollapsibleFilters() {
@@ -293,7 +301,7 @@
     });
   }
 
-  // Pagination (delegated)
+  // Pagination Logic
   function handlePagination() {
     collectionPGWrapper.addEventListener('click', (e) => {
       const link = e.target.closest('.products-pagination a');
@@ -329,11 +337,8 @@
           if (filterIcon) filterIcon.src = "{{ 'filter-close.svg' | asset_url }}";
         }
 
-        handleSidebar();
-        handleFilterButtons();
         handleCollapsibleFilters();
         handleProductCards();
-        initQuickShopModal();
       }
 
       const cleanUrl = `${window.location.pathname}${params ? '?' + params : ''}`;
@@ -343,17 +348,16 @@
     }
   }
 
-  // Bind events once (delegated for everything possible)
+  // Bind events once
   function bindEvents() {
     handleSorting();
     handleFiltering();
-    
     handleFilterButtons();
     handleSidebar();
     handlePagination();
+    
     handleCollapsibleFilters();
     handleProductCards();
-    initQuickShopModal();
   }
 
   document.addEventListener('DOMContentLoaded', () => {
