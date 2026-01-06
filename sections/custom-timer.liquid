@@ -240,9 +240,7 @@
 {% if section.settings.sale_date != blank %}
   <section class="timer-section" data-sale-date="{{ section.settings.sale_date | escape }}">
     {% if section.settings.bg_img != blank %}
-      {{ section.settings.bg_img
- | image_url: width: 1600
- | image_tag: alt: 'Background image', class: 'bg-img', width: '100%', height: '100%'
+      {{ section.settings.bg_img | image_url: width: 1600 | image_tag: alt: 'Background image', class: 'bg-img', width: '100%', height: '100%'
       }}
     {% else %}
       <img

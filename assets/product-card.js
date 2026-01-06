@@ -89,6 +89,18 @@ function handleProductCards() {
                 }
             });
         });
+
+        // Quick Shop Modal Trigger
+        const quickShopTrigger = card.querySelector('.quick-shop-trigger');
+        if (quickShopTrigger) {
+            quickShopTrigger.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const productHandle = quickShopTrigger.dataset.productHandle;
+                if (productHandle && window.openQuickShopModal) {
+                    await window.openQuickShopModal(productHandle);
+                }
+            });
+        }
     });
 }
 

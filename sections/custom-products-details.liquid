@@ -524,6 +524,7 @@
 </style>
 
 <section class="product-details-section">
+
   <div class="breadcrumbs">
     <a href="{{ routes.root_url }}">Home</a>
     {% if collection %}
@@ -535,6 +536,7 @@
   </div>
 
   <div class="product-details-container">
+
     <div class="left-content">
       {% assign selected_variant = product.selected_or_first_available_variant %}
       {% assign selected_image = selected_variant.featured_image | default: product.featured_image %}
@@ -803,7 +805,7 @@
   
     const selectedValues = Array.from(optionGroups).map(group => {
       const selectedBtn = group.querySelector('.variant-box.selected');
-      const value = selectedBtn.dataset.optionValue;
+      const value = selectedBtn.getAttribute('data-option-value');
       return value;
     });
   
@@ -871,17 +873,16 @@
 
     mainImage.src = variantImgSrc.replace(
       /\.(jpg|jpeg|png|webp).*/i,
-      '_400x400.$1'
-    );
+      '_400x400.$1');
 
     mainImage.alt = matchedVariant.title;
 
-    // Update thumbnail visibility based on selected variant image
+  // Update thumbnail visibility based on selected variant image
   const thumbs = section.querySelectorAll('.thumb-img');
   const variantImageId = matchedVariant.featured_image ? matchedVariant.featured_image.id : null;
 
   thumbs.forEach(thumb => {
-  const thumbId = parseInt(thumb.dataset.imageId, 10);
+  const thumbId = parseInt(thumb.getAttribute('data-image-id'), 10);
   thumb.style.display = thumbId === variantImageId ? 'none' : 'block';
   });
 
