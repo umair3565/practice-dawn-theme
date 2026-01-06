@@ -176,6 +176,9 @@
               {% endfor %}
             </div>
 
+            {% render 'quick-shop-modal'
+              , product: product %}
+
             {% render 'custom-pagination'
               , paginate: paginate %}
 
