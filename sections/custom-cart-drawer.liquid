@@ -307,37 +307,40 @@
 </style>
 
 {% schema %}
-  {
-    "name": "Custom Cart Drawer",
-    "settings": [
-      {
-        "type": "collection",
-        "label": "Select Collection",
-        "id": "select_collection_products",
-        "info": "Select Recommended Collection Products "
-      }, {
-        "type": "number",
-        "id": "fs_goal_price",
-        "label": "Free shipping goal amount",
-        "default": 300
-      }, {
-        "type": "text",
-        "id": "free_shipping_success_text",
-        "label": "Text when free shipping is achieved",
-        "default": "Congratulations! You got FREE Shipping!"
-      }, {
-        "type": "text",
-        "id": "shipping_info_text",
-        "label": "Shipping bar below info Text",
-        "default": "Promo Code use may affect free shipping qualification."
-      }
-    ],
-    "presets": [
-      {
-        "name": "Custom Cart Drawer"
-      }
-    ]
-  }
+{
+  "name": "Custom Cart Drawer",
+  "settings": [
+    {
+      "type": "collection",
+      "label": "Select Collection",
+      "id": "select_collection_products",
+      "info": "Select Recommended Collection Products "
+    },
+    {
+      "type": "number",
+      "id": "fs_goal_price",
+      "label": "Free shipping goal amount",
+      "default": 300
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_success_text",
+      "label": "Text when free shipping is achieved",
+      "default": "Congratulations! You got FREE Shipping!"
+    },
+    {
+      "type": "text",
+      "id": "shipping_info_text",
+      "label": "Shipping bar below info Text",
+      "default": "Promo Code use may affect free shipping qualification."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Cart Drawer"
+    }
+  ]
+}
 {% endschema %}
 
 <div class="cart-drawer-overlay"></div>
@@ -346,15 +349,16 @@
   <div
     class="cart-drawer"
     id="cartDrawer"
-    data-section-id="{{ section.id }}">
-    
+    data-section-id="{{ section.id }}"
+  >
     {% if cart.items.size > 0 %}
       <div class="cart-header">
         <div class="cart-header-top">
           <p
             id="cartQuantity"
             class="sub-heading"
-            data-items-count="{{ cart.item_count }}">
+            data-items-count="{{ cart.item_count }}"
+          >
             Cart
             <span>{{ cart.item_count }} item(s)</span>
           </p>
@@ -363,7 +367,8 @@
               height="20px"
               width="20px"
               src=" {{ 'cross-icon.svg' |  asset_url }} "
-              alt="">
+              alt=""
+            >
           </button>
         </div>
 
@@ -386,7 +391,8 @@
               id="free-shipping-fill"
               class="free-shipping-fill"
               data-free-shipping-amount="{{ free_shipping_goal }}"
-              style="width: {{ percentage }}%;"></div>
+              style="width: {{ percentage }}%;"
+            ></div>
           </div>
 
           <p class="free-shipping-text">{{ section.settings.shipping_info_text }}</p>
@@ -398,7 +404,8 @@
           <div
             class="cart-item"
             data-key="{{ item.key }}"
-            data-inventory-quantity="{{ item.variant.inventory_quantity }}">
+            data-inventory-quantity="{{ item.variant.inventory_quantity }}"
+          >
             <div class="cart-item-left">
               {{ item.image | image_url: width: 150 | image_tag: class: 'image' }}
 
@@ -423,7 +430,8 @@
                       type="number"
                       class="display-quantity"
                       value="{{ item.quantity }}"
-                      min="1">
+                      min="1"
+                    >
                     <button class="increment-btn">+</button>
                   </div>
 
@@ -470,22 +478,21 @@
 </div>
 
 <script>
-  
   const cartDrawerWrapper = document.getElementById('cartDrawerWrapper');
   const cartDrawer = document.getElementById('cartDrawer');
   const CartDrawerSectionId = cartDrawer.dataset.sectionId;
-  
+
   // Attach Quantity Listeners
   function quantityUpdate() {
     // Attach a single listener to the cartDrawer
     cartDrawerWrapper.addEventListener('click', async (e) => {
       const item = e.target.closest('.cart-item');
       if (!item) return;
-  
+
       const key = item.dataset.key;
       const maxQty = parseInt(item.dataset.inventoryQuantity) || 0;
       const input = item.querySelector('.display-quantity');
-  
+
       // Increment
       if (e.target.matches('.increment-btn')) {
         let qty = parseInt(input.value) || 1;
@@ -497,7 +504,7 @@
           showToast('ℹ️ Not enough quantity available');
         }
       }
-  
+
       // Decrement
       if (e.target.matches('.decrement-btn')) {
         let qty = parseInt(input.value) || 1;
@@ -507,22 +514,22 @@
           await updateCart(key, qty);
         }
       }
-  
+
       // Remove
       if (e.target.matches('.remove-item')) {
         await updateCart(key, 0);
       }
     });
-  
+
     // Input change handler (delegation doesn't work for change events)
     cartDrawerWrapper.addEventListener('change', async (e) => {
       const item = e.target.closest('.cart-item');
       if (!item) return;
-  
+
       const key = item.dataset.key;
       const maxQty = parseInt(item.dataset.inventoryQuantity) || 0;
       const input = item.querySelector('.display-quantity');
-  
+
       if (e.target.matches('.display-quantity')) {
         let qty = parseInt(input.value) || 1;
         if (qty < 1) qty = 1;
@@ -535,18 +542,18 @@
       }
     });
   }
-  
+
   function updateFreeShippingBar(cartTotal) {
     const fill = document.getElementById('free-shipping-fill');
     if (!fill) return;
-  
-    const freeShippingGoal = parseInt(fill.dataset.freeShippingAmount, 10);
+
+    const freeShippingGoal = parseInt(fill.getAttribute('data-free-shipping-amount'), 10);
     const percentage = Math.min((cartTotal / freeShippingGoal) * 100, 100);
-  
+
     // for smooth transitions of the bar
     fill.style.width = percentage + '%';
   }
-  
+
   // Initial update on cart load
   function initialShippingBar() {
     fetch('/cart.js')
@@ -554,37 +561,37 @@
       .then((data) => updateFreeShippingBar(data.total_price))
       .catch((err) => console.error(err));
   }
-  
+
   // Update Cart via AJAX
   async function updateCart(key, quantity) {
     const cartItems = document.querySelector('.cart-items');
     const overlay = document.getElementById('cartLoadingOverlay');
-  
+
     cartItems.style.opacity = '0.5';
     cartItems.style.pointerEvents = 'none';
     overlay.style.display = 'flex';
-  
+
     try {
       const res = await fetch('/cart/change.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: key, quantity }),
       });
-  
+
       if (!res.ok) throw new Error('Failed to update cart');
-  
+
       const cartData = await res.json();
-  
+
       // Update free shipping bar only
       updateFreeShippingBar(cartData.total_price);
-  
+
       // Re-fetch cart drawer section
       const htmlRes = await fetch(`?section_id=${CartDrawerSectionId}`);
       const htmlText = await htmlRes.text();
       const parser = new DOMParser();
       const newCart = parser.parseFromString(htmlText, 'text/html').getElementById('cartDrawer');
       cartDrawer.innerHTML = newCart.innerHTML;
-  
+
       updateCartCount();
       handleSwiper();
     } catch (error) {
@@ -596,7 +603,7 @@
       overlay.style.display = 'none';
     }
   }
-  
+
   function handleSwiper() {
     new Swiper('.cart-swiper', {
       slidesPerView: 1.5,
@@ -610,7 +617,98 @@
       },
     });
   }
-  
+
+  function cartRelatedProductQtyUpdate() {
+    cartDrawerWrapper.addEventListener('click', async (e) => {
+      const cartRelatedProduct = e.target.closest('.cart-related-product');
+      if (!cartRelatedProduct) return;
+
+      const maxQty = parseInt(cartRelatedProduct.getAttribute('data-inventory-quantity')) || 0;
+      const input = cartRelatedProduct.querySelector('.cart-display-quantity');
+
+      // Increment
+      if (e.target.matches('.cart-increment-btn')) {
+        let qty = parseInt(input.value) || 1;
+        if (qty < maxQty) {
+          qty++;
+          input.value = qty;
+        } else {
+          showToast('ℹ️ Not enough quantity available');
+        }
+      }
+
+      // Decrement
+      if (e.target.matches('.cart-decrement-btn')) {
+        let qty = parseInt(input.value) || 1;
+        if (qty > 1) {
+          qty--;
+          input.value = qty;
+        }
+      }
+    });
+
+    // Input change handler (delegation doesn't work for change events)
+    cartDrawerWrapper.addEventListener('change', async (e) => {
+      const cartRelatedProduct = e.target.closest('.cart-related-product');
+      if (!cartRelatedProduct) return;
+
+      const maxQty = parseInt(cartRelatedProduct.getAttribute('data-inventory-quantity')) || 0;
+      const input = cartRelatedProduct.querySelector('.cart-display-quantity');
+
+      if (e.target.matches('.cart-display-quantity')) {
+        let qty = parseInt(input.value) || 1;
+        if (qty < 1) qty = 1;
+        if (qty > maxQty) {
+          qty = maxQty;
+          showToast('ℹ️ Not enough quantity available');
+        }
+        input.value = qty;
+      }
+    });
+  }
+
+  function handleCartRelatedProdcutAdd() {
+    cartDrawerWrapper.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.add-cart-item');
+      if (!btn) return;
+
+      const productItem = btn.closest('.cart-related-product, #cartDrawer');
+      if (!productItem) return;
+
+      const variantId = productItem.getAttribute('data-variant-id');
+      const quantityInput = productItem.querySelector('.cart-display-quantity');
+      const quantity = parseInt(quantityInput.value) || 1;
+
+      const overlay = document.getElementById('cartLoadingOverlay');
+
+      productItem.style.opacity = '0.5';
+      productItem.style.pointerEvents = 'none';
+      overlay.style.display = 'flex';
+
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: variantId, quantity }),
+        });
+
+        if (!response.ok) throw new Error('Failed to add item');
+
+        const data = await response.json();
+        if (window.openCartDrawer) window.openCartDrawer();
+        updateCartCount();
+        console.log('Added to cart:', data);
+      } catch (err) {
+        console.error('Error adding to cart:', err);
+        showToast('❌ Something went wrong');
+      } finally {
+        productItem.style.opacity = '';
+        productItem.style.pointerEvents = '';
+        overlay.style.display = 'none';
+      }
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
     handleCartDrawer();
