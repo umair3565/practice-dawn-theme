@@ -176,8 +176,7 @@
               {% endfor %}
             </div>
 
-            {% render 'quick-shop-modal'
-              , product: product %}
+            {% render 'quick-shop-modal' %}
 
             {% render 'custom-pagination'
               , paginate: paginate %}
@@ -197,26 +196,26 @@
   const collectionPGWrapper = document.getElementById('collectionPGWrapper');
   const container = document.getElementById('productsGrid');
   const sectionId = container?.dataset.sectionId;
-
+  
   // Sorting Logic
   function handleSorting() {
     collectionPGWrapper.addEventListener('change', (e) => {
       const sortForm = e.target.closest('#sortForm');
       if (!sortForm) return;
-
+  
       const sortBy = e.target.value;
       const params = new URLSearchParams(window.location.search);
       params.set('sort_by', sortBy);
       renderCollection(params.toString());
     });
   }
-
+  
   // Filtering Logic
   function handleFiltering() {
     collectionPGWrapper.addEventListener('change', (e) => {
       const filtersForm = e.target.closest('#filtersForm');
       if (!filtersForm) return;
-
+  
       // Single-select color filters
       if (e.target.classList.contains('color-filter')) {
         const colorCheckboxes = filtersForm.querySelectorAll('.color-filter');
@@ -226,23 +225,23 @@
           });
         }
       }
-
+  
       // Trigger collection rendering
       const formData = new FormData(filtersForm);
       const searchParams = new URLSearchParams(formData).toString();
       renderCollection(searchParams);
     });
   }
-
+  
   function handleSidebar() {
   collectionPGWrapper.addEventListener('click', (e) => {
     const filterIcon  = e.target.closest('.filter-toggle-icon');
     const filterClose = e.target.closest('.filter-close-icon');
-
+  
     
     const filtersSidebar = collectionPGWrapper.querySelector('#filtersSidebar');
     if (!filtersSidebar) return;
-
+  
     if (filterIcon) {
       const isActive = filtersSidebar.classList.toggle('active');
       filterIcon.src = isActive
@@ -250,10 +249,10 @@
         : "{{ 'filter-icon.svg' | asset_url }}";
       return;
     }
-
+  
     if (filterClose) {
       filtersSidebar.classList.remove('active');
-
+  
       const icon = collectionPGWrapper.querySelector('.filter-toggle-icon');
       if (icon) {
         icon.src = "{{ 'filter-icon.svg' | asset_url }}";
@@ -266,7 +265,7 @@
   collectionPGWrapper.addEventListener('click', (e) => {
     const clearBtn     = e.target.closest('.clear-filters-btn');
     const activeFilter = e.target.closest('#activeFilter');
-
+  
     if (clearBtn) {
       e.preventDefault();
       const filtersForm = collectionPGWrapper.querySelector('#filtersForm');
@@ -274,7 +273,7 @@
       renderCollection('');
       return;
     }
-
+  
     if (activeFilter) {
       e.preventDefault();
       const url = activeFilter.getAttribute('href');
@@ -303,35 +302,35 @@
       });
     });
   }
-
+  
   // Pagination Logic
   function handlePagination() {
     collectionPGWrapper.addEventListener('click', (e) => {
       const link = e.target.closest('.products-pagination a');
       if (!link) return;
-
+  
       e.preventDefault();
       const url = new URL(link.href);
       const params = url.searchParams.toString();
       renderCollection(params);
     });
   }
-
+  
   // Section Rendering API
   async function renderCollection(params) {
     const filtersSidebar = document.getElementById('filtersSidebar');
     const wasSidebarActive = filtersSidebar?.classList.contains('active');
-
+  
     const url = `${window.location.pathname}?section_id=${sectionId}${params ? '&' + params : ''}`;
     try {
       const response = await fetch(url);
       const html = await response.text();
       const doc = new DOMParser().parseFromString(html, 'text/html');
       const newProductsGrid = doc.getElementById('productsGrid');
-
+  
       if (newProductsGrid) {
         container.innerHTML = newProductsGrid.innerHTML;
-
+  
         // Restore sidebar state
         if (wasSidebarActive) {
           const newSidebar = document.getElementById('filtersSidebar');
@@ -339,18 +338,18 @@
           const filterIcon = document.querySelector('.filter-toggle-icon');
           if (filterIcon) filterIcon.src = "{{ 'filter-close.svg' | asset_url }}";
         }
-
+      
         handleCollapsibleFilters();
         handleProductCards();
       }
-
+  
       const cleanUrl = `${window.location.pathname}${params ? '?' + params : ''}`;
       history.replaceState({}, '', cleanUrl);
     } catch (error) {
       console.error('Error rendering collection:', error);
     }
   }
-
+  
   // Bind events once
   function bindEvents() {
     handleSorting();
@@ -362,7 +361,7 @@
     handleCollapsibleFilters();
     handleProductCards();
   }
-
+  
   document.addEventListener('DOMContentLoaded', () => {
     bindEvents();
   });

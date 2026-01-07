@@ -64,9 +64,9 @@
   }
 
   .quick-shop-image {
+    max-width: 360px;
     width: 100%;
-    max-width: 300px;
-    height: auto;
+    height: 360px;
     border-radius: 8px;
     object-fit: cover;
     margin-bottom: 20px;
@@ -76,7 +76,6 @@
     font-size: 22px;
     font-weight: 600;
     color: var(--text-secondary, #333);
-    margin: 0 0 15px 0;
   }
 
   .quick-shop-price-container {
@@ -144,7 +143,7 @@
 <div id="quickShopModal" class="quick-shop-modal">
   <div class="quick-shop-wrapper">
     <button class="quick-shop-close" type="button">×</button>
-    
+
     <div class="quick-shop-content">
       <img
         class="quick-shop-image"
@@ -152,15 +151,18 @@
         height="300"
         src=""
         alt="">
-      
+
       <h3 class="quick-shop-title">Loading...</h3>
-      
+
       <div class="quick-shop-price-container">
         <p class="quick-shop-price">0.00</p>
         <p class="quick-shop-compare-price" style="display: none;">0.00</p>
       </div>
-      
-      <a href="#" class="quick-shop-btn" id="quickShopNowBtn">Shop Now</a>
+
+      <a
+        href="#"
+        class="quick-shop-btn"
+        id="quickShopNowBtn">Shop Now</a>
     </div>
   </div>
 </div>
@@ -170,7 +172,7 @@
   window.openQuickShopModal = async function(productHandle) {
     const quickShopModal = document.getElementById('quickShopModal');
     if (!quickShopModal) return;
-
+  
     try {
       // Fetch product data from Shopify
       const response = await fetch(`/products/${productHandle}.js`);
@@ -188,33 +190,33 @@
       }
     }
   };
-
+  
   // Function to populate modal with basic product data
   function populateQuickShopModal(product) {
     const modal = document.getElementById('quickShopModal');
     if (!modal) return;
-
+  
     const selectedVariant = product.variants[0];
-
+  
     // Update image
     const imageElem = modal.querySelector('.quick-shop-image');
     if (imageElem && product.featured_image) {
       imageElem.src = product.featured_image;
       imageElem.alt = product.title;
     }
-
+  
     // Update title
     const titleElem = modal.querySelector('.quick-shop-title');
     if (titleElem) {
       titleElem.textContent = product.title;
     }
-
+  
     // Update price
     const priceElem = modal.querySelector('.quick-shop-price');
     if (priceElem && selectedVariant) {
       priceElem.textContent = (selectedVariant.price / 100).toFixed(2);
     }
-
+  
     // Update compare price
     const comparePriceElem = modal.querySelector('.quick-shop-compare-price');
     if (comparePriceElem && selectedVariant) {
@@ -225,39 +227,30 @@
         comparePriceElem.style.display = 'none';
       }
     }
-
+  
     // Update Shop Now button link
     const shopNowBtn = modal.querySelector('#quickShopNowBtn');
     if (shopNowBtn) {
       shopNowBtn.href = `/products/${product.handle}`;
     }
   }
-
-  // Function to initialize Quick Shop modal close handlers
-  function initQuickShopModal() {
-    const quickShopModal = document.getElementById('quickShopModal');
-    if (!quickShopModal) return;
   
-    const quickShopWrapper = quickShopModal.querySelector('.quick-shop-wrapper');
-    const quickShopCloseBtn = quickShopModal.querySelector('.quick-shop-close');
+  document.addEventListener('click', (e) => {
+  const quickShopModal = document.getElementById('quickShopModal');
+  if (!quickShopModal) return;
   
-    // CLOSE VIA X BUTTON
-    if (quickShopCloseBtn) {
-      quickShopCloseBtn.addEventListener('click', () => {
-        quickShopModal.classList.remove('active');
-      });
-    }
+  const closeBtn = e.target.closest('.quick-shop-close');
+  const wrapper = quickShopModal.querySelector('.quick-shop-wrapper');
   
-    // CLOSE WHEN CLICKING OUTSIDE MODAL
-    quickShopModal.addEventListener('click', (event) => {
-      if (!quickShopWrapper.contains(event.target)) {
-        quickShopModal.classList.remove('active');
-      }
-    });
+  // CLOSE VIA X BUTTON
+  if (closeBtn) {
+    quickShopModal.classList.remove('active');
+    return;
   }
   
-  // Call once on DOM load
-  document.addEventListener('DOMContentLoaded', () => {
-    initQuickShopModal();
+  // CLOSE WHEN CLICKING OUTSIDE MODAL
+  if (wrapper && !wrapper.contains(e.target)) {
+    quickShopModal.classList.remove('active');
+  }
   });
 </script>
