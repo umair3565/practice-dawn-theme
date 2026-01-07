@@ -1,0 +1,59 @@
+{% comment %}
+  Section for rendering variant options in the Quick Shop Modal.
+  Used by the Shopify Section Rendering API.
+{% endcomment %}
+
+{% if product.options.size > 0 %}
+  {% for option in product.options_with_values %}
+    <div class="qsm-variant-option" data-option-index="{{ forloop.index0 }}">
+      <h4 class="qsm-variant-option-name">{{ option.name }}</h4>
+
+      <div class="qsm-option-values">
+        {% if option.name == 'Color' and option.values.first.swatch %}
+          {% for value in option.values %}
+            {% assign hex_color = value.swatch.color %}
+            <button
+              type="button"
+              class="qsm-variant-box qsm-variant-swatch {% if forloop.first %}selected{% endif %}"
+              data-option-name="{{ option.name }}"
+              data-option-value="{{ value }}"
+              title="{{ value }}"
+              style="background-color: {{ hex_color }};"></button>
+          {% endfor %}
+        {% else %}
+          {% for value in option.values %}
+            <button
+              type="button"
+              class="qsm-variant-box {% if forloop.first %}selected{% endif %}"
+              data-option-name="{{ option.name }}"
+              data-option-value="{{ value }}">
+              {{ value }}
+            </button>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+
+  <script id="qsm-variant-json" type="application/json">
+    [
+      {% for variant in product.variants %}
+        {
+          "id": {{ variant.id }},
+          "options": {{ variant.options | json }},
+          "inventory_quantity": {{ variant.inventory_quantity | default: 0 }},
+          "inventory_management": {{ variant.inventory_management | json }},
+          "inventory_policy": {{ variant.inventory_policy | json }},
+          "available": {{ variant.available | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "QSM Variants",
+  "settings": []
+}
+{% endschema %}

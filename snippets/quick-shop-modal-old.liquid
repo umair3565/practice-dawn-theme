@@ -1,0 +1,580 @@
+<style>
+  .qsm-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .qsm-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Modal wrapper - Two column layout */
+  .qsm-wrapper {
+    max-width: 800px;
+    width: 95%;
+    height: 600px;
+    background: #fff;
+    position: relative;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    padding: 0;
+  }
+
+  .qsm-modal.active .qsm-wrapper {
+    transform: scale(1);
+  }
+
+  /* Close button */
+  .qsm-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    color: #333;
+    line-height: 1;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Two column layout */
+  .qsm-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* LEFT SIDE - Product Image */
+  .qsm-images {
+    width: 50%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .qsm-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* RIGHT SIDE - Product Details */
+  .qsm-details {
+    width: 50%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: #fff;
+  }
+
+  .qsm-title {
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 40px;
+    color: #333;
+    margin: 0 0 12px;
+  }
+
+  /* Stock Status */
+  .qsm-stock-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .qsm-stock-icon circle {
+    transition: fill 0.2s ease
+    , stroke 0.2s ease;
+  }
+
+  .qsm-stock-text {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #00a52f;
+  }
+
+  /* Price */
+  .qsm-price-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .qsm-price {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333;
+    margin: 0;
+  }
+
+  .qsm-compare-price {
+    font-weight: 300;
+    text-decoration: line-through;
+    color: rgb(184, 179, 179);
+    font-size: 16px;
+    margin: 0;
+  }
+
+  /* Variant Options */
+  .qsm-variant-option {
+    margin-bottom: 20px;
+  }
+
+  .qsm-variant-option-name {
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 8px;
+  }
+
+  .qsm-option-values {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* Base variant button */
+  .qsm-variant-box {
+    padding: 8px 16px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #333;
+    border: 2px solid #333;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+  }
+
+  .qsm-variant-box:hover {
+    border-color: #0b0b0b;
+  }
+
+  .qsm-variant-box.selected {
+    color: #fff;
+    background-color: #333;
+  }
+
+  /* Swatch */
+  .qsm-variant-swatch {
+    border-radius: 50%;
+    border: 2px solid transparent;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    padding: 0;
+  }
+
+  .qsm-variant-swatch.selected {
+    border-color: #333;
+    transform: scale(1.05);
+  }
+
+  /* Quantity and Cart */
+  .qsm-quantity-cart-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .qsm-cart-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    border: none;
+    background: #333;
+    color: #fff;
+    padding: 0 18px;
+    cursor: pointer;
+    transition: background 0.12s ease;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .qsm-cart-btn:hover:not(:disabled) {
+    background: #222;
+  }
+
+  .qsm-cart-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  .qsm-cart-btn .qsm-left-side {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .qsm-cart-btn p {
+    margin: 0;
+  }
+
+  .qsm-view-details {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #333;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  .qsm-quantity-control {
+    display: flex;
+    align-items: center;
+    border: 2px solid #333;
+    overflow: hidden;
+    height: 48px;
+    min-width: 120px;
+    background: #fff;
+  }
+
+  .qsm-qty-btn {
+    width: 40px;
+    height: 100%;
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .qsm-qty-btn:hover {
+    background: #f5f5f5;
+  }
+
+  .qsm-qty-input {
+    width: 40px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    font-weight: 500;
+    -moz-appearance: textfield;
+  }
+
+  .qsm-qty-input::-webkit-outer-spin-button,
+  .qsm-qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .qsm-wrapper {
+      height: auto;
+      max-height: 80vh;
+      width: 90%;
+    }
+
+    .qsm-content {
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .qsm-images,
+    .qsm-details {
+      width: 100%;
+      height: auto;
+      flex: none;
+    }
+
+    .qsm-images {
+      height: 350px;
+    }
+
+    .qsm-details {
+      padding: 12px;
+      overflow-y: visible;
+    }
+
+    .qsm-title {
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    .qsm-quantity-cart-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .qsm-quantity-control {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .qsm-cart-btn {
+      width: 100%;
+      padding: 10px;
+    }
+  }
+</style>
+
+<div id="qsm-modal" class="qsm-modal">
+  <div class="qsm-wrapper">
+    <button class="qsm-close" type="button">×</button>
+
+    <div class="qsm-content">
+      <!-- LEFT SIDE: Image Gallery -->
+      <div class="qsm-images" id="qsm-images"></div>
+
+      <!-- RIGHT SIDE: Product Details -->
+      <div class="qsm-details">
+        <h3 class="qsm-title" id="qsm-title">Loading...</h3>
+
+        <!-- Stock Status -->
+        <div class="qsm-stock-container">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            class="qsm-stock-icon"
+            xmlns="http://www.w3.org/2000/svg">
+            <circle
+              cx="8"
+              cy="8"
+              r="6"
+              fill="#00A52F"
+              stroke="#C5F5D2"
+              stroke-width="4" />
+          </svg>
+          <span class="qsm-stock-text" id="qsm-stock">
+            Available in stock
+          </span>
+        </div>
+
+        <!-- Price -->
+        <div class="qsm-price-container">
+          <p class="qsm-price" id="qsm-price">Rs.0.00</p>
+          <p
+            class="qsm-compare-price"
+            id="qsm-compare-price"
+            style="display: none;">
+            Rs.0.00
+          </p>
+        </div>
+
+        <!-- Variant Options -->
+        <div class="qsm-variants" id="qsm-variants">
+          <!-- Variant options (boxes or swatches) will be dynamically added here -->
+        </div>
+
+        <!-- Quantity & Add to Cart -->
+        <div class="qsm-quantity-cart-container">
+          <div class="qsm-quantity-control">
+            <button
+              type="button"
+              class="qsm-qty-btn"
+              onclick="updateQty(-1)">
+              -
+            </button>
+            <input
+              type="number"
+              id="qsm-qty"
+              value="1"
+              min="1"
+              class="qsm-qty-input">
+            <button
+              type="button"
+              class="qsm-qty-btn"
+              onclick="updateQty(1)">
+              +
+            </button>
+          </div>
+
+          <button
+            type="button"
+            class="qsm-cart-btn"
+            id="qsm-addToCart">
+            <div class="qsm-left-side">
+              <img
+                width="16"
+                height="16"
+                src="{{ 'shopping-bag.svg' | asset_url }}"
+                alt="cart">
+              <span id="qsm-addToCartText">Add to Bag</span>
+            </div>
+            <p id="qsm-addToCartPrice">Rs.0.00</p>
+          </button>
+        </div>
+
+        <a
+          href="#"
+          id="qsm-viewProduct"
+          class="qsm-view-details">View full details</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.quickShopModal = { product: null, variantId: null, options: {} };
+  
+  window.openQuickShopModal = async (handle) => {
+    try {
+      const product = await (await fetch(`/products/${handle}.js`)).json();
+      window.quickShopModal.product = product;
+      product.options.forEach((opt, i) => (window.quickShopModal.options[opt.name] = product.variants[0].options[i]));
+  
+      refreshModal();
+      document.getElementById('qsm-modal').classList.add('active');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  
+  const refreshModal = () => {
+    const { product, options } = window.quickShopModal;
+    const variant = product.variants.find((v) => product.options.every((opt, i) => v.options[i] === options[opt.name]));
+    window.quickShopModal.variantId = variant?.id;
+  
+    document.getElementById('qsm-title').textContent = product.title;
+    document.getElementById('qsm-viewProduct').href = `/products/${product.handle}`;
+    document.getElementById('qsm-qty').value = 1;
+  
+    // Image
+    const img = variant?.featured_image?.src || product.featured_image;
+    document.getElementById('qsm-images').innerHTML = `<img src="${img}" class="qsm-image" id="qsm-mainImage">`;
+  
+    // Price
+    const p = `Rs.${((variant?.price || 0) / 100).toFixed(2)}`;
+    document.getElementById('qsm-price').textContent = p;
+    document.getElementById('qsm-addToCartPrice').textContent = p;
+  
+    const cp = document.getElementById('qsm-compare-price');
+    if (variant?.compare_at_price > variant?.price) {
+      cp.textContent = `Rs.${(variant.compare_at_price / 100).toFixed(2)}`;
+      cp.style.display = 'block';
+    } else {
+      cp.style.display = 'none';
+    }
+  
+    // Stock
+    const st = document.getElementById('qsm-stock');
+    const btn = document.getElementById('qsm-addToCart');
+    const circ = document.querySelector('.qsm-stock-icon circle');
+    if (variant?.available) {
+      st.textContent =
+        variant.inventory_quantity > 0 ? `Available in stock (${variant.inventory_quantity})` : 'Available in stock';
+      st.style.color = circ.style.fill = '#00A52F';
+      btn.disabled = false;
+      document.getElementById('qsm-addToCartText').textContent = 'Add to Bag';
+    } else {
+      st.textContent = 'Out of Stock';
+      st.style.color = circ.style.fill = '#333';
+      btn.disabled = true;
+      document.getElementById('qsm-addToCartText').textContent = 'Out of Stock';
+    }
+  
+    // Variants
+    document.getElementById('qsm-variants').innerHTML =
+      product.variants.length > 1 || product.variants[0].title !== 'Default Title'
+        ? product.options
+            .map(
+              (opt) => `
+      <div class="qsm-variant-option">
+        <h4 class="qsm-variant-option-name">${opt.name}</h4>
+        <div class="qsm-option-values">
+          ${opt.values
+            .map(
+              (val) =>
+                `<button type="button" class="qsm-variant-box ${
+                  options[opt.name] === val ? 'selected' : ''
+                }" onclick="window.selectVariant('${opt.name}', '${val}')">${val}</button>`
+            )
+            .join('')}
+        </div>
+      </div>
+    `
+            )
+            .join('')
+        : '';
+  };
+  
+  window.selectVariant = (name, val) => {
+    window.quickShopModal.options[name] = val;
+    refreshModal();
+  };
+  
+  window.updateQty = (amt) => {
+    const input = document.getElementById('qsm-qty');
+    const variant = window.quickShopModal.product.variants.find((v) => v.id === window.quickShopModal.variantId);
+    let n = parseInt(input.value) + amt;
+    if (n < 1) n = 1;
+    if (variant?.inventory_management && variant?.inventory_policy !== 'continue' && n > variant.inventory_quantity) {
+      n = variant.inventory_quantity;
+      if (window.showToast) showToast('ℹ️ Not enough quantity available');
+    }
+    input.value = n;
+  };
+  
+  document.getElementById('qsm-addToCart').onclick = async function () {
+    this.classList.add('loading');
+    try {
+      const res = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: window.quickShopModal.variantId,
+          quantity: document.getElementById('qsm-qty').value,
+        }),
+      });
+      if (res.ok) {
+        if (window.openCartDrawer) window.openCartDrawer();
+        document.getElementById('qsm-modal').classList.remove('active');
+        document.dispatchEvent(new CustomEvent('cart:updated'));
+      }
+    } catch (e) {}
+    this.classList.remove('loading');
+  };
+  
+  const closeModal = () => document.getElementById('qsm-modal').classList.remove('active');
+  document.querySelector('.qsm-close').onclick = closeModal;
+  window.onclick = (e) => {
+    if (e.target == document.getElementById('qsm-modal')) closeModal();
+  };
+</script>

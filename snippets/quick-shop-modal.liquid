@@ -1,5 +1,5 @@
 <style>
-  .quick-shop-modal {
+  .qsm-modal {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
@@ -12,245 +12,705 @@
     transition: opacity 0.3s ease;
   }
 
-  .quick-shop-modal.active {
+  .qsm-modal.active {
     opacity: 1;
     pointer-events: auto;
   }
 
-  /* Modal wrapper - simplified smaller size */
-  .quick-shop-wrapper {
-    max-width: 500px;
-    width: 90%;
+  /* Modal wrapper - Two column layout */
+  .qsm-wrapper {
+    max-width: 800px;
+    width: 95%;
+    min-height: 450px;
     background: #fff;
     position: relative;
-    border-radius: 12px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     transform: scale(0.9);
     transition: transform 0.3s ease;
-    padding: 30px;
+    padding: 0;
   }
 
-  .quick-shop-modal.active .quick-shop-wrapper {
+  .qsm-modal.active .qsm-wrapper {
     transform: scale(1);
   }
 
   /* Close button */
-  .quick-shop-close {
+  .qsm-close {
     position: absolute;
     top: 15px;
     right: 15px;
-    font-size: 28px;
-    background: none;
+    font-size: 24px;
+    background: #fff;
     border: none;
     cursor: pointer;
     z-index: 10;
     color: #333;
     line-height: 1;
-    padding: 0;
+    padding: 5px;
     width: 30px;
     height: 30px;
-  }
-
-  .quick-shop-close:hover {
-    color: #000;
-  }
-
-  /* Modal content - centered layout */
-  .quick-shop-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .quick-shop-image {
-    max-width: 360px;
-    width: 100%;
-    height: 360px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-bottom: 20px;
-  }
-
-  .quick-shop-title {
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text-secondary, #333);
-  }
-
-  .quick-shop-price-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 25px;
   }
 
-  .quick-shop-price {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--text-secondary, #333);
-    margin: 0;
+  /* Two column layout */
+  .qsm-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
   }
 
-  .quick-shop-compare-price {
-    font-size: 20px;
-    font-weight: 400;
-    text-decoration: line-through;
-    color: #999;
-    margin: 0;
+  /* LEFT SIDE - Product Image */
+  .qsm-images {
+    width: 50%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
-  .quick-shop-btn {
+  .qsm-image {
     width: 100%;
-    max-width: 300px;
-    padding: 15px 30px;
-    background: var(--text-secondary, #333);
-    color: var(--text-primary, #fff);
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    text-decoration: none;
-    display: inline-block;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border-radius: 6px;
   }
 
-  .quick-shop-btn:hover {
+  /* RIGHT SIDE - Product Details */
+  .qsm-details {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .qsm-details-info {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 20px 0;
+  }
+
+  .qsm-details-footer {
+    padding: 20px;
+    margin-top: auto;
+    background: #fff;
+  }
+
+  .qsm-title {
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 40px;
+    color: #333;
+  }
+
+  /* Stock Status */
+  .qsm-stock-container {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .qsm-stock-icon circle {
+    transition: fill 0.2s ease
+    , stroke 0.2s ease;
+  }
+
+  .qsm-stock-text {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #00a52f;
+  }
+
+  /* Price */
+  .qsm-price-container {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .qsm-price {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333;
+    margin: 0;
+  }
+
+  .qsm-compare-price {
+    font-weight: 300;
+    text-decoration: line-through;
+    color: rgb(184, 179, 179);
+    font-size: 16px;
+    margin: 0;
+  }
+
+  /* Variant Options */
+  .qsm-variant-option {
+    margin-bottom: 10px;
+  }
+
+  .qsm-variant-option-name {
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 8px;
+  }
+
+  .qsm-option-values {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* Base variant button */
+  .qsm-variant-box {
+    padding: 8px 16px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #333;
+    border: 2px solid #333;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+  }
+
+  .qsm-variant-box:hover {
+    border-color: #0b0b0b;
+  }
+
+  .qsm-variant-box.selected {
+    color: #fff;
+    background-color: #333;
+  }
+
+  /* Swatch */
+  .qsm-variant-swatch {
+    border-radius: 50%;
+    border: 2px solid transparent;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    padding: 0;
+  }
+
+  .qsm-variant-swatch.selected {
+    border-color: #333;
+    transform: scale(1.05);
+  }
+
+  /* Quantity and Cart */
+  .qsm-quantity-cart-container {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .qsm-cart-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    border: none;
+    background: #333;
+    color: #fff;
+    padding: 0 18px;
+    cursor: pointer;
+    transition: background 0.12s ease;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .qsm-cart-btn:hover:not(:disabled) {
     background: #222;
   }
 
+  .qsm-cart-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  .qsm-cart-btn .qsm-left-side {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .qsm-cart-btn p {
+    margin: 0;
+  }
+
+  .qsm-quantity-control {
+    display: flex;
+    align-items: center;
+    border: 2px solid #333;
+    overflow: hidden;
+    height: 48px;
+    min-width: 120px;
+    background: #fff;
+  }
+
+  .qsm-qty-btn {
+    width: 40px;
+    height: 100%;
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .qsm-qty-btn:hover {
+    background: #f5f5f5;
+  }
+
+  .qsm-qty-input {
+    width: 40px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    font-weight: 500;
+    -moz-appearance: textfield;
+  }
+
+  .qsm-qty-input::-webkit-outer-spin-button,
+  .qsm-qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+
+  /* Mobile Responsive */
   @media (max-width: 768px) {
-    .quick-shop-wrapper {
-      padding: 20px;
+    .qsm-wrapper {
+      height: auto;
+      max-height: 80vh;
+      width: 90%;
     }
 
-    .quick-shop-title {
-      font-size: 18px;
+    .qsm-content {
+      flex-direction: column;
+      overflow-y: auto;
     }
 
-    .quick-shop-price {
-      font-size: 20px;
+    .qsm-images,
+    .qsm-details {
+      width: 100%;
+      height: auto;
+      flex: none;
     }
 
-    .quick-shop-compare-price {
-      font-size: 18px;
+    .qsm-images {
+      height: 350px;
+    }
+
+    .qsm-details {
+      padding: 12px;
+      overflow-y: visible;
+    }
+
+    .qsm-title {
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    .qsm-quantity-cart-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .qsm-quantity-control {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .qsm-cart-btn {
+      width: 100%;
+      padding: 10px;
     }
   }
 </style>
 
-<div id="quickShopModal" class="quick-shop-modal">
-  <div class="quick-shop-wrapper">
-    <button class="quick-shop-close" type="button">×</button>
+<div id="qsm-modal" class="qsm-modal">
+  <div class="qsm-wrapper">
+    <button class="qsm-close" type="button">×</button>
 
-    <div class="quick-shop-content">
-      <img
-        class="quick-shop-image"
-        width="300"
-        height="300"
-        src=""
-        alt="">
+    <div class="qsm-content">
+      <!-- LEFT SIDE: Image Gallery -->
+      <div class="qsm-images" id="qsm-images"></div>
 
-      <h3 class="quick-shop-title">Loading...</h3>
+      <!-- RIGHT SIDE: Product Details -->
+      <div class="qsm-details">
+        <div class="qsm-details-info">
+          <h3 class="qsm-title" id="qsm-title">Loading...</h3>
 
-      <div class="quick-shop-price-container">
-        <p class="quick-shop-price">0.00</p>
-        <p class="quick-shop-compare-price" style="display: none;">0.00</p>
+          <!-- Stock Status -->
+          <div class="qsm-stock-container">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              class="qsm-stock-icon"
+              xmlns="http://www.w3.org/2000/svg">
+              <circle
+                cx="8"
+                cy="8"
+                r="6"
+                fill="#00A52F"
+                stroke="#C5F5D2"
+                stroke-width="4" />
+            </svg>
+            <span class="qsm-stock-text" id="qsm-stock">
+              Available in stock
+            </span>
+          </div>
+
+          <!-- Price -->
+          <div class="qsm-price-container">
+            <p class="qsm-price" id="qsm-price">Rs.0.00</p>
+            <p
+              class="qsm-compare-price"
+              id="qsm-compare-price"
+              style="display: none;">
+              Rs.0.00
+            </p>
+          </div>
+
+          <!-- Variant Options -->
+          <div class="qsm-variants" id="qsm-variants">
+            <!-- Variant options (boxes or swatches) will be dynamically added here -->
+          </div>
+        </div>
+
+        <div class="qsm-details-footer">
+          <!-- Quantity & Add to Cart -->
+          <div class="qsm-quantity-cart-container">
+            <div class="qsm-quantity-control" id="qsm-quantity-control">
+              <button type="button" class="qsm-qty-btn decrement-btn">-</button>
+              <input type="number" id="qsm-qty-input" class="qsm-qty-input" value="1" min="1">
+              <button type="button" class="qsm-qty-btn increment-btn">+</button>
+            </div>
+
+            <button
+              type="button"
+              class="qsm-cart-btn"
+              id="qsm-addToCart">
+              <div class="qsm-left-side">
+                <img
+                  width="16"
+                  height="16"
+                  src="{{ 'shopping-bag.svg' | asset_url }}"
+                  alt="cart">
+                <span id="qsm-addToCartText">Add to Bag</span>
+              </div>
+              {% comment %} <p id="qsm-addToCartPrice">Rs.0.00</p> {% endcomment %}
+            </button>
+          </div>
+
+        </div>
       </div>
-
-      <a
-        href="#"
-        class="quick-shop-btn"
-        id="quickShopNowBtn">Shop Now</a>
     </div>
+
   </div>
 </div>
 
 <script>
-  // Global function to open quick shop modal with product data
-  window.openQuickShopModal = async function(productHandle) {
-    const quickShopModal = document.getElementById('quickShopModal');
-    if (!quickShopModal) return;
-  
-    try {
-      // Fetch product data from Shopify
-      const response = await fetch(`/products/${productHandle}.js`);
-      const product = await response.json();
-      
-      // Populate modal with basic product data
-      populateQuickShopModal(product);
-      
-      // Show modal
-      quickShopModal.classList.add('active');
-    } catch (error) {
-      console.error('Error fetching product:', error);
-      if (window.showToast) {
-        showToast('❌ Failed to load product details');
-      }
-    }
+  window.quickShopModal = { 
+    product: null,
+    variantId: null,
+    variantsData: [],
+    options: {}
   };
   
-  // Function to populate modal with basic product data
-  function populateQuickShopModal(product) {
-    const modal = document.getElementById('quickShopModal');
-    if (!modal) return;
+  // Static Elements
+  const qsmModal = document.getElementById('qsm-modal');
+  const qsmVariants = document.getElementById('qsm-variants');
+  const qsmAddToCart = document.getElementById('qsm-addToCart');
+  const qsmClose = document.querySelector('.qsm-close');
   
-    const selectedVariant = product.variants[0];
-  
-    // Update image
-    const imageElem = modal.querySelector('.quick-shop-image');
-    if (imageElem && product.featured_image) {
-      imageElem.src = product.featured_image;
-      imageElem.alt = product.title;
-    }
-  
-    // Update title
-    const titleElem = modal.querySelector('.quick-shop-title');
-    if (titleElem) {
-      titleElem.textContent = product.title;
-    }
-  
-    // Update price
-    const priceElem = modal.querySelector('.quick-shop-price');
-    if (priceElem && selectedVariant) {
-      priceElem.textContent = (selectedVariant.price / 100).toFixed(2);
-    }
-  
-    // Update compare price
-    const comparePriceElem = modal.querySelector('.quick-shop-compare-price');
-    if (comparePriceElem && selectedVariant) {
-      if (selectedVariant.compare_at_price && selectedVariant.compare_at_price > selectedVariant.price) {
-        comparePriceElem.textContent = (selectedVariant.compare_at_price / 100).toFixed(2);
-        comparePriceElem.style.display = 'block';
-      } else {
-        comparePriceElem.style.display = 'none';
+  async function openQuickShopModal(handle) {
+    try {
+      // Fetch product data and section HTML in parallel for performance
+      const [productRes, sectionRes] = await Promise.all([
+        fetch('/products/' + handle + '.js'),
+        fetch('/products/' + handle + '?section_id=qsm-variants')
+      ]);
+      
+      const product = await productRes.json();
+      const sectionHtml = await sectionRes.text();
+      
+      window.quickShopModal.product = product;
+      if (qsmVariants) {
+        qsmVariants.innerHTML = sectionHtml;
+        
+        // Parse the detailed variant data (including stock) from the injected section
+        const jsonElem = qsmVariants.querySelector('#qsm-variant-json');
+        if (jsonElem) {
+          window.quickShopModal.variantsData = JSON.parse(jsonElem.textContent);
+        }
       }
+      
+      // Initialize options with the first variant
+      product.options.forEach(function(opt, i) {
+        window.quickShopModal.options[opt.name] = product.variants[0].options[i];
+      });
+  
+      refreshModal();
+      
+      if (qsmModal) {
+        qsmModal.classList.add('active');
+      }
+    } catch (e) {
+      console.error('Error opening quick shop modal:', e);
+    }
+  }
+  // Make global for external triggers (like product cards)
+  window.openQuickShopModal = openQuickShopModal;
+  
+  function refreshModal() {
+    const data = window.quickShopModal;
+    const product = data.product;
+    const options = data.options;
+    
+    // Find matching variant using the detailed variantsData (which has inventory info)
+    const variant = data.variantsData.find(function(v) {
+      return product.options.every(function(opt, i) {
+        return v.options[i] === options[opt.name];
+      });
+    });
+
+    window.quickShopModal.variantId = variant ? variant.id : null;
+
+    // Reset quantity to 1 when variant changes
+    const qtyInput = document.getElementById('qsm-qty-input');
+    if (qtyInput) qtyInput.value = 1;
+
+    if (!variant) {
+      // If no variant is found (e.g., combination doesn't exist), disable add to cart
+      document.getElementById('qsm-title').textContent = product.title;
+      document.getElementById('qsm-images').innerHTML = '<img src="' + product.featured_image + '" class="qsm-image" id="qsm-mainImage">';
+      document.getElementById('qsm-price').textContent = 'Rs.0.00';
+      // document.getElementById('qsm-addToCartPrice').textContent = 'Rs.0.00';
+      document.getElementById('qsm-compare-price').style.display = 'none';
+      document.getElementById('qsm-stock').textContent = 'Unavailable';
+      document.getElementById('qsm-stock').style.color = '#333';
+      document.querySelector('.qsm-stock-icon circle').style.fill = '#333';
+      qsmAddToCart.disabled = true;
+      document.getElementById('qsm-addToCartText').textContent = 'Unavailable';
+      return;
+    }
+
+    // Find the variant in the main product object for image and price details
+    const productVariant = product.variants.find(function(v) { return v.id === variant.id; });
+
+    // Update Text Content
+    document.getElementById('qsm-title').textContent = product.title;
+  
+    // Update Image
+    const img = (productVariant && productVariant.featured_image) ? productVariant.featured_image.src : product.featured_image;
+    document.getElementById('qsm-images').innerHTML = '<img src="' + img + '" class="qsm-image" id="qsm-mainImage">';
+  
+    // Update Pricing
+    const p = 'Rs.' + ((productVariant ? productVariant.price : 0) / 100).toFixed(2);
+    document.getElementById('qsm-price').textContent = p;
+    // document.getElementById('qsm-addToCartPrice').textContent = p;
+  
+    const cp = document.getElementById('qsm-compare-price');
+    if (productVariant && productVariant.compare_at_price > productVariant.price) {
+      cp.textContent = 'Rs.' + (productVariant.compare_at_price / 100).toFixed(2);
+      cp.style.display = 'block';
+    } else {
+      cp.style.display = 'none';
     }
   
-    // Update Shop Now button link
-    const shopNowBtn = modal.querySelector('#quickShopNowBtn');
-    if (shopNowBtn) {
-      shopNowBtn.href = `/products/${product.handle}`;
+    // Update Stock Status using inventory_quantity from our variantsData
+    const st = document.getElementById('qsm-stock');
+    const circ = document.querySelector('.qsm-stock-icon circle');
+    if (variant.available) {
+      st.textContent = variant.inventory_quantity > 0 ? 'Available in stock (' + variant.inventory_quantity + ')' : 'Available in stock';
+      st.style.color = '#00A52F';
+      circ.style.fill = '#00A52F';
+      qsmAddToCart.disabled = false;
+      document.getElementById('qsm-addToCartText').textContent = 'Add to Bag';
+    } else {
+      st.textContent = 'Out of Stock';
+      st.style.color = '#333';
+      circ.style.fill = '#333';
+      qsmAddToCart.disabled = true;
+      document.getElementById('qsm-addToCartText').textContent = 'Out of Stock';
+    }
+  
+    // Update selection states on all buttons/swatches
+    const allVariantBtns = document.querySelectorAll('.qsm-variant-box');
+    allVariantBtns.forEach(function(btn) {
+      const name = btn.getAttribute('data-option-name');
+      const val = btn.getAttribute('data-option-value');
+      if (options[name] === val) {
+        btn.classList.add('selected');
+      } else {
+        btn.classList.remove('selected');
+      }
+    });
+  }
+  
+  async function handleAddToCart() {
+    if (!qsmAddToCart) return;
+    
+    qsmAddToCart.classList.add('loading');
+    
+    const qtyInput = document.getElementById('qsm-qty-input');
+    const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+    
+    try {
+      const response = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: window.quickShopModal.variantId,
+          quantity: quantity,
+        }),
+      });
+  
+      if (!response.ok) throw new Error('Failed to add item');
+  
+      if (window.openCartDrawer) window.openCartDrawer();
+      if (window.updateCartCount) window.updateCartCount();
+      
+      closeQuickShopModal();
+      document.dispatchEvent(new CustomEvent('cart:updated'));
+    } catch (err) {
+      console.error('Add to cart error:', err);
+      if (window.showToast) window.showToast('❌ Failed to add to bag');
+    } finally {
+      qsmAddToCart.classList.remove('loading');
+    }
+  }
+
+  function handleQuantityChange() {
+    const qtyControl = document.getElementById('qsm-quantity-control');
+    const qtyInput = document.getElementById('qsm-qty-input');
+    
+    if (!qtyControl || !qtyInput) return;
+
+    qtyControl.addEventListener('click', function(e) {
+      const data = window.quickShopModal;
+      // Find current variant from our reliable local data
+      const variant = data.variantsData.find(function(v) {
+        return v.id === data.variantId;
+      });
+      
+      if (!variant) return;
+      
+      // Determine max available quantity
+      const isTracked = variant.inventory_management && variant.inventory_policy !== 'continue';
+      const maxQty = isTracked ? variant.inventory_quantity : 9999;
+      let currentVal = parseInt(qtyInput.value) || 1;
+
+      if (e.target.matches('.increment-btn')) {
+        if (currentVal < maxQty) {
+          qtyInput.value = currentVal + 1;
+        } else if (isTracked) {
+          if (window.showToast) window.showToast('ℹ️ Not enough quantity available');
+        } else {
+          qtyInput.value = currentVal + 1;
+        }
+      }
+
+      if (e.target.matches('.decrement-btn')) {
+        if (currentVal > 1) {
+          qtyInput.value = currentVal - 1;
+        }
+      }
+    });
+
+    qtyInput.addEventListener('change', function() {
+      const data = window.quickShopModal;
+      const variant = data.variantsData.find(function(v) {
+        return v.id === data.variantId;
+      });
+      
+      if (!variant) return;
+
+      const isTracked = variant.inventory_management && variant.inventory_policy !== 'continue';
+      const maxQty = isTracked ? variant.inventory_quantity : 9999;
+      let val = parseInt(qtyInput.value) || 1;
+
+      if (val < 1) val = 1;
+      if (isTracked && val > maxQty) {
+        val = maxQty;
+        if (window.showToast) window.showToast('ℹ️ Not enough quantity available');
+      }
+      qtyInput.value = val;
+    });
+  }
+  
+  function closeQuickShopModal() {
+    if (qsmModal) {
+      qsmModal.classList.remove('active');
     }
   }
   
-  document.addEventListener('click', (e) => {
-  const quickShopModal = document.getElementById('quickShopModal');
-  if (!quickShopModal) return;
+  function handleQuickShopSetup() {
+    // Close Button
+    if (qsmClose) {
+      qsmClose.addEventListener('click', closeQuickShopModal);
+    }
   
-  const closeBtn = e.target.closest('.quick-shop-close');
-  const wrapper = quickShopModal.querySelector('.quick-shop-wrapper');
+    // Modal Background Click
+    window.addEventListener('click', function(e) {
+      if (e.target === qsmModal) {
+        closeQuickShopModal();
+      }
+    });
   
-  // CLOSE VIA X BUTTON
-  if (closeBtn) {
-    quickShopModal.classList.remove('active');
-    return;
+    // Variant Selection (Event Delegation)
+    if (qsmVariants) {
+      qsmVariants.addEventListener('click', function(e) {
+        const btn = e.target.closest('.qsm-variant-box');
+        if (!btn) return;
+        
+        const name = btn.getAttribute('data-option-name');
+        const val = btn.getAttribute('data-option-value');
+        window.quickShopModal.options[name] = val;
+        refreshModal();
+      });
+    }
+  
+    // Add to Cart btn
+    if (qsmAddToCart) {
+      qsmAddToCart.addEventListener('click', handleAddToCart);
+    }
+
+    handleQuantityChange();
   }
   
-  // CLOSE WHEN CLICKING OUTSIDE MODAL
-  if (wrapper && !wrapper.contains(e.target)) {
-    quickShopModal.classList.remove('active');
-  }
+  document.addEventListener('DOMContentLoaded', function() {
+    handleQuickShopSetup();
   });
 </script>
