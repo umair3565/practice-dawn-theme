@@ -1,42 +1,181 @@
-{% comment %}
-  Section for rendering variant options in the Quick Shop Modal.
-  Used by the Shopify Section Rendering API.
-{% endcomment %}
+{% schema %}
+  {
+    "name": "QSM Variants",
+    "settings": []
+  }
+{% endschema %}
 
-{% if product.options.size > 0 %}
-  {% for option in product.options_with_values %}
-    <div class="qsm-variant-option" data-option-index="{{ forloop.index0 }}">
-      <h4 class="qsm-variant-option-name">{{ option.name }}</h4>
+{%- assign selected_variant = product.selected_or_first_available_variant -%}
 
-      <div class="qsm-option-values">
-        {% if option.name == 'Color' and option.values.first.swatch %}
-          {% for value in option.values %}
-            {% assign hex_color = value.swatch.color %}
-            <button
-              type="button"
-              class="qsm-variant-box qsm-variant-swatch {% if forloop.first %}selected{% endif %}"
-              data-option-name="{{ option.name }}"
-              data-option-value="{{ value }}"
-              title="{{ value }}"
-              style="background-color: {{ hex_color }};"></button>
-          {% endfor %}
-        {% else %}
-          {% for value in option.values %}
-            <button
-              type="button"
-              class="qsm-variant-box {% if forloop.first %}selected{% endif %}"
-              data-option-name="{{ option.name }}"
-              data-option-value="{{ value }}">
-              {{ value }}
-            </button>
+  <div class="qsm-content">
+
+  {% comment %} LEFT SIDE: Image Gallery {% endcomment %}
+  <div class="qsm-images" id="qsm-images">
+
+    {% assign selected_image = selected_variant.featured_image | default: product.featured_image %}
+
+    <img
+      id="qsm-main-img"
+      class="qsm-main-img"
+      width="100%"
+      height="100%"
+      src="{{ selected_image | img_url: '400x400' }}"
+      alt="{{ selected_variant.title | default: product.title }}">
+
+    {% if product.images.size > 1 %}
+      <div class="qsm-thumb-imgs">
+        {% for image in product.images %}
+          <img
+            class="qsm-thumb-img"
+            width="100%"
+            height="100%"
+            data-image-id="{{ image.id }}"
+            src="{{ image.src | img_url: '360x360' }}"
+            alt="{{ image.alt | escape }}"
+            style="{% if image.id == selected_image.id %}display: none;{% endif %}"
+          >
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+
+  {% comment %} RIGHT SIDE: Product Details {% endcomment %}
+  <div class="qsm-details">
+    <div class="qsm-details-info">
+      <h3 class="qsm-title" id="qsm-title">{{ product.title }}</h3>
+
+      <!-- Stock Status -->
+      <div class="qsm-stock-container">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          class="qsm-stock-icon"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle
+            cx="8"
+            cy="8"
+            r="6"
+            fill="{% if selected_variant.available %}#00A52F{% else %}#333{% endif %}"
+            stroke="{% if selected_variant.available %}#C5F5D2{% else %}#ccc{% endif %}"
+            stroke-width="4" />
+        </svg>
+        <span class="qsm-stock-text" id="qsm-stock">
+          {% if selected_variant.available %}
+            Available in stock
+            {% if selected_variant.inventory_management and selected_variant.inventory_quantity > 0 %}
+              ({{ selected_variant.inventory_quantity }})
+            {% endif %}
+          {% else %}
+            Out of Stock
+          {% endif %}
+        </span>
+      </div>
+
+      <!-- Price -->
+      <div class="qsm-price-container">
+        <p class="qsm-price" id="qsm-price">{{ selected_variant.price | money }}</p>
+        <p
+          class="qsm-compare-price"
+          id="qsm-compare-price"
+          {% unless selected_variant.compare_at_price > selected_variant.price %}
+          style="display: none;"
+          {% endunless %}>
+          {{ selected_variant.compare_at_price | money }}
+        </p>
+      </div>
+
+      <!-- Variant Options -->
+      <div class="qsm-variants" id="qsm-variants">
+        {% if product.options.size > 0 %}
+          {% for option in product.options_with_values %}
+            <div class="qsm-variant-option" data-option-index="{{ forloop.index0 }}">
+              <h4 class="qsm-variant-option-name">{{ option.name }}</h4>
+
+              <div class="qsm-option-values">
+                {% if option.name == 'Color' and option.values.first.swatch %}
+                  {% for value in option.values %}
+                    {% assign hex_color = value.swatch.color %}
+                    <button
+                      type="button"
+                      class="qsm-variant-box qsm-variant-swatch {% if option.selected_value == value %}selected{% endif %}"
+                      data-option-name="{{ option.name }}"
+                      data-option-value="{{ value | escape }}"
+                      title="{{ value | escape }}"
+                      style="background-color: {{ hex_color }};"></button>
+                  {% endfor %}
+                {% else %}
+                  {% for value in option.values %}
+                    <button
+                      type="button"
+                      class="qsm-variant-box {% if option.selected_value == value %}selected{% endif %}"
+                      data-option-name="{{ option.name }}"
+                      data-option-value="{{ value | escape }}">
+                      {{ value }}
+                    </button>
+                  {% endfor %}
+                {% endif %}
+              </div>
+            </div>
           {% endfor %}
         {% endif %}
       </div>
     </div>
-  {% endfor %}
 
-  <script id="qsm-variant-json" type="application/json">
-    [
+    <div class="qsm-details-footer">
+      <!-- Quantity & Add to Cart -->
+      <div class="qsm-quantity-cart-container">
+        <div class="qsm-quantity-control" id="qsm-quantity-control">
+          <button type="button" class="qsm-qty-btn decrement-btn">-</button>
+          <input
+            type="number"
+            id="qsm-qty-input"
+            class="qsm-qty-input"
+            value="1"
+            min="1">
+          <button type="button" class="qsm-qty-btn increment-btn">+</button>
+        </div>
+
+        <button
+          type="button"
+          class="qsm-cart-btn"
+          id="qsm-addToCart"
+          {% unless selected_variant.available %}
+          disabled
+          {% endunless %}>
+          <div class="qsm-left-side">
+            <img
+              width="16"
+              height="16"
+              src="{{ 'shopping-bag.svg' | asset_url }}"
+              alt="cart">
+            <span id="qsm-addToCartText">
+              {%- if selected_variant.available -%}
+                Add to Bag
+              {%- else -%}
+                Out of Stock
+              {%- endif -%}
+            </span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<script id="qsm-variant-json" type="application/json">
+  {
+    "title": {{ product.title | json }},
+    "options": {{ product.options | json }},
+    "featured_image": {
+      "id": {{ product.featured_image.id | default: 'null' }},
+      "src": {{ product.featured_image.src | json }}
+    },
+    "variants": [
       {% for variant in product.variants %}
         {
           "id": {{ variant.id }},
@@ -44,16 +183,12 @@
           "inventory_quantity": {{ variant.inventory_quantity | default: 0 }},
           "inventory_management": {{ variant.inventory_management | json }},
           "inventory_policy": {{ variant.inventory_policy | json }},
-          "available": {{ variant.available | json }}
+          "available": {{ variant.available | json }},
+          "price": {{ variant.price | json }},
+          "compare_at_price": {{ variant.compare_at_price | json }},
+          "featured_image": {% if variant.featured_image %}{ "id": {{ variant.featured_image.id }}, "src": {{ variant.featured_image.src | json }} }{% else %}null{% endif %}
         }{% unless forloop.last %},{% endunless %}
       {% endfor %}
     ]
-  </script>
-{% endif %}
-
-{% schema %}
-{
-  "name": "QSM Variants",
-  "settings": []
-}
-{% endschema %}
+  }
+</script>

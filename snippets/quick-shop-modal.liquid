@@ -17,23 +17,22 @@
     pointer-events: auto;
   }
 
-  /* Modal wrapper - Two column layout */
-  .qsm-wrapper {
-    max-width: 800px;
+  /* Modal container - Two column layout */
+  .qsm-container {
+    max-width: 900px;
     width: 95%;
-    min-height: 450px;
+    max-height: 90vh;
     background: #fff;
     position: relative;
-    border-radius: 4px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     transform: scale(0.9);
     transition: transform 0.3s ease;
-    padding: 0;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   }
 
-  .qsm-modal.active .qsm-wrapper {
+  .qsm-modal.active .qsm-container {
     transform: scale(1);
   }
 
@@ -42,45 +41,73 @@
     position: absolute;
     top: 15px;
     right: 15px;
-    font-size: 24px;
+    font-size: 28px;
     background: #fff;
     border: none;
     cursor: pointer;
-    z-index: 10;
+    z-index: 100;
     color: #333;
-    line-height: 1;
-    padding: 5px;
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   /* Two column layout */
   .qsm-content {
     display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  /* LEFT SIDE - Product Image */
-  .qsm-images {
-    width: 50%;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .qsm-image {
+    flex-direction: row;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+  }
+
+  /* LEFT SIDE - Product Image Gallery */
+  .qsm-images {
+    width: 50%;
+    height: 450px;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+  }
+
+  .qsm-images::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Edge */
+  }
+
+
+  .qsm-main-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
-    object-position: center;
-    display: block;
-    border-radius: 6px;
+    border-radius: 4px;
+  }
+
+  .qsm-thumb-imgs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .qsm-thumb-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
 
   /* RIGHT SIDE - Product Details */
@@ -89,17 +116,16 @@
     display: flex;
     flex-direction: column;
     background: #fff;
-    overflow: hidden;
+    overflow-y: auto;
+    padding: 20px;
   }
 
   .qsm-details-info {
     flex: 1;
     overflow-y: auto;
-    padding: 20px 20px 0;
   }
 
   .qsm-details-footer {
-    padding: 20px;
     margin-top: auto;
     background: #fff;
   }
@@ -307,10 +333,8 @@
 
   /* Mobile Responsive */
   @media (max-width: 768px) {
-    .qsm-wrapper {
-      height: auto;
-      max-height: 80vh;
-      width: 90%;
+    .qsm-container {
+      overflow-y: auto;
     }
 
     .qsm-content {
@@ -357,92 +381,17 @@
 </style>
 
 <div id="qsm-modal" class="qsm-modal">
-  <div class="qsm-wrapper">
+  <div class="qsm-container">
     <button class="qsm-close" type="button">×</button>
-
-    <div class="qsm-content">
-      <!-- LEFT SIDE: Image Gallery -->
-      <div class="qsm-images" id="qsm-images"></div>
-
-      <!-- RIGHT SIDE: Product Details -->
-      <div class="qsm-details">
-        <div class="qsm-details-info">
-          <h3 class="qsm-title" id="qsm-title">Loading...</h3>
-
-          <!-- Stock Status -->
-          <div class="qsm-stock-container">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              class="qsm-stock-icon"
-              xmlns="http://www.w3.org/2000/svg">
-              <circle
-                cx="8"
-                cy="8"
-                r="6"
-                fill="#00A52F"
-                stroke="#C5F5D2"
-                stroke-width="4" />
-            </svg>
-            <span class="qsm-stock-text" id="qsm-stock">
-              Available in stock
-            </span>
-          </div>
-
-          <!-- Price -->
-          <div class="qsm-price-container">
-            <p class="qsm-price" id="qsm-price">Rs.0.00</p>
-            <p
-              class="qsm-compare-price"
-              id="qsm-compare-price"
-              style="display: none;">
-              Rs.0.00
-            </p>
-          </div>
-
-          <!-- Variant Options -->
-          <div class="qsm-variants" id="qsm-variants">
-            <!-- Variant options (boxes or swatches) will be dynamically added here -->
-          </div>
-        </div>
-
-        <div class="qsm-details-footer">
-          <!-- Quantity & Add to Cart -->
-          <div class="qsm-quantity-cart-container">
-            <div class="qsm-quantity-control" id="qsm-quantity-control">
-              <button type="button" class="qsm-qty-btn decrement-btn">-</button>
-              <input type="number" id="qsm-qty-input" class="qsm-qty-input" value="1" min="1">
-              <button type="button" class="qsm-qty-btn increment-btn">+</button>
-            </div>
-
-            <button
-              type="button"
-              class="qsm-cart-btn"
-              id="qsm-addToCart">
-              <div class="qsm-left-side">
-                <img
-                  width="16"
-                  height="16"
-                  src="{{ 'shopping-bag.svg' | asset_url }}"
-                  alt="cart">
-                <span id="qsm-addToCartText">Add to Bag</span>
-              </div>
-              {% comment %} <p id="qsm-addToCartPrice">Rs.0.00</p> {% endcomment %}
-            </button>
-          </div>
-
-        </div>
-      </div>
+    <div id="qsm-render-target">
+      <!-- Content from qsm-variants.liquid will be injected here -->
     </div>
-
   </div>
 </div>
 
 <script>
   window.quickShopModal = { 
-    product: null,
+    product: {},
     variantId: null,
     variantsData: [],
     options: {}
@@ -450,38 +399,40 @@
   
   // Static Elements
   const qsmModal = document.getElementById('qsm-modal');
-  const qsmVariants = document.getElementById('qsm-variants');
-  const qsmAddToCart = document.getElementById('qsm-addToCart');
+  const qsmRenderTarget = document.getElementById('qsm-render-target');
   const qsmClose = document.querySelector('.qsm-close');
   
   async function openQuickShopModal(handle) {
     try {
-      // Fetch product data and section HTML in parallel for performance
-      const [productRes, sectionRes] = await Promise.all([
-        fetch('/products/' + handle + '.js'),
-        fetch('/products/' + handle + '?section_id=qsm-variants')
-      ]);
-      
-      const product = await productRes.json();
+      const sectionRes = await fetch('/products/' + handle + '?section_id=qsm-variants');
       const sectionHtml = await sectionRes.text();
       
-      window.quickShopModal.product = product;
-      if (qsmVariants) {
-        qsmVariants.innerHTML = sectionHtml;
+      if (qsmRenderTarget) {
+        qsmRenderTarget.innerHTML = sectionHtml;
         
-        // Parse the detailed variant data (including stock) from the injected section
-        const jsonElem = qsmVariants.querySelector('#qsm-variant-json');
+        const jsonElem = qsmRenderTarget.querySelector('#qsm-variant-json');
         if (jsonElem) {
-          window.quickShopModal.variantsData = JSON.parse(jsonElem.textContent);
+          const data = JSON.parse(jsonElem.textContent);
+          window.quickShopModal.product = {
+            title: data.title,
+            options: data.options,
+            featured_image: data.featured_image
+          };
+          window.quickShopModal.variantsData = data.variants;
+          
+          // Initialize options with the first variant
+          const firstVariant = data.variants[0];
+          window.quickShopModal.product.options.forEach(function(optName, i) {
+            window.quickShopModal.options[optName] = firstVariant.options[i];
+          });
+          
+          window.quickShopModal.variantId = firstVariant.id;
         }
-      }
-      
-      // Initialize options with the first variant
-      product.options.forEach(function(opt, i) {
-        window.quickShopModal.options[opt.name] = product.variants[0].options[i];
-      });
   
-      refreshModal();
+        // Re-bind dynamic elements and setup
+        handleQuickShopSetup();
+        refreshModal();
+      }
       
       if (qsmModal) {
         qsmModal.classList.add('active');
@@ -490,7 +441,7 @@
       console.error('Error opening quick shop modal:', e);
     }
   }
-  // Make global for external triggers (like product cards)
+  
   window.openQuickShopModal = openQuickShopModal;
   
   function refreshModal() {
@@ -498,75 +449,91 @@
     const product = data.product;
     const options = data.options;
     
-    // Find matching variant using the detailed variantsData (which has inventory info)
+    // Find matching variant
     const variant = data.variantsData.find(function(v) {
-      return product.options.every(function(opt, i) {
-        return v.options[i] === options[opt.name];
+      return product.options.every(function(optName, i) {
+        return v.options[i] === options[optName];
       });
     });
-
+  
     window.quickShopModal.variantId = variant ? variant.id : null;
-
-    // Reset quantity to 1 when variant changes
+  
     const qtyInput = document.getElementById('qsm-qty-input');
+    const qsmAddToCart = document.getElementById('qsm-addToCart');
+    const qsmPrice = document.getElementById('qsm-price');
+    const qsmComparePrice = document.getElementById('qsm-compare-price');
+    const qsmStock = document.getElementById('qsm-stock');
+    const qsmStockIcon = document.querySelector('.qsm-stock-icon circle');
+    const qsmAddToCartText = document.getElementById('qsm-addToCartText');
+  
     if (qtyInput) qtyInput.value = 1;
-
+  
     if (!variant) {
-      // If no variant is found (e.g., combination doesn't exist), disable add to cart
-      document.getElementById('qsm-title').textContent = product.title;
-      document.getElementById('qsm-images').innerHTML = '<img src="' + product.featured_image + '" class="qsm-image" id="qsm-mainImage">';
-      document.getElementById('qsm-price').textContent = 'Rs.0.00';
-      // document.getElementById('qsm-addToCartPrice').textContent = 'Rs.0.00';
-      document.getElementById('qsm-compare-price').style.display = 'none';
-      document.getElementById('qsm-stock').textContent = 'Unavailable';
-      document.getElementById('qsm-stock').style.color = '#333';
-      document.querySelector('.qsm-stock-icon circle').style.fill = '#333';
-      qsmAddToCart.disabled = true;
-      document.getElementById('qsm-addToCartText').textContent = 'Unavailable';
+      if (qsmPrice) qsmPrice.textContent = 'Unavailable';
+      if (qsmComparePrice) qsmComparePrice.style.display = 'none';
+      if (qsmStock) {
+        qsmStock.textContent = 'Unavailable';
+        qsmStock.style.color = '#333';
+      }
+      if (qsmStockIcon) qsmStockIcon.style.fill = '#333';
+      if (qsmAddToCart) qsmAddToCart.disabled = true;
+      if (qsmAddToCartText) qsmAddToCartText.textContent = 'Unavailable';
       return;
     }
-
-    // Find the variant in the main product object for image and price details
-    const productVariant = product.variants.find(function(v) { return v.id === variant.id; });
-
-    // Update Text Content
-    document.getElementById('qsm-title').textContent = product.title;
-  
-    // Update Image
-    const img = (productVariant && productVariant.featured_image) ? productVariant.featured_image.src : product.featured_image;
-    document.getElementById('qsm-images').innerHTML = '<img src="' + img + '" class="qsm-image" id="qsm-mainImage">';
   
     // Update Pricing
-    const p = 'Rs.' + ((productVariant ? productVariant.price : 0) / 100).toFixed(2);
-    document.getElementById('qsm-price').textContent = p;
-    // document.getElementById('qsm-addToCartPrice').textContent = p;
+    if (qsmPrice) qsmPrice.textContent = formatCurrency(variant.price);
   
-    const cp = document.getElementById('qsm-compare-price');
-    if (productVariant && productVariant.compare_at_price > productVariant.price) {
-      cp.textContent = 'Rs.' + (productVariant.compare_at_price / 100).toFixed(2);
-      cp.style.display = 'block';
-    } else {
-      cp.style.display = 'none';
+    if (qsmComparePrice) {
+      if (variant.compare_at_price > variant.price) {
+        qsmComparePrice.textContent = formatCurrency(variant.compare_at_price);
+        qsmComparePrice.style.display = 'block';
+      } else {
+        qsmComparePrice.style.display = 'none';
+      }
     }
   
-    // Update Stock Status using inventory_quantity from our variantsData
-    const st = document.getElementById('qsm-stock');
-    const circ = document.querySelector('.qsm-stock-icon circle');
-    if (variant.available) {
-      st.textContent = variant.inventory_quantity > 0 ? 'Available in stock (' + variant.inventory_quantity + ')' : 'Available in stock';
-      st.style.color = '#00A52F';
-      circ.style.fill = '#00A52F';
-      qsmAddToCart.disabled = false;
-      document.getElementById('qsm-addToCartText').textContent = 'Add to Bag';
-    } else {
-      st.textContent = 'Out of Stock';
-      st.style.color = '#333';
-      circ.style.fill = '#333';
-      qsmAddToCart.disabled = true;
-      document.getElementById('qsm-addToCartText').textContent = 'Out of Stock';
+    // Update Stock Status
+    if (qsmStock && qsmStockIcon) {
+      if (variant.available) {
+        qsmStock.textContent = variant.inventory_quantity > 0 ? 'Available in stock (' + variant.inventory_quantity + ')' : 'Available in stock';
+        qsmStock.style.color = '#00A52F';
+        qsmStockIcon.style.fill = '#00A52F';
+        if (qsmAddToCart) qsmAddToCart.disabled = false;
+        if (qsmAddToCartText) qsmAddToCartText.textContent = 'Add to Bag';
+      } else {
+        qsmStock.textContent = 'Out of Stock';
+        qsmStock.style.color = '#333';
+        qsmStockIcon.style.fill = '#333';
+        if (qsmAddToCart) qsmAddToCart.disabled = true;
+        if (qsmAddToCartText) qsmAddToCartText.textContent = 'Out of Stock';
+      }
     }
   
-    // Update selection states on all buttons/swatches
+    // Update main image and thumbnails visibility based on variant selection
+    const mainImage = document.getElementById('qsm-main-img');
+    const thumbnails = document.querySelectorAll('.qsm-thumb-img');
+    const featuredImage = variant.featured_image || data.product.featured_image;
+  
+    if (featuredImage && mainImage) {
+      const variantImgSrc = featuredImage.src || featuredImage; 
+      
+      if (typeof variantImgSrc === 'string') {
+        const newSrc = variantImgSrc.replace(/\.(jpg|jpeg|png|webp).*/i, '_400x400.$1');
+        if (mainImage.src !== newSrc) mainImage.src = newSrc;
+      }
+      mainImage.alt = variant.title || product.title;
+  
+      const imageId = featuredImage.id;
+      thumbnails.forEach(thumb => {
+        const thumbId = thumb.getAttribute('data-image-id');
+        // Use loose equality because one might be string and other number
+        thumb.style.display = (thumbId == imageId) ? 'none' : 'block';
+      });
+    }
+    
+  
+    // Update selection states
     const allVariantBtns = document.querySelectorAll('.qsm-variant-box');
     allVariantBtns.forEach(function(btn) {
       const name = btn.getAttribute('data-option-name');
@@ -579,7 +546,12 @@
     });
   }
   
+  function formatCurrency(cents) {
+    return 'Rs.' + (cents / 100).toFixed(2);
+  }
+  
   async function handleAddToCart() {
+    const qsmAddToCart = document.getElementById('qsm-addToCart');
     if (!qsmAddToCart) return;
     
     qsmAddToCart.classList.add('loading');
@@ -611,44 +583,42 @@
       qsmAddToCart.classList.remove('loading');
     }
   }
-
+   
   function handleQuantityChange() {
     const qtyControl = document.getElementById('qsm-quantity-control');
     const qtyInput = document.getElementById('qsm-qty-input');
     
     if (!qtyControl || !qtyInput) return;
-
+  
     qtyControl.addEventListener('click', function(e) {
       const data = window.quickShopModal;
-      // Find current variant from our reliable local data
       const variant = data.variantsData.find(function(v) {
         return v.id === data.variantId;
       });
       
       if (!variant) return;
       
-      // Determine max available quantity
       const isTracked = variant.inventory_management && variant.inventory_policy !== 'continue';
       const maxQty = isTracked ? variant.inventory_quantity : 9999;
       let currentVal = parseInt(qtyInput.value) || 1;
-
+  
       if (e.target.matches('.increment-btn')) {
         if (currentVal < maxQty) {
           qtyInput.value = currentVal + 1;
         } else if (isTracked) {
-          if (window.showToast) window.showToast('ℹ️ Not enough quantity available');
+          showToast('ℹ️ Not enough quantity available');
         } else {
           qtyInput.value = currentVal + 1;
         }
       }
-
+  
       if (e.target.matches('.decrement-btn')) {
         if (currentVal > 1) {
           qtyInput.value = currentVal - 1;
         }
       }
     });
-
+  
     qtyInput.addEventListener('change', function() {
       const data = window.quickShopModal;
       const variant = data.variantsData.find(function(v) {
@@ -656,15 +626,15 @@
       });
       
       if (!variant) return;
-
+  
       const isTracked = variant.inventory_management && variant.inventory_policy !== 'continue';
       const maxQty = isTracked ? variant.inventory_quantity : 9999;
       let val = parseInt(qtyInput.value) || 1;
-
+  
       if (val < 1) val = 1;
       if (isTracked && val > maxQty) {
         val = maxQty;
-        if (window.showToast) window.showToast('ℹ️ Not enough quantity available');
+      showToast('ℹ️ Not enough quantity available');
       }
       qtyInput.value = val;
     });
@@ -677,19 +647,10 @@
   }
   
   function handleQuickShopSetup() {
-    // Close Button
-    if (qsmClose) {
-      qsmClose.addEventListener('click', closeQuickShopModal);
-    }
+    const qsmVariants = document.getElementById('qsm-variants');
+    const qsmAddToCart = document.getElementById('qsm-addToCart');
   
-    // Modal Background Click
-    window.addEventListener('click', function(e) {
-      if (e.target === qsmModal) {
-        closeQuickShopModal();
-      }
-    });
-  
-    // Variant Selection (Event Delegation)
+    // Variant Selection
     if (qsmVariants) {
       qsmVariants.addEventListener('click', function(e) {
         const btn = e.target.closest('.qsm-variant-box');
@@ -706,11 +667,20 @@
     if (qsmAddToCart) {
       qsmAddToCart.addEventListener('click', handleAddToCart);
     }
-
+  
     handleQuantityChange();
   }
   
   document.addEventListener('DOMContentLoaded', function() {
-    handleQuickShopSetup();
+    // Statics
+    if (qsmClose) {
+      qsmClose.addEventListener('click', closeQuickShopModal);
+    }
+  
+    window.addEventListener('click', function(e) {
+      if (e.target === qsmModal) {
+        closeQuickShopModal();
+      }
+    });
   });
 </script>
