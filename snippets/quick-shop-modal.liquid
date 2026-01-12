@@ -527,6 +527,7 @@
       const imageId = featuredImage.id;
       thumbnails.forEach(thumb => {
         const thumbId = thumb.getAttribute('data-image-id');
+        console.log("imageId--",imageId);
         // Use loose equality because one might be string and other number
         thumb.style.display = (thumbId == imageId) ? 'none' : 'block';
       });
